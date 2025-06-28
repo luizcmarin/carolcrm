@@ -1,25 +1,4 @@
 <p align="center">
-   _____                _  _____ _____  __  __ 
-  / ____|              | |/ ____|  __ \|  \/  |
- | |     __ _ _ __ ___ | | |    | |__) | \  / |
- | |    / _` | '__/ _ \| | |    |  _  /| |\/| |
- | |___| (_| | | | (_) | | |____| | \ \| |  | |
-  \_____\__,_|_|  \___/|_|\_____|_|  \_\_|  |_|
-                                               
-   ______                 ____________  __  ___
-  / ____/___ __________  / / ____/ __ \/  |/  /
- / /   / __ `/ ___/ __ \/ / /   / /_/ / /|_/ / 
-/ /___/ /_/ / /  / /_/ / / /___/ _, _/ /  / /  
-\____/\__,_/_/   \____/_/\____/_/ |_/_/  /_/   
-                                               
-┏┓      ┓┏┓┳┓┳┳┓
-┃ ┏┓┏┓┏┓┃┃ ┣┫┃┃┃
-┗┛┗┻┛ ┗┛┗┗┛┛┗┛ ┗
-                
-╔═╗┌─┐┬─┐┌─┐┬  ╔═╗╦═╗╔╦╗
-║  ├─┤├┬┘│ ││  ║  ╠╦╝║║║
-╚═╝┴ ┴┴└─└─┘┴─┘╚═╝╩╚═╩ ╩
-
   ,ad8888ba,                                        88    ,ad8888ba,   88888888ba   88b           d88  
  d8"'    `"8b                                       88   d8"'    `"8b  88      "8b  888b         d888  
 d8'                                                 88  d8'            88      ,8P  88`8b       d8'88  
@@ -28,20 +7,14 @@ d8'                                                 88  d8'            88      ,
 Y8,            ,adPPPPP88  88          8b       d8  88  Y8,            88    `8b    88   `8b d8'   88  
  Y8a.    .a8P  88,    ,88  88          "8a,   ,a8"  88   Y8a.    .a8P  88     `8b   88    `888'    88  
   `"Y8888Y"'   `"8bbdP"Y8  88           `"YbbdP"'   88    `"Y8888Y"'   88      `8b  88     `8'     88  
-                                                                                                       
-                                                                                                      
+
     <h1 align="center">CarolCRM</h1>
     <br>
 </p>
 
-[![Latest Stable Version](https://poser.pugx.org/yiisoft/_____/v)](https://packagist.org/packages/yiisoft/_____)
-[![Total Downloads](https://poser.pugx.org/yiisoft/_____/downloads)](https://packagist.org/packages/yiisoft/_____)
-[![Build status](https://github.com/yiisoft/_____/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/yiisoft/_____/actions/workflows/build.yml?query=branch%3Amaster)
-[![Code Coverage](https://codecov.io/gh/yiisoft/_____/branch/master/graph/badge.svg)](https://codecov.io/gh/yiisoft/_____)
-[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fyiisoft%2F_____%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/yiisoft/_____/master)
-[![Static analysis](https://github.com/yiisoft/_____/actions/workflows/static.yml/badge.svg?branch=master)](https://github.com/yiisoft/_____/actions/workflows/static.yml?query=branch%3Amaster)
-[![type-coverage](https://shepherd.dev/github/yiisoft/_____/coverage.svg)](https://shepherd.dev/github/yiisoft/_____)
-[![psalm-level](https://shepherd.dev/github/yiisoft/_____/level.svg)](https://shepherd.dev/github/yiisoft/_____)
+[![Build Status](https://github.com/luizcmarin/CarolCRM/actions/workflows/quality_checks.yml/badge.svg?branch=main)](https://github.com/luizcmarin/CarolCRM/actions/workflows/quality_checks.yml?query=branch%3Amain)
+[![Static Analysis](https://github.com/luizcmarin/CarolCRM/actions/workflows/quality_checks.yml/badge.svg?branch=main)](https://github.com/luizcmarin/CarolCRM/actions/workflows/quality_checks.yml?query=branch%3Amain)
+
 
 **CarolCRM** é um software de Gerenciamento de Relacionamento com o Cliente (CRM) auto-hospedado, perfeito para quase todas as empresas, freelancers e diversas outras utilizações. Com seu design limpo e moderno, **CarolCRM** pode ajudar você a parecer mais profissional para seus clientes e, ao mesmo tempo, melhorar o desempenho do seu negócio.
 
