@@ -1,8 +1,4 @@
 PRAGMA foreign_keys = false;
- 
--- ----------------------------
--- Table structure for tblactivity_log
--- ----------------------------
 DROP TABLE IF EXISTS "tblactivity_log";
 CREATE TABLE "tblactivity_log" (
   "id" integer NOT NULL,
@@ -11,15 +7,6 @@ CREATE TABLE "tblactivity_log" (
   "staffid" text(100),
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblactivity_log
--- ----------------------------
-INSERT INTO "tblactivity_log" VALUES (1, 'User Successfully Logged In [User Id: 1, Is Staff Member: Yes, IP: ::1]', '2025-06-25 11:47:50', 'LUIZ MARIN');
-
--- ----------------------------
--- Table structure for tblannouncements
--- ----------------------------
 DROP TABLE IF EXISTS "tblannouncements";
 CREATE TABLE "tblannouncements" (
   "announcementid" integer NOT NULL,
@@ -32,14 +19,6 @@ CREATE TABLE "tblannouncements" (
   "userid" text(100) NOT NULL,
   PRIMARY KEY ("announcementid")
 );
-
--- ----------------------------
--- Records of tblannouncements
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblclients
--- ----------------------------
 DROP TABLE IF EXISTS "tblclients";
 CREATE TABLE "tblclients" (
   "userid" integer NOT NULL,
@@ -75,14 +54,6 @@ CREATE TABLE "tblclients" (
   "addedfrom" integer NOT NULL,
   PRIMARY KEY ("userid")
 );
-
--- ----------------------------
--- Records of tblclients
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblconsent_purposes
--- ----------------------------
 DROP TABLE IF EXISTS "tblconsent_purposes";
 CREATE TABLE "tblconsent_purposes" (
   "id" integer NOT NULL,
@@ -92,14 +63,6 @@ CREATE TABLE "tblconsent_purposes" (
   "last_updated" text,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblconsent_purposes
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblconsents
--- ----------------------------
 DROP TABLE IF EXISTS "tblconsents";
 CREATE TABLE "tblconsents" (
   "id" integer NOT NULL,
@@ -114,14 +77,6 @@ CREATE TABLE "tblconsents" (
   "staff_name" text(100),
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblconsents
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblcontact_permissions
--- ----------------------------
 DROP TABLE IF EXISTS "tblcontact_permissions";
 CREATE TABLE "tblcontact_permissions" (
   "id" integer NOT NULL,
@@ -129,14 +84,6 @@ CREATE TABLE "tblcontact_permissions" (
   "userid" integer NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblcontact_permissions
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblcontacts
--- ----------------------------
 DROP TABLE IF EXISTS "tblcontacts";
 CREATE TABLE "tblcontacts" (
   "id" integer NOT NULL,
@@ -169,14 +116,6 @@ CREATE TABLE "tblcontacts" (
   "ticket_emails" integer(1) NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblcontacts
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblcontract_comments
--- ----------------------------
 DROP TABLE IF EXISTS "tblcontract_comments";
 CREATE TABLE "tblcontract_comments" (
   "id" integer NOT NULL,
@@ -186,14 +125,6 @@ CREATE TABLE "tblcontract_comments" (
   "dateadded" text NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblcontract_comments
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblcontract_renewals
--- ----------------------------
 DROP TABLE IF EXISTS "tblcontract_renewals";
 CREATE TABLE "tblcontract_renewals" (
   "id" integer NOT NULL,
@@ -210,14 +141,6 @@ CREATE TABLE "tblcontract_renewals" (
   "is_on_old_expiry_notified" integer,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblcontract_renewals
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblcontracts
--- ----------------------------
 DROP TABLE IF EXISTS "tblcontracts";
 CREATE TABLE "tblcontracts" (
   "id" integer NOT NULL,
@@ -250,28 +173,12 @@ CREATE TABLE "tblcontracts" (
   "last_sign_reminder_at" text,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblcontracts
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblcontracts_types
--- ----------------------------
 DROP TABLE IF EXISTS "tblcontracts_types";
 CREATE TABLE "tblcontracts_types" (
   "id" integer NOT NULL,
   "name" text NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblcontracts_types
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblcountries
--- ----------------------------
 DROP TABLE IF EXISTS "tblcountries";
 CREATE TABLE "tblcountries" (
   "country_id" integer NOT NULL,
@@ -285,264 +192,256 @@ CREATE TABLE "tblcountries" (
   "cctld" text(5),
   PRIMARY KEY ("country_id")
 );
-
--- ----------------------------
--- Records of tblcountries
--- ----------------------------
-INSERT INTO "tblcountries" VALUES (1, 'AF', 'Afghanistan', 'Islamic Republic of Afghanistan', 'AFG', '004', 'yes', '93', '.af');
-INSERT INTO "tblcountries" VALUES (2, 'AX', 'Aland Islands', '&Aring;land Islands', 'ALA', '248', 'no', '358', '.ax');
-INSERT INTO "tblcountries" VALUES (3, 'AL', 'Albania', 'Republic of Albania', 'ALB', '008', 'yes', '355', '.al');
-INSERT INTO "tblcountries" VALUES (4, 'DZ', 'Algeria', 'People''s Democratic Republic of Algeria', 'DZA', '012', 'yes', '213', '.dz');
-INSERT INTO "tblcountries" VALUES (5, 'AS', 'American Samoa', 'American Samoa', 'ASM', '016', 'no', '1+684', '.as');
-INSERT INTO "tblcountries" VALUES (6, 'AD', 'Andorra', 'Principality of Andorra', 'AND', '020', 'yes', '376', '.ad');
-INSERT INTO "tblcountries" VALUES (7, 'AO', 'Angola', 'Republic of Angola', 'AGO', '024', 'yes', '244', '.ao');
-INSERT INTO "tblcountries" VALUES (8, 'AI', 'Anguilla', 'Anguilla', 'AIA', '660', 'no', '1+264', '.ai');
-INSERT INTO "tblcountries" VALUES (9, 'AQ', 'Antarctica', 'Antarctica', 'ATA', '010', 'no', '672', '.aq');
-INSERT INTO "tblcountries" VALUES (10, 'AG', 'Antigua and Barbuda', 'Antigua and Barbuda', 'ATG', '028', 'yes', '1+268', '.ag');
-INSERT INTO "tblcountries" VALUES (11, 'AR', 'Argentina', 'Argentine Republic', 'ARG', '032', 'yes', '54', '.ar');
-INSERT INTO "tblcountries" VALUES (12, 'AM', 'Armenia', 'Republic of Armenia', 'ARM', '051', 'yes', '374', '.am');
+INSERT INTO "tblcountries" VALUES (1, 'AF', 'Afeganistão', 'República Islâmica do Afeganistão', 'AFG', '004', 'yes', '93', '.af');
+INSERT INTO "tblcountries" VALUES (2, 'AX', 'Ilhas Aland', 'Ilhas Aland', 'ALA', '248', 'no', '358', '.ax');
+INSERT INTO "tblcountries" VALUES (3, 'AL', 'Albânia', 'República da Albânia', 'ALB', '008', 'yes', '355', '.al');
+INSERT INTO "tblcountries" VALUES (4, 'DZ', 'Argélia', 'República Democrática Popular da Argélia', 'DZA', '012', 'yes', '213', '.dz');
+INSERT INTO "tblcountries" VALUES (5, 'AS', 'Samoa Americana', 'Samoa Americana', 'ASM', '016', 'no', '1+684', '.as');
+INSERT INTO "tblcountries" VALUES (6, 'AD', 'Andorra', 'Principado de Andorra', 'AND', '020', 'yes', '376', '.ad');
+INSERT INTO "tblcountries" VALUES (7, 'AO', 'Angola', 'República de Angola', 'AGO', '024', 'yes', '244', '.ao');
+INSERT INTO "tblcountries" VALUES (8, 'AI', 'Anguila', 'Anguila', 'AIA', '660', 'no', '1+264', '.ai');
+INSERT INTO "tblcountries" VALUES (9, 'AQ', 'Antártida', 'Antártida', 'ATA', '010', 'no', '672', '.aq');
+INSERT INTO "tblcountries" VALUES (10, 'AG', 'Antígua e Barbuda', 'Antígua e Barbuda', 'ATG', '028', 'yes', '1+268', '.ag');
+INSERT INTO "tblcountries" VALUES (11, 'AR', 'Argentina', 'República Argentina', 'ARG', '032', 'yes', '54', '.ar');
+INSERT INTO "tblcountries" VALUES (12, 'AM', 'Armênia', 'República da Armênia', 'ARM', '051', 'yes', '374', '.am');
 INSERT INTO "tblcountries" VALUES (13, 'AW', 'Aruba', 'Aruba', 'ABW', '533', 'no', '297', '.aw');
-INSERT INTO "tblcountries" VALUES (14, 'AU', 'Australia', 'Commonwealth of Australia', 'AUS', '036', 'yes', '61', '.au');
-INSERT INTO "tblcountries" VALUES (15, 'AT', 'Austria', 'Republic of Austria', 'AUT', '040', 'yes', '43', '.at');
-INSERT INTO "tblcountries" VALUES (16, 'AZ', 'Azerbaijan', 'Republic of Azerbaijan', 'AZE', '031', 'yes', '994', '.az');
-INSERT INTO "tblcountries" VALUES (17, 'BS', 'Bahamas', 'Commonwealth of The Bahamas', 'BHS', '044', 'yes', '1+242', '.bs');
-INSERT INTO "tblcountries" VALUES (18, 'BH', 'Bahrain', 'Kingdom of Bahrain', 'BHR', '048', 'yes', '973', '.bh');
-INSERT INTO "tblcountries" VALUES (19, 'BD', 'Bangladesh', 'People''s Republic of Bangladesh', 'BGD', '050', 'yes', '880', '.bd');
+INSERT INTO "tblcountries" VALUES (14, 'AU', 'Austrália', 'Comunidade da Austrália', 'AUS', '036', 'yes', '61', '.au');
+INSERT INTO "tblcountries" VALUES (15, 'AT', 'Áustria', 'República da Áustria', 'AUT', '040', 'yes', '43', '.at');
+INSERT INTO "tblcountries" VALUES (16, 'AZ', 'Azerbaijão', 'República do Azerbaijão', 'AZE', '031', 'yes', '994', '.az');
+INSERT INTO "tblcountries" VALUES (17, 'BS', 'Bahamas', 'Comunidade das Bahamas', 'BHS', '044', 'yes', '1+242', '.bs');
+INSERT INTO "tblcountries" VALUES (18, 'BH', 'Bahrein', 'Reino do Bahrein', 'BHR', '048', 'yes', '973', '.bh');
+INSERT INTO "tblcountries" VALUES (19, 'BD', 'Bangladesh', 'República Popular de Bangladesh', 'BGD', '050', 'yes', '880', '.bd');
 INSERT INTO "tblcountries" VALUES (20, 'BB', 'Barbados', 'Barbados', 'BRB', '052', 'yes', '1+246', '.bb');
-INSERT INTO "tblcountries" VALUES (21, 'BY', 'Belarus', 'Republic of Belarus', 'BLR', '112', 'yes', '375', '.by');
-INSERT INTO "tblcountries" VALUES (22, 'BE', 'Belgium', 'Kingdom of Belgium', 'BEL', '056', 'yes', '32', '.be');
+INSERT INTO "tblcountries" VALUES (21, 'BY', 'Belarus', 'República de Belarus', 'BLR', '112', 'yes', '375', '.by');
+INSERT INTO "tblcountries" VALUES (22, 'BE', 'Bélgica', 'Reino da Bélgica', 'BEL', '056', 'yes', '32', '.be');
 INSERT INTO "tblcountries" VALUES (23, 'BZ', 'Belize', 'Belize', 'BLZ', '084', 'yes', '501', '.bz');
-INSERT INTO "tblcountries" VALUES (24, 'BJ', 'Benin', 'Republic of Benin', 'BEN', '204', 'yes', '229', '.bj');
-INSERT INTO "tblcountries" VALUES (25, 'BM', 'Bermuda', 'Bermuda Islands', 'BMU', '060', 'no', '1+441', '.bm');
-INSERT INTO "tblcountries" VALUES (26, 'BT', 'Bhutan', 'Kingdom of Bhutan', 'BTN', '064', 'yes', '975', '.bt');
-INSERT INTO "tblcountries" VALUES (27, 'BO', 'Bolivia', 'Plurinational State of Bolivia', 'BOL', '068', 'yes', '591', '.bo');
-INSERT INTO "tblcountries" VALUES (28, 'BQ', 'Bonaire, Sint Eustatius and Saba', 'Bonaire, Sint Eustatius and Saba', 'BES', '535', 'no', '599', '.bq');
-INSERT INTO "tblcountries" VALUES (29, 'BA', 'Bosnia and Herzegovina', 'Bosnia and Herzegovina', 'BIH', '070', 'yes', '387', '.ba');
-INSERT INTO "tblcountries" VALUES (30, 'BW', 'Botswana', 'Republic of Botswana', 'BWA', '072', 'yes', '267', '.bw');
-INSERT INTO "tblcountries" VALUES (31, 'BV', 'Bouvet Island', 'Bouvet Island', 'BVT', '074', 'no', 'NONE', '.bv');
-INSERT INTO "tblcountries" VALUES (32, 'BR', 'Brazil', 'Federative Republic of Brazil', 'BRA', '076', 'yes', '55', '.br');
-INSERT INTO "tblcountries" VALUES (33, 'IO', 'British Indian Ocean Territory', 'British Indian Ocean Territory', 'IOT', '086', 'no', '246', '.io');
+INSERT INTO "tblcountries" VALUES (24, 'BJ', 'Benin', 'República do Benin', 'BEN', '204', 'yes', '229', '.bj');
+INSERT INTO "tblcountries" VALUES (25, 'BM', 'Bermudas', 'Ilhas Bermudas', 'BMU', '060', 'no', '1+441', '.bm');
+INSERT INTO "tblcountries" VALUES (26, 'BT', 'Butão', 'Reino do Butão', 'BTN', '064', 'yes', '975', '.bt');
+INSERT INTO "tblcountries" VALUES (27, 'BO', 'Bolívia', 'Estado Plurinacional da Bolívia', 'BOL', '068', 'yes', '591', '.bo');
+INSERT INTO "tblcountries" VALUES (28, 'BQ', 'Bonaire, Santo Eustáquio e Saba', 'Bonaire, Santo Eustáquio e Saba', 'BES', '535', 'no', '599', '.bq');
+INSERT INTO "tblcountries" VALUES (29, 'BA', 'Bósnia e Herzegovina', 'Bósnia e Herzegovina', 'BIH', '070', 'yes', '387', '.ba');
+INSERT INTO "tblcountries" VALUES (30, 'BW', 'Botsuana', 'República de Botsuana', 'BWA', '072', 'yes', '267', '.bw');
+INSERT INTO "tblcountries" VALUES (31, 'BV', 'Ilha Bouvet', 'Ilha Bouvet', 'BVT', '074', 'no', 'NONE', '.bv');
+INSERT INTO "tblcountries" VALUES (32, 'BR', 'Brasil', 'República Federativa do Brasil', 'BRA', '076', 'yes', '55', '.br');
+INSERT INTO "tblcountries" VALUES (33, 'IO', 'Território Britânico do Oceano Índico', 'Território Britânico do Oceano Índico', 'IOT', '086', 'no', '246', '.io');
 INSERT INTO "tblcountries" VALUES (34, 'BN', 'Brunei', 'Brunei Darussalam', 'BRN', '096', 'yes', '673', '.bn');
-INSERT INTO "tblcountries" VALUES (35, 'BG', 'Bulgaria', 'Republic of Bulgaria', 'BGR', '100', 'yes', '359', '.bg');
-INSERT INTO "tblcountries" VALUES (36, 'BF', 'Burkina Faso', 'Burkina Faso', 'BFA', '854', 'yes', '226', '.bf');
-INSERT INTO "tblcountries" VALUES (37, 'BI', 'Burundi', 'Republic of Burundi', 'BDI', '108', 'yes', '257', '.bi');
-INSERT INTO "tblcountries" VALUES (38, 'KH', 'Cambodia', 'Kingdom of Cambodia', 'KHM', '116', 'yes', '855', '.kh');
-INSERT INTO "tblcountries" VALUES (39, 'CM', 'Cameroon', 'Republic of Cameroon', 'CMR', '120', 'yes', '237', '.cm');
-INSERT INTO "tblcountries" VALUES (40, 'CA', 'Canada', 'Canada', 'CAN', '124', 'yes', '1', '.ca');
-INSERT INTO "tblcountries" VALUES (41, 'CV', 'Cape Verde', 'Republic of Cape Verde', 'CPV', '132', 'yes', '238', '.cv');
-INSERT INTO "tblcountries" VALUES (42, 'KY', 'Cayman Islands', 'The Cayman Islands', 'CYM', '136', 'no', '1+345', '.ky');
-INSERT INTO "tblcountries" VALUES (43, 'CF', 'Central African Republic', 'Central African Republic', 'CAF', '140', 'yes', '236', '.cf');
-INSERT INTO "tblcountries" VALUES (44, 'TD', 'Chad', 'Republic of Chad', 'TCD', '148', 'yes', '235', '.td');
-INSERT INTO "tblcountries" VALUES (45, 'CL', 'Chile', 'Republic of Chile', 'CHL', '152', 'yes', '56', '.cl');
-INSERT INTO "tblcountries" VALUES (46, 'CN', 'China', 'People''s Republic of China', 'CHN', '156', 'yes', '86', '.cn');
-INSERT INTO "tblcountries" VALUES (47, 'CX', 'Christmas Island', 'Christmas Island', 'CXR', '162', 'no', '61', '.cx');
-INSERT INTO "tblcountries" VALUES (48, 'CC', 'Cocos (Keeling) Islands', 'Cocos (Keeling) Islands', 'CCK', '166', 'no', '61', '.cc');
-INSERT INTO "tblcountries" VALUES (49, 'CO', 'Colombia', 'Republic of Colombia', 'COL', '170', 'yes', '57', '.co');
-INSERT INTO "tblcountries" VALUES (50, 'KM', 'Comoros', 'Union of the Comoros', 'COM', '174', 'yes', '269', '.km');
-INSERT INTO "tblcountries" VALUES (51, 'CG', 'Congo', 'Republic of the Congo', 'COG', '178', 'yes', '242', '.cg');
-INSERT INTO "tblcountries" VALUES (52, 'CK', 'Cook Islands', 'Cook Islands', 'COK', '184', 'some', '682', '.ck');
-INSERT INTO "tblcountries" VALUES (53, 'CR', 'Costa Rica', 'Republic of Costa Rica', 'CRI', '188', 'yes', '506', '.cr');
-INSERT INTO "tblcountries" VALUES (54, 'CI', 'Cote d''ivoire (Ivory Coast)', 'Republic of C&ocirc;te D''Ivoire (Ivory Coast)', 'CIV', '384', 'yes', '225', '.ci');
-INSERT INTO "tblcountries" VALUES (55, 'HR', 'Croatia', 'Republic of Croatia', 'HRV', '191', 'yes', '385', '.hr');
-INSERT INTO "tblcountries" VALUES (56, 'CU', 'Cuba', 'Republic of Cuba', 'CUB', '192', 'yes', '53', '.cu');
-INSERT INTO "tblcountries" VALUES (57, 'CW', 'Curacao', 'Cura&ccedil;ao', 'CUW', '531', 'no', '599', '.cw');
-INSERT INTO "tblcountries" VALUES (58, 'CY', 'Cyprus', 'Republic of Cyprus', 'CYP', '196', 'yes', '357', '.cy');
-INSERT INTO "tblcountries" VALUES (59, 'CZ', 'Czech Republic', 'Czech Republic', 'CZE', '203', 'yes', '420', '.cz');
-INSERT INTO "tblcountries" VALUES (60, 'CD', 'Democratic Republic of the Congo', 'Democratic Republic of the Congo', 'COD', '180', 'yes', '243', '.cd');
-INSERT INTO "tblcountries" VALUES (61, 'DK', 'Denmark', 'Kingdom of Denmark', 'DNK', '208', 'yes', '45', '.dk');
-INSERT INTO "tblcountries" VALUES (62, 'DJ', 'Djibouti', 'Republic of Djibouti', 'DJI', '262', 'yes', '253', '.dj');
-INSERT INTO "tblcountries" VALUES (63, 'DM', 'Dominica', 'Commonwealth of Dominica', 'DMA', '212', 'yes', '1+767', '.dm');
-INSERT INTO "tblcountries" VALUES (64, 'DO', 'Dominican Republic', 'Dominican Republic', 'DOM', '214', 'yes', '1+809, 8', '.do');
-INSERT INTO "tblcountries" VALUES (65, 'EC', 'Ecuador', 'Republic of Ecuador', 'ECU', '218', 'yes', '593', '.ec');
-INSERT INTO "tblcountries" VALUES (66, 'EG', 'Egypt', 'Arab Republic of Egypt', 'EGY', '818', 'yes', '20', '.eg');
-INSERT INTO "tblcountries" VALUES (67, 'SV', 'El Salvador', 'Republic of El Salvador', 'SLV', '222', 'yes', '503', '.sv');
-INSERT INTO "tblcountries" VALUES (68, 'GQ', 'Equatorial Guinea', 'Republic of Equatorial Guinea', 'GNQ', '226', 'yes', '240', '.gq');
-INSERT INTO "tblcountries" VALUES (69, 'ER', 'Eritrea', 'State of Eritrea', 'ERI', '232', 'yes', '291', '.er');
-INSERT INTO "tblcountries" VALUES (70, 'EE', 'Estonia', 'Republic of Estonia', 'EST', '233', 'yes', '372', '.ee');
-INSERT INTO "tblcountries" VALUES (71, 'ET', 'Ethiopia', 'Federal Democratic Republic of Ethiopia', 'ETH', '231', 'yes', '251', '.et');
-INSERT INTO "tblcountries" VALUES (72, 'FK', 'Falkland Islands (Malvinas)', 'The Falkland Islands (Malvinas)', 'FLK', '238', 'no', '500', '.fk');
-INSERT INTO "tblcountries" VALUES (73, 'FO', 'Faroe Islands', 'The Faroe Islands', 'FRO', '234', 'no', '298', '.fo');
-INSERT INTO "tblcountries" VALUES (74, 'FJ', 'Fiji', 'Republic of Fiji', 'FJI', '242', 'yes', '679', '.fj');
-INSERT INTO "tblcountries" VALUES (75, 'FI', 'Finland', 'Republic of Finland', 'FIN', '246', 'yes', '358', '.fi');
-INSERT INTO "tblcountries" VALUES (76, 'FR', 'France', 'French Republic', 'FRA', '250', 'yes', '33', '.fr');
-INSERT INTO "tblcountries" VALUES (77, 'GF', 'French Guiana', 'French Guiana', 'GUF', '254', 'no', '594', '.gf');
-INSERT INTO "tblcountries" VALUES (78, 'PF', 'French Polynesia', 'French Polynesia', 'PYF', '258', 'no', '689', '.pf');
-INSERT INTO "tblcountries" VALUES (79, 'TF', 'French Southern Territories', 'French Southern Territories', 'ATF', '260', 'no', NULL, '.tf');
-INSERT INTO "tblcountries" VALUES (80, 'GA', 'Gabon', 'Gabonese Republic', 'GAB', '266', 'yes', '241', '.ga');
-INSERT INTO "tblcountries" VALUES (81, 'GM', 'Gambia', 'Republic of The Gambia', 'GMB', '270', 'yes', '220', '.gm');
-INSERT INTO "tblcountries" VALUES (82, 'GE', 'Georgia', 'Georgia', 'GEO', '268', 'yes', '995', '.ge');
-INSERT INTO "tblcountries" VALUES (83, 'DE', 'Germany', 'Federal Republic of Germany', 'DEU', '276', 'yes', '49', '.de');
-INSERT INTO "tblcountries" VALUES (84, 'GH', 'Ghana', 'Republic of Ghana', 'GHA', '288', 'yes', '233', '.gh');
+INSERT INTO "tblcountries" VALUES (35, 'BG', 'Bulgária', 'República da Bulgária', 'BGR', '100', 'yes', '359', '.bg');
+INSERT INTO "tblcountries" VALUES (36, 'BF', 'Burquina Faso', 'Burquina Faso', 'BFA', '854', 'yes', '226', '.bf');
+INSERT INTO "tblcountries" VALUES (37, 'BI', 'Burundi', 'República do Burundi', 'BDI', '108', 'yes', '257', '.bi');
+INSERT INTO "tblcountries" VALUES (38, 'KH', 'Camboja', 'Reino do Camboja', 'KHM', '116', 'yes', '855', '.kh');
+INSERT INTO "tblcountries" VALUES (39, 'CM', 'Camarões', 'República dos Camarões', 'CMR', '120', 'yes', '237', '.cm');
+INSERT INTO "tblcountries" VALUES (40, 'CA', 'Canadá', 'Canadá', 'CAN', '124', 'yes', '1', '.ca');
+INSERT INTO "tblcountries" VALUES (41, 'CV', 'Cabo Verde', 'República de Cabo Verde', 'CPV', '132', 'yes', '238', '.cv');
+INSERT INTO "tblcountries" VALUES (42, 'KY', 'Ilhas Cayman', 'As Ilhas Cayman', 'CYM', '136', 'no', '1+345', '.ky');
+INSERT INTO "tblcountries" VALUES (43, 'CF', 'República Centro-Africana', 'República Centro-Africana', 'CAF', '140', 'yes', '236', '.cf');
+INSERT INTO "tblcountries" VALUES (44, 'TD', 'Chade', 'República do Chade', 'TCD', '148', 'yes', '235', '.td');
+INSERT INTO "tblcountries" VALUES (45, 'CL', 'Chile', 'República do Chile', 'CHL', '152', 'yes', '56', '.cl');
+INSERT INTO "tblcountries" VALUES (46, 'CN', 'China', 'República Popular da China', 'CHN', '156', 'yes', '86', '.cn');
+INSERT INTO "tblcountries" VALUES (47, 'CX', 'Ilha Christmas', 'Ilha Christmas', 'CXR', '162', 'no', '61', '.cx');
+INSERT INTO "tblcountries" VALUES (48, 'CC', 'Ilhas Cocos (Keeling)', 'Ilhas Cocos (Keeling)', 'CCK', '166', 'no', '61', '.cc');
+INSERT INTO "tblcountries" VALUES (49, 'CO', 'Colômbia', 'República da Colômbia', 'COL', '170', 'yes', '57', '.co');
+INSERT INTO "tblcountries" VALUES (50, 'KM', 'Comores', 'União das Comores', 'COM', '174', 'yes', '269', '.km');
+INSERT INTO "tblcountries" VALUES (51, 'CG', 'Congo', 'República do Congo', 'COG', '178', 'yes', '242', '.cg');
+INSERT INTO "tblcountries" VALUES (52, 'CK', 'Ilhas Cook', 'Ilhas Cook', 'COK', '184', 'some', '682', '.ck');
+INSERT INTO "tblcountries" VALUES (53, 'CR', 'Costa Rica', 'República da Costa Rica', 'CRI', '188', 'yes', '506', '.cr');
+INSERT INTO "tblcountries" VALUES (54, 'CI', 'Costa do Marfim', 'República da Costa do Marfim', 'CIV', '384', 'yes', '225', '.ci');
+INSERT INTO "tblcountries" VALUES (55, 'HR', 'Croácia', 'República da Croácia', 'HRV', '191', 'yes', '385', '.hr');
+INSERT INTO "tblcountries" VALUES (56, 'CU', 'Cuba', 'República de Cuba', 'CUB', '192', 'yes', '53', '.cu');
+INSERT INTO "tblcountries" VALUES (57, 'CW', 'Curaçao', 'Curaçao', 'CUW', '531', 'no', '599', '.cw');
+INSERT INTO "tblcountries" VALUES (58, 'CY', 'Chipre', 'República de Chipre', 'CYP', '196', 'yes', '357', '.cy');
+INSERT INTO "tblcountries" VALUES (59, 'CZ', 'República Tcheca', 'República Tcheca', 'CZE', '203', 'yes', '420', '.cz');
+INSERT INTO "tblcountries" VALUES (60, 'CD', 'República Democrática do Congo', 'República Democrática do Congo', 'COD', '180', 'yes', '243', '.cd');
+INSERT INTO "tblcountries" VALUES (61, 'DK', 'Dinamarca', 'Reino da Dinamarca', 'DNK', '208', 'yes', '45', '.dk');
+INSERT INTO "tblcountries" VALUES (62, 'DJ', 'Djibuti', 'República do Djibuti', 'DJI', '262', 'yes', '253', '.dj');
+INSERT INTO "tblcountries" VALUES (63, 'DM', 'Dominica', 'Comunidade da Dominica', 'DMA', '212', 'yes', '1+767', '.dm');
+INSERT INTO "tblcountries" VALUES (64, 'DO', 'República Dominicana', 'República Dominicana', 'DOM', '214', 'yes', '1+809, 8', '.do');
+INSERT INTO "tblcountries" VALUES (65, 'EC', 'Equador', 'República do Equador', 'ECU', '218', 'yes', '593', '.ec');
+INSERT INTO "tblcountries" VALUES (66, 'EG', 'Egito', 'República Árabe do Egito', 'EGY', '818', 'yes', '20', '.eg');
+INSERT INTO "tblcountries" VALUES (67, 'SV', 'El Salvador', 'República de El Salvador', 'SLV', '222', 'yes', '503', '.sv');
+INSERT INTO "tblcountries" VALUES (68, 'GQ', 'Guiné Equatorial', 'República da Guiné Equatorial', 'GNQ', '226', 'yes', '240', '.gq');
+INSERT INTO "tblcountries" VALUES (69, 'ER', 'Eritreia', 'Estado da Eritreia', 'ERI', '232', 'yes', '291', '.er');
+INSERT INTO "tblcountries" VALUES (70, 'EE', 'Estônia', 'República da Estônia', 'EST', '233', 'yes', '372', '.ee');
+INSERT INTO "tblcountries" VALUES (71, 'ET', 'Etiópia', 'República Democrática Federal da Etiópia', 'ETH', '231', 'yes', '251', '.et');
+INSERT INTO "tblcountries" VALUES (72, 'FK', 'Ilhas Malvinas (Falkland)', 'As Ilhas Malvinas (Falkland)', 'FLK', '238', 'no', '500', '.fk');
+INSERT INTO "tblcountries" VALUES (73, 'FO', 'Ilhas Faroé', 'As Ilhas Faroé', 'FRO', '234', 'no', '298', '.fo');
+INSERT INTO "tblcountries" VALUES (74, 'FJ', 'Fiji', 'República de Fiji', 'FJI', '242', 'yes', '679', '.fj');
+INSERT INTO "tblcountries" VALUES (75, 'FI', 'Finlândia', 'República da Finlândia', 'FIN', '246', 'yes', '358', '.fi');
+INSERT INTO "tblcountries" VALUES (76, 'FR', 'França', 'República Francesa', 'FRA', '250', 'yes', '33', '.fr');
+INSERT INTO "tblcountries" VALUES (77, 'GF', 'Guiana Francesa', 'Guiana Francesa', 'GUF', '254', 'no', '594', '.gf');
+INSERT INTO "tblcountries" VALUES (78, 'PF', 'Polinésia Francesa', 'Polinésia Francesa', 'PYF', '258', 'no', '689', '.pf');
+INSERT INTO "tblcountries" VALUES (79, 'TF', 'Territórios Franceses do Sul', 'Territórios Franceses do Sul', 'ATF', '260', 'no', NULL, '.tf');
+INSERT INTO "tblcountries" VALUES (80, 'GA', 'Gabão', 'República Gabonesa', 'GAB', '266', 'yes', '241', '.ga');
+INSERT INTO "tblcountries" VALUES (81, 'GM', 'Gâmbia', 'República da Gâmbia', 'GMB', '270', 'yes', '220', '.gm');
+INSERT INTO "tblcountries" VALUES (82, 'GE', 'Geórgia', 'Geórgia', 'GEO', '268', 'yes', '995', '.ge');
+INSERT INTO "tblcountries" VALUES (83, 'DE', 'Alemanha', 'República Federal da Alemanha', 'DEU', '276', 'yes', '49', '.de');
+INSERT INTO "tblcountries" VALUES (84, 'GH', 'Gana', 'República de Gana', 'GHA', '288', 'yes', '233', '.gh');
 INSERT INTO "tblcountries" VALUES (85, 'GI', 'Gibraltar', 'Gibraltar', 'GIB', '292', 'no', '350', '.gi');
-INSERT INTO "tblcountries" VALUES (86, 'GR', 'Greece', 'Hellenic Republic', 'GRC', '300', 'yes', '30', '.gr');
-INSERT INTO "tblcountries" VALUES (87, 'GL', 'Greenland', 'Greenland', 'GRL', '304', 'no', '299', '.gl');
-INSERT INTO "tblcountries" VALUES (88, 'GD', 'Grenada', 'Grenada', 'GRD', '308', 'yes', '1+473', '.gd');
-INSERT INTO "tblcountries" VALUES (89, 'GP', 'Guadaloupe', 'Guadeloupe', 'GLP', '312', 'no', '590', '.gp');
+INSERT INTO "tblcountries" VALUES (86, 'GR', 'Grécia', 'República Helênica', 'GRC', '300', 'yes', '30', '.gr');
+INSERT INTO "tblcountries" VALUES (87, 'GL', 'Groenlândia', 'Groenlândia', 'GRL', '304', 'no', '299', '.gl');
+INSERT INTO "tblcountries" VALUES (88, 'GD', 'Granada', 'Granada', 'GRD', '308', 'yes', '1+473', '.gd');
+INSERT INTO "tblcountries" VALUES (89, 'GP', 'Guadalupe', 'Guadalupe', 'GLP', '312', 'no', '590', '.gp');
 INSERT INTO "tblcountries" VALUES (90, 'GU', 'Guam', 'Guam', 'GUM', '316', 'no', '1+671', '.gu');
-INSERT INTO "tblcountries" VALUES (91, 'GT', 'Guatemala', 'Republic of Guatemala', 'GTM', '320', 'yes', '502', '.gt');
+INSERT INTO "tblcountries" VALUES (91, 'GT', 'Guatemala', 'República da Guatemala', 'GTM', '320', 'yes', '502', '.gt');
 INSERT INTO "tblcountries" VALUES (92, 'GG', 'Guernsey', 'Guernsey', 'GGY', '831', 'no', '44', '.gg');
-INSERT INTO "tblcountries" VALUES (93, 'GN', 'Guinea', 'Republic of Guinea', 'GIN', '324', 'yes', '224', '.gn');
-INSERT INTO "tblcountries" VALUES (94, 'GW', 'Guinea-Bissau', 'Republic of Guinea-Bissau', 'GNB', '624', 'yes', '245', '.gw');
-INSERT INTO "tblcountries" VALUES (95, 'GY', 'Guyana', 'Co-operative Republic of Guyana', 'GUY', '328', 'yes', '592', '.gy');
-INSERT INTO "tblcountries" VALUES (96, 'HT', 'Haiti', 'Republic of Haiti', 'HTI', '332', 'yes', '509', '.ht');
-INSERT INTO "tblcountries" VALUES (97, 'HM', 'Heard Island and McDonald Islands', 'Heard Island and McDonald Islands', 'HMD', '334', 'no', 'NONE', '.hm');
-INSERT INTO "tblcountries" VALUES (98, 'HN', 'Honduras', 'Republic of Honduras', 'HND', '340', 'yes', '504', '.hn');
+INSERT INTO "tblcountries" VALUES (93, 'GN', 'Guiné', 'República da Guiné', 'GIN', '324', 'yes', '224', '.gn');
+INSERT INTO "tblcountries" VALUES (94, 'GW', 'Guiné-Bissau', 'República da Guiné-Bissau', 'GNB', '624', 'yes', '245', '.gw');
+INSERT INTO "tblcountries" VALUES (95, 'GY', 'Guiana', 'República Cooperativista da Guiana', 'GUY', '328', 'yes', '592', '.gy');
+INSERT INTO "tblcountries" VALUES (96, 'HT', 'Haiti', 'República do Haiti', 'HTI', '332', 'yes', '509', '.ht');
+INSERT INTO "tblcountries" VALUES (97, 'HM', 'Ilha Heard e Ilhas McDonald', 'Ilha Heard e Ilhas McDonald', 'HMD', '334', 'no', 'NONE', '.hm');
+INSERT INTO "tblcountries" VALUES (98, 'HN', 'Honduras', 'República de Honduras', 'HND', '340', 'yes', '504', '.hn');
 INSERT INTO "tblcountries" VALUES (99, 'HK', 'Hong Kong', 'Hong Kong', 'HKG', '344', 'no', '852', '.hk');
-INSERT INTO "tblcountries" VALUES (100, 'HU', 'Hungary', 'Hungary', 'HUN', '348', 'yes', '36', '.hu');
-INSERT INTO "tblcountries" VALUES (101, 'IS', 'Iceland', 'Republic of Iceland', 'ISL', '352', 'yes', '354', '.is');
-INSERT INTO "tblcountries" VALUES (102, 'IN', 'India', 'Republic of India', 'IND', '356', 'yes', '91', '.in');
-INSERT INTO "tblcountries" VALUES (103, 'ID', 'Indonesia', 'Republic of Indonesia', 'IDN', '360', 'yes', '62', '.id');
-INSERT INTO "tblcountries" VALUES (104, 'IR', 'Iran', 'Islamic Republic of Iran', 'IRN', '364', 'yes', '98', '.ir');
-INSERT INTO "tblcountries" VALUES (105, 'IQ', 'Iraq', 'Republic of Iraq', 'IRQ', '368', 'yes', '964', '.iq');
-INSERT INTO "tblcountries" VALUES (106, 'IE', 'Ireland', 'Ireland', 'IRL', '372', 'yes', '353', '.ie');
-INSERT INTO "tblcountries" VALUES (107, 'IM', 'Isle of Man', 'Isle of Man', 'IMN', '833', 'no', '44', '.im');
-INSERT INTO "tblcountries" VALUES (108, 'IL', 'Israel', 'State of Israel', 'ISR', '376', 'yes', '972', '.il');
-INSERT INTO "tblcountries" VALUES (109, 'IT', 'Italy', 'Italian Republic', 'ITA', '380', 'yes', '39', '.jm');
+INSERT INTO "tblcountries" VALUES (100, 'HU', 'Hungria', 'Hungria', 'HUN', '348', 'yes', '36', '.hu');
+INSERT INTO "tblcountries" VALUES (101, 'IS', 'Islândia', 'República da Islândia', 'ISL', '352', 'yes', '354', '.is');
+INSERT INTO "tblcountries" VALUES (102, 'IN', 'Índia', 'República da Índia', 'IND', '356', 'yes', '91', '.in');
+INSERT INTO "tblcountries" VALUES (103, 'ID', 'Indonésia', 'República da Indonésia', 'IDN', '360', 'yes', '62', '.id');
+INSERT INTO "tblcountries" VALUES (104, 'IR', 'Irã', 'República Islâmica do Irã', 'IRN', '364', 'yes', '98', '.ir');
+INSERT INTO "tblcountries" VALUES (105, 'IQ', 'Iraque', 'República do Iraque', 'IRQ', '368', 'yes', '964', '.iq');
+INSERT INTO "tblcountries" VALUES (106, 'IE', 'Irlanda', 'Irlanda', 'IRL', '372', 'yes', '353', '.ie');
+INSERT INTO "tblcountries" VALUES (107, 'IM', 'Ilha de Man', 'Ilha de Man', 'IMN', '833', 'no', '44', '.im');
+INSERT INTO "tblcountries" VALUES (108, 'IL', 'Israel', 'Estado de Israel', 'ISR', '376', 'yes', '972', '.il');
+INSERT INTO "tblcountries" VALUES (109, 'IT', 'Itália', 'República Italiana', 'ITA', '380', 'yes', '39', '.jm');
 INSERT INTO "tblcountries" VALUES (110, 'JM', 'Jamaica', 'Jamaica', 'JAM', '388', 'yes', '1+876', '.jm');
-INSERT INTO "tblcountries" VALUES (111, 'JP', 'Japan', 'Japan', 'JPN', '392', 'yes', '81', '.jp');
-INSERT INTO "tblcountries" VALUES (112, 'JE', 'Jersey', 'The Bailiwick of Jersey', 'JEY', '832', 'no', '44', '.je');
-INSERT INTO "tblcountries" VALUES (113, 'JO', 'Jordan', 'Hashemite Kingdom of Jordan', 'JOR', '400', 'yes', '962', '.jo');
-INSERT INTO "tblcountries" VALUES (114, 'KZ', 'Kazakhstan', 'Republic of Kazakhstan', 'KAZ', '398', 'yes', '7', '.kz');
-INSERT INTO "tblcountries" VALUES (115, 'KE', 'Kenya', 'Republic of Kenya', 'KEN', '404', 'yes', '254', '.ke');
-INSERT INTO "tblcountries" VALUES (116, 'KI', 'Kiribati', 'Republic of Kiribati', 'KIR', '296', 'yes', '686', '.ki');
-INSERT INTO "tblcountries" VALUES (117, 'XK', 'Kosovo', 'Republic of Kosovo', '---', '---', 'some', '381', '');
-INSERT INTO "tblcountries" VALUES (118, 'KW', 'Kuwait', 'State of Kuwait', 'KWT', '414', 'yes', '965', '.kw');
-INSERT INTO "tblcountries" VALUES (119, 'KG', 'Kyrgyzstan', 'Kyrgyz Republic', 'KGZ', '417', 'yes', '996', '.kg');
-INSERT INTO "tblcountries" VALUES (120, 'LA', 'Laos', 'Lao People''s Democratic Republic', 'LAO', '418', 'yes', '856', '.la');
-INSERT INTO "tblcountries" VALUES (121, 'LV', 'Latvia', 'Republic of Latvia', 'LVA', '428', 'yes', '371', '.lv');
-INSERT INTO "tblcountries" VALUES (122, 'LB', 'Lebanon', 'Republic of Lebanon', 'LBN', '422', 'yes', '961', '.lb');
-INSERT INTO "tblcountries" VALUES (123, 'LS', 'Lesotho', 'Kingdom of Lesotho', 'LSO', '426', 'yes', '266', '.ls');
-INSERT INTO "tblcountries" VALUES (124, 'LR', 'Liberia', 'Republic of Liberia', 'LBR', '430', 'yes', '231', '.lr');
-INSERT INTO "tblcountries" VALUES (125, 'LY', 'Libya', 'Libya', 'LBY', '434', 'yes', '218', '.ly');
-INSERT INTO "tblcountries" VALUES (126, 'LI', 'Liechtenstein', 'Principality of Liechtenstein', 'LIE', '438', 'yes', '423', '.li');
-INSERT INTO "tblcountries" VALUES (127, 'LT', 'Lithuania', 'Republic of Lithuania', 'LTU', '440', 'yes', '370', '.lt');
-INSERT INTO "tblcountries" VALUES (128, 'LU', 'Luxembourg', 'Grand Duchy of Luxembourg', 'LUX', '442', 'yes', '352', '.lu');
-INSERT INTO "tblcountries" VALUES (129, 'MO', 'Macao', 'The Macao Special Administrative Region', 'MAC', '446', 'no', '853', '.mo');
-INSERT INTO "tblcountries" VALUES (130, 'MK', 'North Macedonia', 'Republic of North Macedonia', 'MKD', '807', 'yes', '389', '.mk');
-INSERT INTO "tblcountries" VALUES (131, 'MG', 'Madagascar', 'Republic of Madagascar', 'MDG', '450', 'yes', '261', '.mg');
-INSERT INTO "tblcountries" VALUES (132, 'MW', 'Malawi', 'Republic of Malawi', 'MWI', '454', 'yes', '265', '.mw');
-INSERT INTO "tblcountries" VALUES (133, 'MY', 'Malaysia', 'Malaysia', 'MYS', '458', 'yes', '60', '.my');
-INSERT INTO "tblcountries" VALUES (134, 'MV', 'Maldives', 'Republic of Maldives', 'MDV', '462', 'yes', '960', '.mv');
-INSERT INTO "tblcountries" VALUES (135, 'ML', 'Mali', 'Republic of Mali', 'MLI', '466', 'yes', '223', '.ml');
-INSERT INTO "tblcountries" VALUES (136, 'MT', 'Malta', 'Republic of Malta', 'MLT', '470', 'yes', '356', '.mt');
-INSERT INTO "tblcountries" VALUES (137, 'MH', 'Marshall Islands', 'Republic of the Marshall Islands', 'MHL', '584', 'yes', '692', '.mh');
-INSERT INTO "tblcountries" VALUES (138, 'MQ', 'Martinique', 'Martinique', 'MTQ', '474', 'no', '596', '.mq');
-INSERT INTO "tblcountries" VALUES (139, 'MR', 'Mauritania', 'Islamic Republic of Mauritania', 'MRT', '478', 'yes', '222', '.mr');
-INSERT INTO "tblcountries" VALUES (140, 'MU', 'Mauritius', 'Republic of Mauritius', 'MUS', '480', 'yes', '230', '.mu');
+INSERT INTO "tblcountries" VALUES (111, 'JP', 'Japão', 'Japão', 'JPN', '392', 'yes', '81', '.jp');
+INSERT INTO "tblcountries" VALUES (112, 'JE', 'Jersey', 'Bailiado de Jersey', 'JEY', '832', 'no', '44', '.je');
+INSERT INTO "tblcountries" VALUES (113, 'JO', 'Jordânia', 'Reino Hachemita da Jordânia', 'JOR', '400', 'yes', '962', '.jo');
+INSERT INTO "tblcountries" VALUES (114, 'KZ', 'Cazaquistão', 'República do Cazaquistão', 'KAZ', '398', 'yes', '7', '.kz');
+INSERT INTO "tblcountries" VALUES (115, 'KE', 'Quênia', 'República do Quênia', 'KEN', '404', 'yes', '254', '.ke');
+INSERT INTO "tblcountries" VALUES (116, 'KI', 'Kiribati', 'República de Kiribati', 'KIR', '296', 'yes', '686', '.ki');
+INSERT INTO "tblcountries" VALUES (117, 'XK', 'Kosovo', 'República do Kosovo', '---', '---', 'some', '381', '');
+INSERT INTO "tblcountries" VALUES (118, 'KW', 'Kuwait', 'Estado do Kuwait', 'KWT', '414', 'yes', '965', '.kw');
+INSERT INTO "tblcountries" VALUES (119, 'KG', 'Quirguistão', 'República Quirguiz', 'KGZ', '417', 'yes', '996', '.kg');
+INSERT INTO "tblcountries" VALUES (120, 'LA', 'Laos', 'República Democrática Popular do Laos', 'LAO', '418', 'yes', '856', '.la');
+INSERT INTO "tblcountries" VALUES (121, 'LV', 'Letônia', 'República da Letônia', 'LVA', '428', 'yes', '371', '.lv');
+INSERT INTO "tblcountries" VALUES (122, 'LB', 'Líbano', 'República do Líbano', 'LBN', '422', 'yes', '961', '.lb');
+INSERT INTO "tblcountries" VALUES (123, 'LS', 'Lesoto', 'Reino do Lesoto', 'LSO', '426', 'yes', '266', '.ls');
+INSERT INTO "tblcountries" VALUES (124, 'LR', 'Libéria', 'República da Libéria', 'LBR', '430', 'yes', '231', '.lr');
+INSERT INTO "tblcountries" VALUES (125, 'LY', 'Líbia', 'Líbia', 'LBY', '434', 'yes', '218', '.ly');
+INSERT INTO "tblcountries" VALUES (126, 'LI', 'Liechtenstein', 'Principado de Liechtenstein', 'LIE', '438', 'yes', '423', '.li');
+INSERT INTO "tblcountries" VALUES (127, 'LT', 'Lituânia', 'República da Lituânia', 'LTU', '440', 'yes', '370', '.lt');
+INSERT INTO "tblcountries" VALUES (128, 'LU', 'Luxemburgo', 'Grão-Ducado de Luxemburgo', 'LUX', '442', 'yes', '352', '.lu');
+INSERT INTO "tblcountries" VALUES (129, 'MO', 'Macau', 'Região Administrativa Especial de Macau', 'MAC', '446', 'no', '853', '.mo');
+INSERT INTO "tblcountries" VALUES (130, 'MK', 'Macedônia do Norte', 'República da Macedônia do Norte', 'MKD', '807', 'yes', '389', '.mk');
+INSERT INTO "tblcountries" VALUES (131, 'MG', 'Madagáscar', 'República de Madagáscar', 'MDG', '450', 'yes', '261', '.mg');
+INSERT INTO "tblcountries" VALUES (132, 'MW', 'Malawi', 'República do Malawi', 'MWI', '454', 'yes', '265', '.mw');
+INSERT INTO "tblcountries" VALUES (133, 'MY', 'Malásia', 'Malásia', 'MYS', '458', 'yes', '60', '.my');
+INSERT INTO "tblcountries" VALUES (134, 'MV', 'Maldivas', 'República das Maldivas', 'MDV', '462', 'yes', '960', '.mv');
+INSERT INTO "tblcountries" VALUES (135, 'ML', 'Mali', 'República do Mali', 'MLI', '466', 'yes', '223', '.ml');
+INSERT INTO "tblcountries" VALUES (136, 'MT', 'Malta', 'República de Malta', 'MLT', '470', 'yes', '356', '.mt');
+INSERT INTO "tblcountries" VALUES (137, 'MH', 'Ilhas Marshall', 'República das Ilhas Marshall', 'MHL', '584', 'yes', '692', '.mh');
+INSERT INTO "tblcountries" VALUES (138, 'MQ', 'Martinica', 'Martinica', 'MTQ', '474', 'no', '596', '.mq');
+INSERT INTO "tblcountries" VALUES (139, 'MR', 'Mauritânia', 'República Islâmica da Mauritânia', 'MRT', '478', 'yes', '222', '.mr');
+INSERT INTO "tblcountries" VALUES (140, 'MU', 'Maurício', 'República de Maurício', 'MUS', '480', 'yes', '230', '.mu');
 INSERT INTO "tblcountries" VALUES (141, 'YT', 'Mayotte', 'Mayotte', 'MYT', '175', 'no', '262', '.yt');
-INSERT INTO "tblcountries" VALUES (142, 'MX', 'Mexico', 'United Mexican States', 'MEX', '484', 'yes', '52', '.mx');
-INSERT INTO "tblcountries" VALUES (143, 'FM', 'Micronesia', 'Federated States of Micronesia', 'FSM', '583', 'yes', '691', '.fm');
-INSERT INTO "tblcountries" VALUES (144, 'MD', 'Moldava', 'Republic of Moldova', 'MDA', '498', 'yes', '373', '.md');
-INSERT INTO "tblcountries" VALUES (145, 'MC', 'Monaco', 'Principality of Monaco', 'MCO', '492', 'yes', '377', '.mc');
-INSERT INTO "tblcountries" VALUES (146, 'MN', 'Mongolia', 'Mongolia', 'MNG', '496', 'yes', '976', '.mn');
+INSERT INTO "tblcountries" VALUES (142, 'MX', 'México', 'Estados Unidos Mexicanos', 'MEX', '484', 'yes', '52', '.mx');
+INSERT INTO "tblcountries" VALUES (143, 'FM', 'Micronésia', 'Estados Federados da Micronésia', 'FSM', '583', 'yes', '691', '.fm');
+INSERT INTO "tblcountries" VALUES (144, 'MD', 'Moldávia', 'República da Moldávia', 'MDA', '498', 'yes', '373', '.md');
+INSERT INTO "tblcountries" VALUES (145, 'MC', 'Mônaco', 'Principado de Mônaco', 'MCO', '492', 'yes', '377', '.mc');
+INSERT INTO "tblcountries" VALUES (146, 'MN', 'Mongólia', 'Mongólia', 'MNG', '496', 'yes', '976', '.mn');
 INSERT INTO "tblcountries" VALUES (147, 'ME', 'Montenegro', 'Montenegro', 'MNE', '499', 'yes', '382', '.me');
 INSERT INTO "tblcountries" VALUES (148, 'MS', 'Montserrat', 'Montserrat', 'MSR', '500', 'no', '1+664', '.ms');
-INSERT INTO "tblcountries" VALUES (149, 'MA', 'Morocco', 'Kingdom of Morocco', 'MAR', '504', 'yes', '212', '.ma');
-INSERT INTO "tblcountries" VALUES (150, 'MZ', 'Mozambique', 'Republic of Mozambique', 'MOZ', '508', 'yes', '258', '.mz');
-INSERT INTO "tblcountries" VALUES (151, 'MM', 'Myanmar (Burma)', 'Republic of the Union of Myanmar', 'MMR', '104', 'yes', '95', '.mm');
-INSERT INTO "tblcountries" VALUES (152, 'NA', 'Namibia', 'Republic of Namibia', 'NAM', '516', 'yes', '264', '.na');
-INSERT INTO "tblcountries" VALUES (153, 'NR', 'Nauru', 'Republic of Nauru', 'NRU', '520', 'yes', '674', '.nr');
-INSERT INTO "tblcountries" VALUES (154, 'NP', 'Nepal', 'Federal Democratic Republic of Nepal', 'NPL', '524', 'yes', '977', '.np');
-INSERT INTO "tblcountries" VALUES (155, 'NL', 'Netherlands', 'Kingdom of the Netherlands', 'NLD', '528', 'yes', '31', '.nl');
-INSERT INTO "tblcountries" VALUES (156, 'NC', 'New Caledonia', 'New Caledonia', 'NCL', '540', 'no', '687', '.nc');
-INSERT INTO "tblcountries" VALUES (157, 'NZ', 'New Zealand', 'New Zealand', 'NZL', '554', 'yes', '64', '.nz');
-INSERT INTO "tblcountries" VALUES (158, 'NI', 'Nicaragua', 'Republic of Nicaragua', 'NIC', '558', 'yes', '505', '.ni');
-INSERT INTO "tblcountries" VALUES (159, 'NE', 'Niger', 'Republic of Niger', 'NER', '562', 'yes', '227', '.ne');
-INSERT INTO "tblcountries" VALUES (160, 'NG', 'Nigeria', 'Federal Republic of Nigeria', 'NGA', '566', 'yes', '234', '.ng');
+INSERT INTO "tblcountries" VALUES (149, 'MA', 'Marrocos', 'Reino de Marrocos', 'MAR', '504', 'yes', '212', '.ma');
+INSERT INTO "tblcountries" VALUES (150, 'MZ', 'Moçambique', 'República de Moçambique', 'MOZ', '508', 'yes', '258', '.mz');
+INSERT INTO "tblcountries" VALUES (151, 'MM', 'Mianmar (Birmânia)', 'República da União de Mianmar', 'MMR', '104', 'yes', '95', '.mm');
+INSERT INTO "tblcountries" VALUES (152, 'NA', 'Namíbia', 'República da Namíbia', 'NAM', '516', 'yes', '264', '.na');
+INSERT INTO "tblcountries" VALUES (153, 'NR', 'Nauru', 'República de Nauru', 'NRU', '520', 'yes', '674', '.nr');
+INSERT INTO "tblcountries" VALUES (154, 'NP', 'Nepal', 'República Democrática Federal do Nepal', 'NPL', '524', 'yes', '977', '.np');
+INSERT INTO "tblcountries" VALUES (155, 'NL', 'Países Baixos', 'Reino dos Países Baixos', 'NLD', '528', 'yes', '31', '.nl');
+INSERT INTO "tblcountries" VALUES (156, 'NC', 'Nova Caledônia', 'Nova Caledônia', 'NCL', '540', 'no', '687', '.nc');
+INSERT INTO "tblcountries" VALUES (157, 'NZ', 'Nova Zelândia', 'Nova Zelândia', 'NZL', '554', 'yes', '64', '.nz');
+INSERT INTO "tblcountries" VALUES (158, 'NI', 'Nicarágua', 'República da Nicarágua', 'NIC', '558', 'yes', '505', '.ni');
+INSERT INTO "tblcountries" VALUES (159, 'NE', 'Níger', 'República do Níger', 'NER', '562', 'yes', '227', '.ne');
+INSERT INTO "tblcountries" VALUES (160, 'NG', 'Nigéria', 'República Federal da Nigéria', 'NGA', '566', 'yes', '234', '.ng');
 INSERT INTO "tblcountries" VALUES (161, 'NU', 'Niue', 'Niue', 'NIU', '570', 'some', '683', '.nu');
-INSERT INTO "tblcountries" VALUES (162, 'NF', 'Norfolk Island', 'Norfolk Island', 'NFK', '574', 'no', '672', '.nf');
-INSERT INTO "tblcountries" VALUES (163, 'KP', 'North Korea', 'Democratic People''s Republic of Korea', 'PRK', '408', 'yes', '850', '.kp');
-INSERT INTO "tblcountries" VALUES (164, 'MP', 'Northern Mariana Islands', 'Northern Mariana Islands', 'MNP', '580', 'no', '1+670', '.mp');
-INSERT INTO "tblcountries" VALUES (165, 'NO', 'Norway', 'Kingdom of Norway', 'NOR', '578', 'yes', '47', '.no');
-INSERT INTO "tblcountries" VALUES (166, 'OM', 'Oman', 'Sultanate of Oman', 'OMN', '512', 'yes', '968', '.om');
-INSERT INTO "tblcountries" VALUES (167, 'PK', 'Pakistan', 'Islamic Republic of Pakistan', 'PAK', '586', 'yes', '92', '.pk');
-INSERT INTO "tblcountries" VALUES (168, 'PW', 'Palau', 'Republic of Palau', 'PLW', '585', 'yes', '680', '.pw');
-INSERT INTO "tblcountries" VALUES (169, 'PS', 'Palestine', 'State of Palestine (or Occupied Palestinian Territory)', 'PSE', '275', 'some', '970', '.ps');
-INSERT INTO "tblcountries" VALUES (170, 'PA', 'Panama', 'Republic of Panama', 'PAN', '591', 'yes', '507', '.pa');
-INSERT INTO "tblcountries" VALUES (171, 'PG', 'Papua New Guinea', 'Independent State of Papua New Guinea', 'PNG', '598', 'yes', '675', '.pg');
-INSERT INTO "tblcountries" VALUES (172, 'PY', 'Paraguay', 'Republic of Paraguay', 'PRY', '600', 'yes', '595', '.py');
-INSERT INTO "tblcountries" VALUES (173, 'PE', 'Peru', 'Republic of Peru', 'PER', '604', 'yes', '51', '.pe');
-INSERT INTO "tblcountries" VALUES (174, 'PH', 'Philippines', 'Republic of the Philippines', 'PHL', '608', 'yes', '63', '.ph');
+INSERT INTO "tblcountries" VALUES (162, 'NF', 'Ilha Norfolk', 'Ilha Norfolk', 'NFK', '574', 'no', '672', '.nf');
+INSERT INTO "tblcountries" VALUES (163, 'KP', 'Coreia do Norte', 'República Popular Democrática da Coreia', 'PRK', '408', 'yes', '850', '.kp');
+INSERT INTO "tblcountries" VALUES (164, 'MP', 'Ilhas Marianas do Norte', 'Ilhas Marianas do Norte', 'MNP', '580', 'no', '1+670', '.mp');
+INSERT INTO "tblcountries" VALUES (165, 'NO', 'Noruega', 'Reino da Noruega', 'NOR', '578', 'yes', '47', '.no');
+INSERT INTO "tblcountries" VALUES (166, 'OM', 'Omã', 'Sultanato de Omã', 'OMN', '512', 'yes', '968', '.om');
+INSERT INTO "tblcountries" VALUES (167, 'PK', 'Paquistão', 'República Islâmica do Paquistão', 'PAK', '586', 'yes', '92', '.pk');
+INSERT INTO "tblcountries" VALUES (168, 'PW', 'Palau', 'República de Palau', 'PLW', '585', 'yes', '680', '.pw');
+INSERT INTO "tblcountries" VALUES (169, 'PS', 'Palestina', 'Estado da Palestina (ou Território Palestino Ocupado)', 'PSE', '275', 'some', '970', '.ps');
+INSERT INTO "tblcountries" VALUES (170, 'PA', 'Panamá', 'República do Panamá', 'PAN', '591', 'yes', '507', '.pa');
+INSERT INTO "tblcountries" VALUES (171, 'PG', 'Papua-Nova Guiné', 'Estado Independente de Papua-Nova Guiné', 'PNG', '598', 'yes', '675', '.pg');
+INSERT INTO "tblcountries" VALUES (172, 'PY', 'Paraguai', 'República do Paraguai', 'PRY', '600', 'yes', '595', '.py');
+INSERT INTO "tblcountries" VALUES (173, 'PE', 'Peru', 'República do Peru', 'PER', '604', 'yes', '51', '.pe');
+INSERT INTO "tblcountries" VALUES (174, 'PH', 'Filipinas', 'República das Filipinas', 'PHL', '608', 'yes', '63', '.ph');
 INSERT INTO "tblcountries" VALUES (175, 'PN', 'Pitcairn', 'Pitcairn', 'PCN', '612', 'no', 'NONE', '.pn');
-INSERT INTO "tblcountries" VALUES (176, 'PL', 'Poland', 'Republic of Poland', 'POL', '616', 'yes', '48', '.pl');
-INSERT INTO "tblcountries" VALUES (177, 'PT', 'Portugal', 'Portuguese Republic', 'PRT', '620', 'yes', '351', '.pt');
-INSERT INTO "tblcountries" VALUES (178, 'PR', 'Puerto Rico', 'Commonwealth of Puerto Rico', 'PRI', '630', 'no', '1+939', '.pr');
-INSERT INTO "tblcountries" VALUES (179, 'QA', 'Qatar', 'State of Qatar', 'QAT', '634', 'yes', '974', '.qa');
-INSERT INTO "tblcountries" VALUES (180, 'RE', 'Reunion', 'R&eacute;union', 'REU', '638', 'no', '262', '.re');
-INSERT INTO "tblcountries" VALUES (181, 'RO', 'Romania', 'Romania', 'ROU', '642', 'yes', '40', '.ro');
-INSERT INTO "tblcountries" VALUES (182, 'RU', 'Russia', 'Russian Federation', 'RUS', '643', 'yes', '7', '.ru');
-INSERT INTO "tblcountries" VALUES (183, 'RW', 'Rwanda', 'Republic of Rwanda', 'RWA', '646', 'yes', '250', '.rw');
-INSERT INTO "tblcountries" VALUES (184, 'BL', 'Saint Barthelemy', 'Saint Barth&eacute;lemy', 'BLM', '652', 'no', '590', '.bl');
-INSERT INTO "tblcountries" VALUES (185, 'SH', 'Saint Helena', 'Saint Helena, Ascension and Tristan da Cunha', 'SHN', '654', 'no', '290', '.sh');
-INSERT INTO "tblcountries" VALUES (186, 'KN', 'Saint Kitts and Nevis', 'Federation of Saint Christopher and Nevis', 'KNA', '659', 'yes', '1+869', '.kn');
-INSERT INTO "tblcountries" VALUES (187, 'LC', 'Saint Lucia', 'Saint Lucia', 'LCA', '662', 'yes', '1+758', '.lc');
-INSERT INTO "tblcountries" VALUES (188, 'MF', 'Saint Martin', 'Saint Martin', 'MAF', '663', 'no', '590', '.mf');
-INSERT INTO "tblcountries" VALUES (189, 'PM', 'Saint Pierre and Miquelon', 'Saint Pierre and Miquelon', 'SPM', '666', 'no', '508', '.pm');
-INSERT INTO "tblcountries" VALUES (190, 'VC', 'Saint Vincent and the Grenadines', 'Saint Vincent and the Grenadines', 'VCT', '670', 'yes', '1+784', '.vc');
-INSERT INTO "tblcountries" VALUES (191, 'WS', 'Samoa', 'Independent State of Samoa', 'WSM', '882', 'yes', '685', '.ws');
-INSERT INTO "tblcountries" VALUES (192, 'SM', 'San Marino', 'Republic of San Marino', 'SMR', '674', 'yes', '378', '.sm');
-INSERT INTO "tblcountries" VALUES (193, 'ST', 'Sao Tome and Principe', 'Democratic Republic of S&atilde;o Tom&eacute; and Pr&iacute;ncipe', 'STP', '678', 'yes', '239', '.st');
-INSERT INTO "tblcountries" VALUES (194, 'SA', 'Saudi Arabia', 'Kingdom of Saudi Arabia', 'SAU', '682', 'yes', '966', '.sa');
-INSERT INTO "tblcountries" VALUES (195, 'SN', 'Senegal', 'Republic of Senegal', 'SEN', '686', 'yes', '221', '.sn');
-INSERT INTO "tblcountries" VALUES (196, 'RS', 'Serbia', 'Republic of Serbia', 'SRB', '688', 'yes', '381', '.rs');
-INSERT INTO "tblcountries" VALUES (197, 'SC', 'Seychelles', 'Republic of Seychelles', 'SYC', '690', 'yes', '248', '.sc');
-INSERT INTO "tblcountries" VALUES (198, 'SL', 'Sierra Leone', 'Republic of Sierra Leone', 'SLE', '694', 'yes', '232', '.sl');
-INSERT INTO "tblcountries" VALUES (199, 'SG', 'Singapore', 'Republic of Singapore', 'SGP', '702', 'yes', '65', '.sg');
-INSERT INTO "tblcountries" VALUES (200, 'SX', 'Sint Maarten', 'Sint Maarten', 'SXM', '534', 'no', '1+721', '.sx');
-INSERT INTO "tblcountries" VALUES (201, 'SK', 'Slovakia', 'Slovak Republic', 'SVK', '703', 'yes', '421', '.sk');
-INSERT INTO "tblcountries" VALUES (202, 'SI', 'Slovenia', 'Republic of Slovenia', 'SVN', '705', 'yes', '386', '.si');
-INSERT INTO "tblcountries" VALUES (203, 'SB', 'Solomon Islands', 'Solomon Islands', 'SLB', '090', 'yes', '677', '.sb');
-INSERT INTO "tblcountries" VALUES (204, 'SO', 'Somalia', 'Somali Republic', 'SOM', '706', 'yes', '252', '.so');
-INSERT INTO "tblcountries" VALUES (205, 'ZA', 'South Africa', 'Republic of South Africa', 'ZAF', '710', 'yes', '27', '.za');
-INSERT INTO "tblcountries" VALUES (206, 'GS', 'South Georgia and the South Sandwich Islands', 'South Georgia and the South Sandwich Islands', 'SGS', '239', 'no', '500', '.gs');
-INSERT INTO "tblcountries" VALUES (207, 'KR', 'South Korea', 'Republic of Korea', 'KOR', '410', 'yes', '82', '.kr');
-INSERT INTO "tblcountries" VALUES (208, 'SS', 'South Sudan', 'Republic of South Sudan', 'SSD', '728', 'yes', '211', '.ss');
-INSERT INTO "tblcountries" VALUES (209, 'ES', 'Spain', 'Kingdom of Spain', 'ESP', '724', 'yes', '34', '.es');
-INSERT INTO "tblcountries" VALUES (210, 'LK', 'Sri Lanka', 'Democratic Socialist Republic of Sri Lanka', 'LKA', '144', 'yes', '94', '.lk');
-INSERT INTO "tblcountries" VALUES (211, 'SD', 'Sudan', 'Republic of the Sudan', 'SDN', '729', 'yes', '249', '.sd');
-INSERT INTO "tblcountries" VALUES (212, 'SR', 'Suriname', 'Republic of Suriname', 'SUR', '740', 'yes', '597', '.sr');
-INSERT INTO "tblcountries" VALUES (213, 'SJ', 'Svalbard and Jan Mayen', 'Svalbard and Jan Mayen', 'SJM', '744', 'no', '47', '.sj');
-INSERT INTO "tblcountries" VALUES (214, 'SZ', 'Swaziland', 'Kingdom of Swaziland', 'SWZ', '748', 'yes', '268', '.sz');
-INSERT INTO "tblcountries" VALUES (215, 'SE', 'Sweden', 'Kingdom of Sweden', 'SWE', '752', 'yes', '46', '.se');
-INSERT INTO "tblcountries" VALUES (216, 'CH', 'Switzerland', 'Swiss Confederation', 'CHE', '756', 'yes', '41', '.ch');
-INSERT INTO "tblcountries" VALUES (217, 'SY', 'Syria', 'Syrian Arab Republic', 'SYR', '760', 'yes', '963', '.sy');
-INSERT INTO "tblcountries" VALUES (218, 'TW', 'Taiwan', 'Republic of China (Taiwan)', 'TWN', '158', 'former', '886', '.tw');
-INSERT INTO "tblcountries" VALUES (219, 'TJ', 'Tajikistan', 'Republic of Tajikistan', 'TJK', '762', 'yes', '992', '.tj');
-INSERT INTO "tblcountries" VALUES (220, 'TZ', 'Tanzania', 'United Republic of Tanzania', 'TZA', '834', 'yes', '255', '.tz');
-INSERT INTO "tblcountries" VALUES (221, 'TH', 'Thailand', 'Kingdom of Thailand', 'THA', '764', 'yes', '66', '.th');
-INSERT INTO "tblcountries" VALUES (222, 'TL', 'Timor-Leste (East Timor)', 'Democratic Republic of Timor-Leste', 'TLS', '626', 'yes', '670', '.tl');
-INSERT INTO "tblcountries" VALUES (223, 'TG', 'Togo', 'Togolese Republic', 'TGO', '768', 'yes', '228', '.tg');
+INSERT INTO "tblcountries" VALUES (176, 'PL', 'Polônia', 'República da Polônia', 'POL', '616', 'yes', '48', '.pl');
+INSERT INTO "tblcountries" VALUES (177, 'PT', 'Portugal', 'República Portuguesa', 'PRT', '620', 'yes', '351', '.pt');
+INSERT INTO "tblcountries" VALUES (178, 'PR', 'Porto Rico', 'Comunidade de Porto Rico', 'PRI', '630', 'no', '1+939', '.pr');
+INSERT INTO "tblcountries" VALUES (179, 'QA', 'Catar', 'Estado do Catar', 'QAT', '634', 'yes', '974', '.qa');
+INSERT INTO "tblcountries" VALUES (180, 'RE', 'Reunião', 'Reunião', 'REU', '638', 'no', '262', '.re');
+INSERT INTO "tblcountries" VALUES (181, 'RO', 'Romênia', 'Romênia', 'ROU', '642', 'yes', '40', '.ro');
+INSERT INTO "tblcountries" VALUES (182, 'RU', 'Rússia', 'Federação Russa', 'RUS', '643', 'yes', '7', '.ru');
+INSERT INTO "tblcountries" VALUES (183, 'RW', 'Ruanda', 'República de Ruanda', 'RWA', '646', 'yes', '250', '.rw');
+INSERT INTO "tblcountries" VALUES (184, 'BL', 'São Bartolomeu', 'São Bartolomeu', 'BLM', '652', 'no', '590', '.bl');
+INSERT INTO "tblcountries" VALUES (185, 'SH', 'Santa Helena', 'Santa Helena, Ascensão e Tristão da Cunha', 'SHN', '654', 'no', '290', '.sh');
+INSERT INTO "tblcountries" VALUES (186, 'KN', 'São Cristóvão e Nevis', 'Federação de São Cristóvão e Nevis', 'KNA', '659', 'yes', '1+869', '.kn');
+INSERT INTO "tblcountries" VALUES (187, 'LC', 'Santa Lúcia', 'Santa Lúcia', 'LCA', '662', 'yes', '1+758', '.lc');
+INSERT INTO "tblcountries" VALUES (188, 'MF', 'São Martinho (lado francês)', 'São Martinho', 'MAF', '663', 'no', '590', '.mf');
+INSERT INTO "tblcountries" VALUES (189, 'PM', 'São Pedro e Miquelão', 'São Pedro e Miquelão', 'SPM', '666', 'no', '508', '.pm');
+INSERT INTO "tblcountries" VALUES (190, 'VC', 'São Vicente e Granadinas', 'São Vicente e Granadinas', 'VCT', '670', 'yes', '1+784', '.vc');
+INSERT INTO "tblcountries" VALUES (191, 'WS', 'Samoa', 'Estado Independente de Samoa', 'WSM', '882', 'yes', '685', '.ws');
+INSERT INTO "tblcountries" VALUES (192, 'SM', 'San Marino', 'República de San Marino', 'SMR', '674', 'yes', '378', '.sm');
+INSERT INTO "tblcountries" VALUES (193, 'ST', 'São Tomé e Príncipe', 'República Democrática de São Tomé e Príncipe', 'STP', '678', 'yes', '239', '.st');
+INSERT INTO "tblcountries" VALUES (194, 'SA', 'Arábia Saudita', 'Reino da Arábia Saudita', 'SAU', '682', 'yes', '966', '.sa');
+INSERT INTO "tblcountries" VALUES (195, 'SN', 'Senegal', 'República do Senegal', 'SEN', '686', 'yes', '221', '.sn');
+INSERT INTO "tblcountries" VALUES (196, 'RS', 'Sérvia', 'República da Sérvia', 'SRB', '688', 'yes', '381', '.rs');
+INSERT INTO "tblcountries" VALUES (197, 'SC', 'Seicheles', 'República das Seicheles', 'SYC', '690', 'yes', '248', '.sc');
+INSERT INTO "tblcountries" VALUES (198, 'SL', 'Serra Leoa', 'República da Serra Leoa', 'SLE', '694', 'yes', '232', '.sl');
+INSERT INTO "tblcountries" VALUES (199, 'SG', 'Singapura', 'República de Singapura', 'SGP', '702', 'yes', '65', '.sg');
+INSERT INTO "tblcountries" VALUES (200, 'SX', 'Sint Maarten (lado holandês)', 'Sint Maarten', 'SXM', '534', 'no', '1+721', '.sx');
+INSERT INTO "tblcountries" VALUES (201, 'SK', 'Eslováquia', 'República Eslovaca', 'SVK', '703', 'yes', '421', '.sk');
+INSERT INTO "tblcountries" VALUES (202, 'SI', 'Eslovênia', 'República da Eslovênia', 'SVN', '705', 'yes', '386', '.si');
+INSERT INTO "tblcountries" VALUES (203, 'SB', 'Ilhas Salomão', 'Ilhas Salomão', 'SLB', '090', 'yes', '677', '.sb');
+INSERT INTO "tblcountries" VALUES (204, 'SO', 'Somália', 'República Somali', 'SOM', '706', 'yes', '252', '.so');
+INSERT INTO "tblcountries" VALUES (205, 'ZA', 'África do Sul', 'República da África do Sul', 'ZAF', '710', 'yes', '27', '.za');
+INSERT INTO "tblcountries" VALUES (206, 'GS', 'Ilhas Geórgia do Sul e Sandwich do Sul', 'Ilhas Geórgia do Sul e Sandwich do Sul', 'SGS', '239', 'no', '500', '.gs');
+INSERT INTO "tblcountries" VALUES (207, 'KR', 'Coreia do Sul', 'República da Coreia', 'KOR', '410', 'yes', '82', '.kr');
+INSERT INTO "tblcountries" VALUES (208, 'SS', 'Sudão do Sul', 'República do Sudão do Sul', 'SSD', '728', 'yes', '211', '.ss');
+INSERT INTO "tblcountries" VALUES (209, 'ES', 'Espanha', 'Reino da Espanha', 'ESP', '724', 'yes', '34', '.es');
+INSERT INTO "tblcountries" VALUES (210, 'LK', 'Sri Lanka', 'República Democrática Socialista do Sri Lanka', 'LKA', '144', 'yes', '94', '.lk');
+INSERT INTO "tblcountries" VALUES (211, 'SD', 'Sudão', 'República do Sudão', 'SDN', '729', 'yes', '249', '.sd');
+INSERT INTO "tblcountries" VALUES (212, 'SR', 'Suriname', 'República do Suriname', 'SUR', '740', 'yes', '597', '.sr');
+INSERT INTO "tblcountries" VALUES (213, 'SJ', 'Svalbard e Jan Mayen', 'Svalbard e Jan Mayen', 'SJM', '744', 'no', '47', '.sj');
+INSERT INTO "tblcountries" VALUES (214, 'SZ', 'Suazilândia', 'Reino da Suazilândia', 'SWZ', '748', 'yes', '268', '.sz');
+INSERT INTO "tblcountries" VALUES (215, 'SE', 'Suécia', 'Reino da Suécia', 'SWE', '752', 'yes', '46', '.se');
+INSERT INTO "tblcountries" VALUES (216, 'CH', 'Suíça', 'Confederação Suíça', 'CHE', '756', 'yes', '41', '.ch');
+INSERT INTO "tblcountries" VALUES (217, 'SY', 'Síria', 'República Árabe Síria', 'SYR', '760', 'yes', '963', '.sy');
+INSERT INTO "tblcountries" VALUES (218, 'TW', 'Taiwan', 'República da China (Taiwan)', 'TWN', '158', 'former', '886', '.tw');
+INSERT INTO "tblcountries" VALUES (219, 'TJ', 'Tajiquistão', 'República do Tajiquistão', 'TJK', '762', 'yes', '992', '.tj');
+INSERT INTO "tblcountries" VALUES (220, 'TZ', 'Tanzânia', 'República Unida da Tanzânia', 'TZA', '834', 'yes', '255', '.tz');
+INSERT INTO "tblcountries" VALUES (221, 'TH', 'Tailândia', 'Reino da Tailândia', 'THA', '764', 'yes', '66', '.th');
+INSERT INTO "tblcountries" VALUES (222, 'TL', 'Timor-Leste', 'República Democrática de Timor-Leste', 'TLS', '626', 'yes', '670', '.tl');
+INSERT INTO "tblcountries" VALUES (223, 'TG', 'Togo', 'República Togolesa', 'TGO', '768', 'yes', '228', '.tg');
 INSERT INTO "tblcountries" VALUES (224, 'TK', 'Tokelau', 'Tokelau', 'TKL', '772', 'no', '690', '.tk');
-INSERT INTO "tblcountries" VALUES (225, 'TO', 'Tonga', 'Kingdom of Tonga', 'TON', '776', 'yes', '676', '.to');
-INSERT INTO "tblcountries" VALUES (226, 'TT', 'Trinidad and Tobago', 'Republic of Trinidad and Tobago', 'TTO', '780', 'yes', '1+868', '.tt');
-INSERT INTO "tblcountries" VALUES (227, 'TN', 'Tunisia', 'Republic of Tunisia', 'TUN', '788', 'yes', '216', '.tn');
-INSERT INTO "tblcountries" VALUES (228, 'TR', 'Turkey', 'Republic of Turkey', 'TUR', '792', 'yes', '90', '.tr');
-INSERT INTO "tblcountries" VALUES (229, 'TM', 'Turkmenistan', 'Turkmenistan', 'TKM', '795', 'yes', '993', '.tm');
-INSERT INTO "tblcountries" VALUES (230, 'TC', 'Turks and Caicos Islands', 'Turks and Caicos Islands', 'TCA', '796', 'no', '1+649', '.tc');
+INSERT INTO "tblcountries" VALUES (225, 'TO', 'Tonga', 'Reino de Tonga', 'TON', '776', 'yes', '676', '.to');
+INSERT INTO "tblcountries" VALUES (226, 'TT', 'Trinidad e Tobago', 'República de Trinidad e Tobago', 'TTO', '780', 'yes', '1+868', '.tt');
+INSERT INTO "tblcountries" VALUES (227, 'TN', 'Tunísia', 'República da Tunísia', 'TUN', '788', 'yes', '216', '.tn');
+INSERT INTO "tblcountries" VALUES (228, 'TR', 'Turquia', 'República da Turquia', 'TUR', '792', 'yes', '90', '.tr');
+INSERT INTO "tblcountries" VALUES (229, 'TM', 'Turcomenistão', 'Turcomenistão', 'TKM', '795', 'yes', '993', '.tm');
+INSERT INTO "tblcountries" VALUES (230, 'TC', 'Ilhas Turks e Caicos', 'Ilhas Turks e Caicos', 'TCA', '796', 'no', '1+649', '.tc');
 INSERT INTO "tblcountries" VALUES (231, 'TV', 'Tuvalu', 'Tuvalu', 'TUV', '798', 'yes', '688', '.tv');
-INSERT INTO "tblcountries" VALUES (232, 'UG', 'Uganda', 'Republic of Uganda', 'UGA', '800', 'yes', '256', '.ug');
-INSERT INTO "tblcountries" VALUES (233, 'UA', 'Ukraine', 'Ukraine', 'UKR', '804', 'yes', '380', '.ua');
-INSERT INTO "tblcountries" VALUES (234, 'AE', 'United Arab Emirates', 'United Arab Emirates', 'ARE', '784', 'yes', '971', '.ae');
-INSERT INTO "tblcountries" VALUES (235, 'GB', 'United Kingdom', 'United Kingdom of Great Britain and Nothern Ireland', 'GBR', '826', 'yes', '44', '.uk');
-INSERT INTO "tblcountries" VALUES (236, 'US', 'United States', 'United States of America', 'USA', '840', 'yes', '1', '.us');
-INSERT INTO "tblcountries" VALUES (237, 'UM', 'United States Minor Outlying Islands', 'United States Minor Outlying Islands', 'UMI', '581', 'no', 'NONE', 'NONE');
-INSERT INTO "tblcountries" VALUES (238, 'UY', 'Uruguay', 'Eastern Republic of Uruguay', 'URY', '858', 'yes', '598', '.uy');
-INSERT INTO "tblcountries" VALUES (239, 'UZ', 'Uzbekistan', 'Republic of Uzbekistan', 'UZB', '860', 'yes', '998', '.uz');
-INSERT INTO "tblcountries" VALUES (240, 'VU', 'Vanuatu', 'Republic of Vanuatu', 'VUT', '548', 'yes', '678', '.vu');
-INSERT INTO "tblcountries" VALUES (241, 'VA', 'Vatican City', 'State of the Vatican City', 'VAT', '336', 'no', '39', '.va');
-INSERT INTO "tblcountries" VALUES (242, 'VE', 'Venezuela', 'Bolivarian Republic of Venezuela', 'VEN', '862', 'yes', '58', '.ve');
-INSERT INTO "tblcountries" VALUES (243, 'VN', 'Vietnam', 'Socialist Republic of Vietnam', 'VNM', '704', 'yes', '84', '.vn');
-INSERT INTO "tblcountries" VALUES (244, 'VG', 'Virgin Islands, British', 'British Virgin Islands', 'VGB', '092', 'no', '1+284', '.vg');
-INSERT INTO "tblcountries" VALUES (245, 'VI', 'Virgin Islands, US', 'Virgin Islands of the United States', 'VIR', '850', 'no', '1+340', '.vi');
-INSERT INTO "tblcountries" VALUES (246, 'WF', 'Wallis and Futuna', 'Wallis and Futuna', 'WLF', '876', 'no', '681', '.wf');
-INSERT INTO "tblcountries" VALUES (247, 'EH', 'Western Sahara', 'Western Sahara', 'ESH', '732', 'no', '212', '.eh');
-INSERT INTO "tblcountries" VALUES (248, 'YE', 'Yemen', 'Republic of Yemen', 'YEM', '887', 'yes', '967', '.ye');
-INSERT INTO "tblcountries" VALUES (249, 'ZM', 'Zambia', 'Republic of Zambia', 'ZMB', '894', 'yes', '260', '.zm');
-INSERT INTO "tblcountries" VALUES (250, 'ZW', 'Zimbabwe', 'Republic of Zimbabwe', 'ZWE', '716', 'yes', '263', '.zw');
-
--- ----------------------------
--- Table structure for tblcreditnote_refunds
--- ----------------------------
+INSERT INTO "tblcountries" VALUES (232, 'UG', 'Uganda', 'República de Uganda', 'UGA', '800', 'yes', '256', '.ug');
+INSERT INTO "tblcountries" VALUES (233, 'UA', 'Ucrânia', 'Ucrânia', 'UKR', '804', 'yes', '380', '.ua');
+INSERT INTO "tblcountries" VALUES (234, 'AE', 'Emirados Árabes Unidos', 'Emirados Árabes Unidos', 'ARE', '784', 'yes', '971', '.ae');
+INSERT INTO "tblcountries" VALUES (235, 'GB', 'Reino Unido', 'Reino Unido da Grã-Bretanha e Irlanda do Norte', 'GBR', '826', 'yes', '44', '.uk');
+INSERT INTO "tblcountries" VALUES (236, 'US', 'Estados Unidos', 'Estados Unidos da América', 'USA', '840', 'yes', '1', '.us');
+INSERT INTO "tblcountries" VALUES (237, 'UM', 'Ilhas Menores Distantes dos Estados Unidos', 'Ilhas Menores Distantes dos Estados Unidos', 'UMI', '581', 'no', 'NONE', 'NONE');
+INSERT INTO "tblcountries" VALUES (238, 'UY', 'Uruguai', 'República Oriental do Uruguai', 'URY', '858', 'yes', '598', '.uy');
+INSERT INTO "tblcountries" VALUES (239, 'UZ', 'Uzbequistão', 'República do Uzbequistão', 'UZB', '860', 'yes', '998', '.uz');
+INSERT INTO "tblcountries" VALUES (240, 'VU', 'Vanuatu', 'República de Vanuatu', 'VUT', '548', 'yes', '678', '.vu');
+INSERT INTO "tblcountries" VALUES (241, 'VA', 'Cidade do Vaticano', 'Estado da Cidade do Vaticano', 'VAT', '336', 'no', '39', '.va');
+INSERT INTO "tblcountries" VALUES (242, 'VE', 'Venezuela', 'República Bolivariana da Venezuela', 'VEN', '862', 'yes', '58', '.ve');
+INSERT INTO "tblcountries" VALUES (243, 'VN', 'Vietnã', 'República Socialista do Vietnã', 'VNM', '704', 'yes', '84', '.vn');
+INSERT INTO "tblcountries" VALUES (244, 'VG', 'Ilhas Virgens Britânicas', 'Ilhas Virgens Britânicas', 'VGB', '092', 'no', '1+284', '.vg');
+INSERT INTO "tblcountries" VALUES (245, 'VI', 'Ilhas Virgens Americanas', 'Ilhas Virgens dos Estados Unidos', 'VIR', '850', 'no', '1+340', '.vi');
+INSERT INTO "tblcountries" VALUES (246, 'WF', 'Wallis e Futuna', 'Wallis e Futuna', 'WLF', '876', 'no', '681', '.wf');
+INSERT INTO "tblcountries" VALUES (247, 'EH', 'Saara Ocidental', 'Saara Ocidental', 'ESH', '732', 'no', '212', '.eh');
+INSERT INTO "tblcountries" VALUES (248, 'YE', 'Iêmen', 'República do Iêmen', 'YEM', '887', 'yes', '967', '.ye');
+INSERT INTO "tblcountries" VALUES (249, 'ZM', 'Zâmbia', 'República da Zâmbia', 'ZMB', '894', 'yes', '260', '.zm');
+INSERT INTO "tblcountries" VALUES (250, 'ZW', 'Zimbábue', 'República do Zimbábue', 'ZWE', '716', 'yes', '263', '.zw');
 DROP TABLE IF EXISTS "tblcreditnote_refunds";
 CREATE TABLE "tblcreditnote_refunds" (
   "id" integer NOT NULL,
@@ -555,14 +454,6 @@ CREATE TABLE "tblcreditnote_refunds" (
   "created_at" text,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblcreditnote_refunds
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblcreditnotes
--- ----------------------------
 DROP TABLE IF EXISTS "tblcreditnotes";
 CREATE TABLE "tblcreditnotes" (
   "id" integer NOT NULL,
@@ -604,14 +495,6 @@ CREATE TABLE "tblcreditnotes" (
   "reference_no" text(100),
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblcreditnotes
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblcredits
--- ----------------------------
 DROP TABLE IF EXISTS "tblcredits";
 CREATE TABLE "tblcredits" (
   "id" integer NOT NULL,
@@ -623,14 +506,6 @@ CREATE TABLE "tblcredits" (
   "amount" real(15,2) NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblcredits
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblcurrencies
--- ----------------------------
 DROP TABLE IF EXISTS "tblcurrencies";
 CREATE TABLE "tblcurrencies" (
   "id" integer NOT NULL,
@@ -642,30 +517,15 @@ CREATE TABLE "tblcurrencies" (
   "isdefault" integer(1) NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblcurrencies
--- ----------------------------
-INSERT INTO "tblcurrencies" VALUES (1, '$', 'USD', '.', ',', 'before', 1);
-INSERT INTO "tblcurrencies" VALUES (2, '€', 'EUR', ',', '.', 'before', 0);
-
--- ----------------------------
--- Table structure for tblcustomer_admins
--- ----------------------------
+INSERT INTO "tblcurrencies" VALUES (1, 'R$', 'Real', '.', ',', 'before', 1);
+INSERT INTO "tblcurrencies" VALUES (2, '$', 'USD', '.', ',', 'before', 0);
+INSERT INTO "tblcurrencies" VALUES (3, '€', 'EUR', ',', '.', 'before', 0);
 DROP TABLE IF EXISTS "tblcustomer_admins";
 CREATE TABLE "tblcustomer_admins" (
   "staff_id" integer NOT NULL,
   "customer_id" integer NOT NULL,
   "date_assigned" text NOT NULL
 );
-
--- ----------------------------
--- Records of tblcustomer_admins
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblcustomer_groups
--- ----------------------------
 DROP TABLE IF EXISTS "tblcustomer_groups";
 CREATE TABLE "tblcustomer_groups" (
   "id" integer NOT NULL,
@@ -673,28 +533,12 @@ CREATE TABLE "tblcustomer_groups" (
   "customer_id" integer NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblcustomer_groups
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblcustomers_groups
--- ----------------------------
 DROP TABLE IF EXISTS "tblcustomers_groups";
 CREATE TABLE "tblcustomers_groups" (
   "id" integer NOT NULL,
   "name" text(191) NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblcustomers_groups
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblcustomfields
--- ----------------------------
 DROP TABLE IF EXISTS "tblcustomfields";
 CREATE TABLE "tblcustomfields" (
   "id" integer NOT NULL,
@@ -717,14 +561,6 @@ CREATE TABLE "tblcustomfields" (
   "default_value" text,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblcustomfields
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblcustomfieldsvalues
--- ----------------------------
 DROP TABLE IF EXISTS "tblcustomfieldsvalues";
 CREATE TABLE "tblcustomfieldsvalues" (
   "id" integer NOT NULL,
@@ -734,14 +570,6 @@ CREATE TABLE "tblcustomfieldsvalues" (
   "value" text NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblcustomfieldsvalues
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbldepartments
--- ----------------------------
 DROP TABLE IF EXISTS "tbldepartments";
 CREATE TABLE "tbldepartments" (
   "departmentid" integer NOT NULL,
@@ -758,14 +586,6 @@ CREATE TABLE "tbldepartments" (
   "hidefromclient" integer(1) NOT NULL,
   PRIMARY KEY ("departmentid")
 );
-
--- ----------------------------
--- Records of tbldepartments
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbldismissed_announcements
--- ----------------------------
 DROP TABLE IF EXISTS "tbldismissed_announcements";
 CREATE TABLE "tbldismissed_announcements" (
   "dismissedannouncementid" integer NOT NULL,
@@ -774,14 +594,6 @@ CREATE TABLE "tbldismissed_announcements" (
   "userid" integer NOT NULL,
   PRIMARY KEY ("dismissedannouncementid")
 );
-
--- ----------------------------
--- Records of tbldismissed_announcements
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblemailtemplates
--- ----------------------------
 DROP TABLE IF EXISTS "tblemailtemplates";
 CREATE TABLE "tblemailtemplates" (
   "emailtemplateid" integer NOT NULL,
@@ -798,118 +610,110 @@ CREATE TABLE "tblemailtemplates" (
   "order" integer NOT NULL,
   PRIMARY KEY ("emailtemplateid")
 );
-
--- ----------------------------
--- Records of tblemailtemplates
--- ----------------------------
-INSERT INTO "tblemailtemplates" VALUES (1, 'client', 'new-client-created', 'english', 'New Contact Added/Registered (Welcome Email)', 'Welcome aboard', 'Dear {contact_firstname} {contact_lastname}<br /><br />Thank you for registering on the <strong>{companyname}</strong> CRM System.<br /><br />We just wanted to say welcome.<br /><br />Please contact us if you need any help.<br /><br />Click here to view your profile: <a href="{crm_url}">{crm_url}</a><br /><br />Kind Regards, <br />{email_signature}<br /><br />(This is an automated email, so please don''t reply to this email address)', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (2, 'invoice', 'invoice-send-to-client', 'english', 'Send Invoice to Customer', 'Invoice with number {invoice_number} created', '<span style="font-size: 12pt;">Dear {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;">We have prepared the following invoice for you: <strong># {invoice_number}</strong></span><br /><br /><span style="font-size: 12pt;"><strong>Invoice status</strong>: {invoice_status}</span><br /><br /><span style="font-size: 12pt;">You can view the invoice on the following link: <a href="{invoice_link}">{invoice_number}</a></span><br /><br /><span style="font-size: 12pt;">Please contact us for more information.</span><br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (3, 'ticket', 'new-ticket-opened-admin', 'english', 'New Ticket Opened (Opened by Staff, Sent to Customer)', 'New Support Ticket Opened', '<p><span style="font-size: 12pt;">Hi {contact_firstname} {contact_lastname}</span><br><br><span style="font-size: 12pt;">New support ticket has been opened.</span><br><br><span style="font-size: 12pt;"><strong>Subject:</strong> {ticket_subject}</span><br><span style="font-size: 12pt;"><strong>Department:</strong> {ticket_department}</span><br><span style="font-size: 12pt;"><strong>Priority:</strong> {ticket_priority}<br></span><br><span style="font-size: 12pt;"><strong>Ticket message:</strong></span><br><span style="font-size: 12pt;">{ticket_message}</span><br><br><span style="font-size: 12pt;">You can view the ticket on the following link: <a href="{ticket_public_url}">#{ticket_id}</a><br><br>Kind Regards,</span><br><span style="font-size: 12pt;">{email_signature}</span></p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (4, 'ticket', 'ticket-reply', 'english', 'Ticket Reply (Sent to Customer)', 'New Ticket Reply', '<span style="font-size: 12pt;">Hi {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;">You have a new ticket reply to ticket <a href="{ticket_public_url}">#{ticket_id}</a></span><br /><br /><span style="font-size: 12pt;"><strong>Ticket Subject:</strong> {ticket_subject}<br /></span><br /><span style="font-size: 12pt;"><strong>Ticket message:</strong></span><br /><span style="font-size: 12pt;">{ticket_message}</span><br /><br /><span style="font-size: 12pt;">You can view the ticket on the following link: <a href="{ticket_public_url}">#{ticket_id}</a></span><br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (5, 'ticket', 'ticket-autoresponse', 'english', 'New Ticket Opened - Autoresponse', 'New Support Ticket Opened', '<span style="font-size: 12pt;">Hi {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;">Thank you for contacting our support team. A support ticket has now been opened for your request. You will be notified when a response is made by email.</span><br /><br /><span style="font-size: 12pt;"><strong>Subject:</strong> {ticket_subject}</span><br /><span style="font-size: 12pt;"><strong>Department</strong>: {ticket_department}</span><br /><span style="font-size: 12pt;"><strong>Priority:</strong> {ticket_priority}</span><br /><br /><span style="font-size: 12pt;"><strong>Ticket message:</strong></span><br /><span style="font-size: 12pt;">{ticket_message}</span><br /><br /><span style="font-size: 12pt;">You can view the ticket on the following link: <a href="{ticket_public_url}">#{ticket_id}</a></span><br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (6, 'invoice', 'invoice-payment-recorded', 'english', 'Invoice Payment Recorded (Sent to Customer)', 'Invoice Payment Recorded', '<span style="font-size: 12pt;">Hello {contact_firstname}&nbsp;{contact_lastname}<br /><br /></span>Thank you for the payment. Find the payment details below:<br /><br />-------------------------------------------------<br /><br />Amount:&nbsp;<strong>{payment_total}<br /></strong>Date:&nbsp;<strong>{payment_date}</strong><br />Invoice number:&nbsp;<span style="font-size: 12pt;"><strong># {invoice_number}<br /><br /></strong></span>-------------------------------------------------<br /><br />You can always view the invoice for this payment at the following link:&nbsp;<a href="{invoice_link}"><span style="font-size: 12pt;">{invoice_number}</span></a><br /><br />We are looking forward working with you.<br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (7, 'invoice', 'invoice-overdue-notice', 'english', 'Invoice Overdue Notice', 'Invoice Overdue Notice - {invoice_number}', '<span style="font-size: 12pt;">Hi {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;">This is an overdue notice for invoice <strong># {invoice_number}</strong></span><br /><br /><span style="font-size: 12pt;">This invoice was due: {invoice_duedate}</span><br /><br /><span style="font-size: 12pt;">You can view the invoice on the following link: <a href="{invoice_link}">{invoice_number}</a></span><br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (8, 'invoice', 'invoice-already-send', 'english', 'Invoice Already Sent to Customer', 'Invoice # {invoice_number} ', '<span style="font-size: 12pt;">Hi {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;">At your request, here is the invoice with number <strong># {invoice_number}</strong></span><br /><br /><span style="font-size: 12pt;">You can view the invoice on the following link: <a href="{invoice_link}">{invoice_number}</a></span><br /><br /><span style="font-size: 12pt;">Please contact us for more information.</span><br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (9, 'ticket', 'new-ticket-created-staff', 'english', 'New Ticket Created (Opened by Customer, Sent to Staff Members)', 'New Ticket Created', '<p><span style="font-size: 12pt;">A new support ticket has been opened.</span><br /><br /><span style="font-size: 12pt;"><strong>Subject</strong>: {ticket_subject}</span><br /><span style="font-size: 12pt;"><strong>Department</strong>: {ticket_department}</span><br /><span style="font-size: 12pt;"><strong>Priority</strong>: {ticket_priority}<br /></span><br /><span style="font-size: 12pt;"><strong>Ticket message:</strong></span><br /><span style="font-size: 12pt;">{ticket_message}</span><br /><br /><span style="font-size: 12pt;">You can view the ticket on the following link: <a href="{ticket_url}">#{ticket_id}</a></span><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span></p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (10, 'estimate', 'estimate-send-to-client', 'english', 'Send Estimate to Customer', 'Estimate # {estimate_number} created', '<span style="font-size: 12pt;">Dear {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;">Please find the attached estimate <strong># {estimate_number}</strong></span><br /><br /><span style="font-size: 12pt;"><strong>Estimate status:</strong> {estimate_status}</span><br /><br /><span style="font-size: 12pt;">You can view the estimate on the following link: <a href="{estimate_link}">{estimate_number}</a></span><br /><br /><span style="font-size: 12pt;">We look forward to your communication.</span><br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}<br /></span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (11, 'ticket', 'ticket-reply-to-admin', 'english', 'Ticket Reply (Sent to Staff)', 'New Support Ticket Reply', '<span style="font-size: 12pt;">A new support ticket reply from {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;"><strong>Subject</strong>: {ticket_subject}</span><br /><span style="font-size: 12pt;"><strong>Department</strong>: {ticket_department}</span><br /><span style="font-size: 12pt;"><strong>Priority</strong>: {ticket_priority}</span><br /><br /><span style="font-size: 12pt;"><strong>Ticket message:</strong></span><br /><span style="font-size: 12pt;">{ticket_message}</span><br /><br /><span style="font-size: 12pt;">You can view the ticket on the following link: <a href="{ticket_url}">#{ticket_id}</a></span><br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (12, 'estimate', 'estimate-already-send', 'english', 'Estimate Already Sent to Customer', 'Estimate # {estimate_number} ', '<span style="font-size: 12pt;">Dear {contact_firstname} {contact_lastname}</span><br /> <br /><span style="font-size: 12pt;">Thank you for your estimate request.</span><br /> <br /><span style="font-size: 12pt;">You can view the estimate on the following link: <a href="{estimate_link}">{estimate_number}</a></span><br /> <br /><span style="font-size: 12pt;">Please contact us for more information.</span><br /> <br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (13, 'contract', 'contract-expiration', 'english', 'Contract Expiration Reminder (Sent to Customer Contacts)', 'Contract Expiration Reminder', '<span style="font-size: 12pt;">Dear {client_company}</span><br /><br /><span style="font-size: 12pt;">This is a reminder that the following contract will expire soon:</span><br /><br /><span style="font-size: 12pt;"><strong>Subject:</strong> {contract_subject}</span><br /><span style="font-size: 12pt;"><strong>Description:</strong> {contract_description}</span><br /><span style="font-size: 12pt;"><strong>Date Start:</strong> {contract_datestart}</span><br /><span style="font-size: 12pt;"><strong>Date End:</strong> {contract_dateend}</span><br /><br /><span style="font-size: 12pt;">Please contact us for more information.</span><br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (14, 'tasks', 'task-assigned', 'english', 'New Task Assigned (Sent to Staff)', 'New Task Assigned to You - {task_name}', '<span style="font-size: 12pt;">Dear {staff_firstname}</span><br /><br /><span style="font-size: 12pt;">You have been assigned to a new task:</span><br /><br /><span style="font-size: 12pt;"><strong>Name:</strong> {task_name}<br /></span><strong>Start Date:</strong> {task_startdate}<br /><span style="font-size: 12pt;"><strong>Due date:</strong> {task_duedate}</span><br /><span style="font-size: 12pt;"><strong>Priority:</strong> {task_priority}<br /><br /></span><span style="font-size: 12pt;"><span>You can view the task on the following link</span>: <a href="{task_link}">{task_name}</a></span><br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (15, 'tasks', 'task-added-as-follower', 'english', 'Staff Member Added as Follower on Task (Sent to Staff)', 'You are added as follower on task - {task_name}', '<span style="font-size: 12pt;">Hi {staff_firstname}<br /></span><br /><span style="font-size: 12pt;">You have been added as follower on the following task:</span><br /><br /><span style="font-size: 12pt;"><strong>Name:</strong> {task_name}</span><br /><span style="font-size: 12pt;"><strong>Start date:</strong> {task_startdate}</span><br /><br /><span>You can view the task on the following link</span><span>: </span><a href="{task_link}">{task_name}</a><br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (16, 'tasks', 'task-commented', 'english', 'New Comment on Task (Sent to Staff)', 'New Comment on Task - {task_name}', 'Dear {staff_firstname}<br /><br />A comment has been made on the following task:<br /><br /><strong>Name:</strong> {task_name}<br /><strong>Comment:</strong> {task_comment}<br /><br />You can view the task on the following link: <a href="{task_link}">{task_name}</a><br /><br />Kind Regards,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (17, 'tasks', 'task-added-attachment', 'english', 'New Attachment(s) on Task (Sent to Staff)', 'New Attachment on Task - {task_name}', 'Hi {staff_firstname}<br /><br /><strong>{task_user_take_action}</strong> added an attachment on the following task:<br /><br /><strong>Name:</strong> {task_name}<br /><br />You can view the task on the following link: <a href="{task_link}">{task_name}</a><br /><br />Kind Regards,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (18, 'estimate', 'estimate-declined-to-staff', 'english', 'Estimate Declined (Sent to Staff)', 'Customer Declined Estimate', '<span style="font-size: 12pt;">Hi</span><br /> <br /><span style="font-size: 12pt;">Customer ({client_company}) declined estimate with number <strong># {estimate_number}</strong></span><br /> <br /><span style="font-size: 12pt;">You can view the estimate on the following link: <a href="{estimate_link}">{estimate_number}</a></span><br /> <br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (19, 'estimate', 'estimate-accepted-to-staff', 'english', 'Estimate Accepted (Sent to Staff)', 'Customer Accepted Estimate', '<span style="font-size: 12pt;">Hi</span><br /> <br /><span style="font-size: 12pt;">Customer ({client_company}) accepted estimate with number <strong># {estimate_number}</strong></span><br /> <br /><span style="font-size: 12pt;">You can view the estimate on the following link: <a href="{estimate_link}">{estimate_number}</a></span><br /> <br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (20, 'proposals', 'proposal-client-accepted', 'english', 'Customer Action - Accepted (Sent to Staff)', 'Customer Accepted Proposal', '<div>Hi<br /> <br />Client <strong>{proposal_proposal_to}</strong> accepted the following proposal:<br /> <br /><strong>Number:</strong> {proposal_number}<br /><strong>Subject</strong>: {proposal_subject}<br /><strong>Total</strong>: {proposal_total}<br /> <br />View the proposal on the following link: <a href="{proposal_link}">{proposal_number}</a><br /> <br />Kind Regards,<br />{email_signature}</div>
+INSERT INTO "tblemailtemplates" VALUES (1, 'client', 'new-client-created', 'portuguese', 'Novo Contato Adicionado/Registrado (Email de Boas-Vindas)', 'Bem-vindo(a) a bordo', 'Prezado(a) {contact_firstname} {contact_lastname}<br /><br />Obrigado(a) por se registrar no Sistema CRM da <strong>{companyname}</strong>.<br /><br />Gostaríamos de dar as boas-vindas.<br /><br />Por favor, entre em contato se precisar de ajuda.<br /><br />Clique aqui para ver seu perfil: <a href="{crm_url}">{crm_url}</a><br /><br />Atenciosamente, <br />{email_signature}<br /><br />(Este é um e-mail automático, por favor, não responda a este endereço de e-mail)', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (2, 'invoice', 'invoice-send-to-client', 'portuguese', 'Enviar Fatura ao Cliente', 'Fatura número {invoice_number} criada', '<span style="font-size: 12pt;">Prezado(a) {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;">Preparamos a seguinte fatura para você: <strong># {invoice_number}</strong></span><br /><br /><span style="font-size: 12pt;"><strong>Status da Fatura</strong>: {invoice_status}</span><br /><br /><span style="font-size: 12pt;">Você pode visualizar a fatura no seguinte link: <a href="{invoice_link}">{invoice_number}</a></span><br /><br /><span style="font-size: 12pt;">Entre em contato conosco para mais informações.</span><br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (3, 'ticket', 'new-ticket-opened-admin', 'portuguese', 'Novo Ticket Aberto (Aberto pela Equipe, Enviado ao Cliente)', 'Novo Ticket de Suporte Aberto', '<p><span style="font-size: 12pt;">Olá {contact_firstname} {contact_lastname}</span><br><br><span style="font-size: 12pt;">Um novo ticket de suporte foi aberto.</span><br><br><span style="font-size: 12pt;"><strong>Assunto:</strong> {ticket_subject}</span><br><span style="font-size: 12pt;"><strong>Departamento:</strong> {ticket_department}</span><br><span style="font-size: 12pt;"><strong>Prioridade:</strong> {ticket_priority}<br></span><br><span style="font-size: 12pt;"><strong>Mensagem do Ticket:</strong></span><br><span style="font-size: 12pt;">{ticket_message}</span><br><br><span style="font-size: 12pt;">Você pode visualizar o ticket no seguinte link: <a href="{ticket_public_url}">#{ticket_id}</a><br><br>Atenciosamente,</span><br><span style="font-size: 12pt;">{email_signature}</span></p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (4, 'ticket', 'ticket-reply', 'portuguese', 'Resposta de Ticket (Enviado ao Cliente)', 'Nova Resposta de Ticket', '<span style="font-size: 12pt;">Olá {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;">Você tem uma nova resposta para o ticket <a href="{ticket_public_url}">#{ticket_id}</a></span><br /><br /><span style="font-size: 12pt;"><strong>Assunto do Ticket:</strong> {ticket_subject}<br /></span><br /><span style="font-size: 12pt;"><strong>Mensagem do Ticket:</strong></span><br /><span style="font-size: 12pt;">{ticket_message}</span><br /><br /><span style="font-size: 12pt;">Você pode visualizar o ticket no seguinte link: <a href="{ticket_public_url}">#{ticket_id}</a></span><br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (5, 'ticket', 'ticket-autoresponse', 'portuguese', 'Novo Ticket Aberto - Resposta Automática', 'Novo Ticket de Suporte Aberto', '<span style="font-size: 12pt;">Olá {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;">Agradecemos por contatar nossa equipe de suporte. Um ticket de suporte foi aberto para sua solicitação. Você será notificado por e-mail quando uma resposta for feita.</span><br /><br /><span style="font-size: 12pt;"><strong>Assunto:</strong> {ticket_subject}</span><br /><span style="font-size: 12pt;"><strong>Departamento</strong>: {ticket_department}</span><br /><span style="font-size: 12pt;"><strong>Prioridade:</strong> {ticket_priority}</span><br /><br /><span style="font-size: 12pt;"><strong>Mensagem do Ticket:</strong></span><br /><span style="font-size: 12pt;">{ticket_message}</span><br /><br /><span style="font-size: 12pt;">Você pode visualizar o ticket no seguinte link: <a href="{ticket_public_url}">#{ticket_id}</a></span><br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (6, 'invoice', 'invoice-payment-recorded', 'portuguese', 'Pagamento de Fatura Registrado (Enviado ao Cliente)', 'Pagamento de Fatura Registrado', '<span style="font-size: 12pt;">Olá {contact_firstname}&nbsp;{contact_lastname}<br /><br /></span>Obrigado(a) pelo pagamento. Encontre os detalhes do pagamento abaixo:<br /><br />-------------------------------------------------<br /><br />Valor:&nbsp;<strong>{payment_total}<br /></strong>Data:&nbsp;<strong>{payment_date}</strong><br />Número da Fatura:&nbsp;<span style="font-size: 12pt;"><strong># {invoice_number}<br /><br /></strong></span>-------------------------------------------------<br /><br />Você pode sempre visualizar a fatura para este pagamento no seguinte link:&nbsp;<a href="{invoice_link}"><span style="font-size: 12pt;">{invoice_number}</span></a><br /><br />Esperamos trabalhar com você.<br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (7, 'invoice', 'invoice-overdue-notice', 'portuguese', 'Aviso de Fatura Vencida', 'Aviso de Fatura Vencida - {invoice_number}', '<span style="font-size: 12pt;">Olá {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;">Este é um aviso de vencimento para a fatura <strong># {invoice_number}</strong></span><br /><br /><span style="font-size: 12pt;">Esta fatura venceu em: {invoice_duedate}</span><br /><br /><span style="font-size: 12pt;">Você pode visualizar a fatura no seguinte link: <a href="{invoice_link}">{invoice_number}</a></span><br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (8, 'invoice', 'invoice-already-send', 'portuguese', 'Fatura Já Enviada ao Cliente', 'Fatura # {invoice_number} ', '<span style="font-size: 12pt;">Olá {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;">A seu pedido, aqui está a fatura número <strong># {invoice_number}</strong></span><br /><br /><span style="font-size: 12pt;">Você pode visualizar a fatura no seguinte link: <a href="{invoice_link}">{invoice_number}</a></span><br /><br /><span style="font-size: 12pt;">Entre em contato conosco para mais informações.</span><br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (9, 'ticket', 'new-ticket-created-staff', 'portuguese', 'Novo Ticket Criado (Aberto pelo Cliente, Enviado aos Membros da Equipe)', 'Novo Ticket Criado', '<p><span style="font-size: 12pt;">Um novo ticket de suporte foi aberto.</span><br /><br /><span style="font-size: 12pt;"><strong>Assunto</strong>: {ticket_subject}</span><br /><span style="font-size: 12pt;"><strong>Departamento</strong>: {ticket_department}</span><br /><span style="font-size: 12pt;"><strong>Prioridade</strong>: {ticket_priority}<br /></span><br /><span style="font-size: 12pt;"><strong>Mensagem do Ticket:</strong></span><br /><span style="font-size: 12pt;">{ticket_message}</span><br /><br /><span style="font-size: 12pt;">Você pode visualizar o ticket no seguinte link: <a href="{ticket_url}">#{ticket_id}</a></span><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span></p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (10, 'estimate', 'estimate-send-to-client', 'portuguese', 'Enviar Orçamento ao Cliente', 'Orçamento # {estimate_number} criado', '<span style="font-size: 12pt;">Prezado(a) {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;">Por favor, encontre o orçamento anexado <strong># {estimate_number}</strong></span><br /><br /><span style="font-size: 12pt;"><strong>Status do Orçamento:</strong> {estimate_status}</span><br /><br /><span style="font-size: 12pt;">Você pode visualizar o orçamento no seguinte link: <a href="{estimate_link}">{estimate_number}</a></span><br /><br /><span style="font-size: 12pt;">Aguardamos sua comunicação.</span><br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}<br /></span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (11, 'ticket', 'ticket-reply-to-admin', 'portuguese', 'Resposta de Ticket (Enviado à Equipe)', 'Nova Resposta de Ticket de Suporte', '<span style="font-size: 12pt;">Uma nova resposta de ticket de suporte de {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;"><strong>Assunto</strong>: {ticket_subject}</span><br /><span style="font-size: 12pt;"><strong>Departamento</strong>: {ticket_department}</span><br /><span style="font-size: 12pt;"><strong>Prioridade</strong>: {ticket_priority}</span><br /><br /><span style="font-size: 12pt;"><strong>Mensagem do Ticket:</strong></span><br /><span style="font-size: 12pt;">{ticket_message}</span><br /><br /><span style="font-size: 12pt;">Você pode visualizar o ticket no seguinte link: <a href="{ticket_url}">#{ticket_id}</a></span><br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (12, 'estimate', 'estimate-already-send', 'portuguese', 'Orçamento Já Enviado ao Cliente', 'Orçamento # {estimate_number} ', '<span style="font-size: 12pt;">Prezado(a) {contact_firstname} {contact_lastname}</span><br /> <br /><span style="font-size: 12pt;">Obrigado(a) pela sua solicitação de orçamento.</span><br /> <br /><span style="font-size: 12pt;">Você pode visualizar o orçamento no seguinte link: <a href="{estimate_link}">{estimate_number}</a></span><br /> <br /><span style="font-size: 12pt;">Entre em contato conosco para mais informações.</span><br /> <br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (13, 'contract', 'contract-expiration', 'portuguese', 'Lembrete de Vencimento de Contrato (Enviado aos Contatos do Cliente)', 'Lembrete de Vencimento de Contrato', '<span style="font-size: 12pt;">Prezada {client_company}</span><br /><br /><span style="font-size: 12pt;">Este é um lembrete de que o seguinte contrato expirará em breve:</span><br /><br /><span style="font-size: 12pt;"><strong>Assunto:</strong> {contract_subject}</span><br /><span style="font-size: 12pt;"><strong>Descrição:</strong> {contract_description}</span><br /><span style="font-size: 12pt;"><strong>Data de Início:</strong> {contract_datestart}</span><br /><span style="font-size: 12pt;"><strong>Data de Término:</strong> {contract_dateend}</span><br /><br /><span style="font-size: 12pt;">Entre em contato conosco para mais informações.</span><br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (14, 'tasks', 'task-assigned', 'portuguese', 'Nova Tarefa Atribuída (Enviado à Equipe)', 'Nova Tarefa Atribuída a Você - {task_name}', '<span style="font-size: 12pt;">Prezado(a) {staff_firstname}</span><br /><br /><span style="font-size: 12pt;">Você foi atribuído(a) a uma nova tarefa:</span><br /><br /><span style="font-size: 12pt;"><strong>Nome:</strong> {task_name}<br /></span><strong>Data de Início:</strong> {task_startdate}<br /><span style="font-size: 12pt;"><strong>Data de Vencimento:</strong> {task_duedate}</span><br /><span style="font-size: 12pt;"><strong>Prioridade:</strong> {task_priority}<br /><br /></span><span style="font-size: 12pt;"><span>Você pode visualizar a tarefa no seguinte link</span>: <a href="{task_link}">{task_name}</a></span><br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (15, 'tasks', 'task-added-as-follower', 'portuguese', 'Membro da Equipe Adicionado como Seguidor na Tarefa (Enviado à Equipe)', 'Você foi adicionado(a) como seguidor na tarefa - {task_name}', '<span style="font-size: 12pt;">Olá {staff_firstname}<br /></span><br /><span style="font-size: 12pt;">Você foi adicionado(a) como seguidor na seguinte tarefa:</span><br /><br /><span style="font-size: 12pt;"><strong>Nome:</strong> {task_name}</span><br /><span style="font-size: 12pt;"><strong>Data de Início:</strong> {task_startdate}</span><br /><br /><span>Você pode visualizar a tarefa no seguinte link</span><span>: </span><a href="{task_link}">{task_name}</a><br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (16, 'tasks', 'task-commented', 'portuguese', 'Novo Comentário na Tarefa (Enviado à Equipe)', 'Novo Comentário na Tarefa - {task_name}', 'Prezado(a) {staff_firstname}<br /><br />Um comentário foi feito na seguinte tarefa:<br /><br /><strong>Nome:</strong> {task_name}<br /><strong>Comentário:</strong> {task_comment}<br /><br />Você pode visualizar a tarefa no seguinte link: <a href="{task_link}">{task_name}</a><br /><br />Atenciosamente,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (17, 'tasks', 'task-added-attachment', 'portuguese', 'Novo(s) Anexo(s) na Tarefa (Enviado à Equipe)', 'Novo Anexo na Tarefa - {task_name}', 'Olá {staff_firstname}<br /><br /><strong>{task_user_take_action}</strong> adicionou um anexo na seguinte tarefa:<br /><br /><strong>Nome:</strong> {task_name}<br /><br />Você pode visualizar a tarefa no seguinte link: <a href="{task_link}">{task_name}</a><br /><br />Atenciosamente,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (18, 'estimate', 'estimate-declined-to-staff', 'portuguese', 'Orçamento Recusado (Enviado à Equipe)', 'Cliente Recusou Orçamento', '<span style="font-size: 12pt;">Olá</span><br /> <br /><span style="font-size: 12pt;">O Cliente ({client_company}) recusou o orçamento número <strong># {estimate_number}</strong></span><br /> <br /><span style="font-size: 12pt;">Você pode visualizar o orçamento no seguinte link: <a href="{estimate_link}">{estimate_number}</a></span><br /> <br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (19, 'estimate', 'estimate-accepted-to-staff', 'portuguese', 'Orçamento Aceito (Enviado à Equipe)', 'Cliente Aceitou Orçamento', '<span style="font-size: 12pt;">Olá</span><br /> <br /><span style="font-size: 12pt;">O Cliente ({client_company}) aceitou o orçamento número <strong># {estimate_number}</strong></span><br /> <br /><span style="font-size: 12pt;">Você pode visualizar o orçamento no seguinte link: <a href="{estimate_link}">{estimate_number}</a></span><br /> <br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (20, 'proposals', 'proposal-client-accepted', 'portuguese', 'Ação do Cliente - Aceita (Enviado à Equipe)', 'Cliente Aceitou Proposta', '<div>Olá<br /> <br />O cliente <strong>{proposal_proposal_to}</strong> aceitou a seguinte proposta:<br /> <br /><strong>Número:</strong> {proposal_number}<br /><strong>Assunto</strong>: {proposal_subject}<br /><strong>Total</strong>: {proposal_total}<br /> <br />Visualize a proposta no seguinte link: <a href="{proposal_link}">{proposal_number}</a><br /> <br />Atenciosamente,<br />{email_signature}</div>
 <div>&nbsp;</div>
 <div>&nbsp;</div>
 <div>&nbsp;</div>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (21, 'proposals', 'proposal-send-to-customer', 'english', 'Send Proposal to Customer', 'Proposal With Number {proposal_number} Created', 'Dear {proposal_proposal_to}<br /><br />Please find our attached proposal.<br /><br />This proposal is valid until: {proposal_open_till}<br />You can view the proposal on the following link: <a href="{proposal_link}">{proposal_number}</a><br /><br />Please don''t hesitate to comment online if you have any questions.<br /><br />We look forward to your communication.<br /><br />Kind Regards,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (22, 'proposals', 'proposal-client-declined', 'english', 'Customer Action - Declined (Sent to Staff)', 'Client Declined Proposal', 'Hi<br /> <br />Customer <strong>{proposal_proposal_to}</strong> declined the proposal <strong>{proposal_subject}</strong><br /> <br />View the proposal on the following link <a href="{proposal_link}">{proposal_number}</a>&nbsp;or from the admin area.<br /> <br />Kind Regards,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (23, 'proposals', 'proposal-client-thank-you', 'english', 'Thank You Email (Sent to Customer After Accept)', 'Thank for you accepting proposal', 'Dear {proposal_proposal_to}<br /> <br />Thank for for accepting the proposal.<br /> <br />We look forward to doing business with you.<br /> <br />We will contact you as soon as possible<br /> <br />Kind Regards,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (24, 'proposals', 'proposal-comment-to-client', 'english', 'New Comment  (Sent to Customer/Lead)', 'New Proposal Comment', 'Dear {proposal_proposal_to}<br /> <br />A new comment has been made on the following proposal: <strong>{proposal_number}</strong><br /> <br />You can view and reply to the comment on the following link: <a href="{proposal_link}">{proposal_number}</a><br /> <br />Kind Regards,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (25, 'proposals', 'proposal-comment-to-admin', 'english', 'New Comment (Sent to Staff) ', 'New Proposal Comment', 'Hi<br /> <br />A new comment has been made to the proposal <strong>{proposal_subject}</strong><br /> <br />You can view and reply to the comment on the following link: <a href="{proposal_link}">{proposal_number}</a>&nbsp;or from the admin area.<br /> <br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (26, 'estimate', 'estimate-thank-you-to-customer', 'english', 'Thank You Email (Sent to Customer After Accept)', 'Thank for you accepting estimate', '<span style="font-size: 12pt;">Dear {contact_firstname} {contact_lastname}</span><br /> <br /><span style="font-size: 12pt;">Thank for for accepting the estimate.</span><br /> <br /><span style="font-size: 12pt;">We look forward to doing business with you.</span><br /> <br /><span style="font-size: 12pt;">We will contact you as soon as possible.</span><br /> <br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (27, 'tasks', 'task-deadline-notification', 'english', 'Task Deadline Reminder - Sent to Assigned Members', 'Task Deadline Reminder', 'Hi {staff_firstname}&nbsp;{staff_lastname}<br /><br />This is an automated email from {companyname}.<br /><br />The task <strong>{task_name}</strong> deadline is on <strong>{task_duedate}</strong>. <br />This task is still not finished.<br /><br />You can view the task on the following link: <a href="{task_link}">{task_name}</a><br /><br />Kind Regards,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (28, 'contract', 'send-contract', 'english', 'Send Contract to Customer', 'Contract - {contract_subject}', '<p><span style="font-size: 12pt;">Hi&nbsp;{contact_firstname}&nbsp;{contact_lastname}</span><br /><br /><span style="font-size: 12pt;">Please find the <a href="{contract_link}">{contract_subject}</a> attached.<br /><br />Description: {contract_description}<br /><br /></span><span style="font-size: 12pt;">Looking forward to hear from you.</span><br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span></p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (29, 'invoice', 'invoice-payment-recorded-to-staff', 'english', 'Invoice Payment Recorded (Sent to Staff)', 'New Invoice Payment', '<span style="font-size: 12pt;">Hi</span><br /><br /><span style="font-size: 12pt;">Customer recorded payment for invoice <strong># {invoice_number}</strong></span><br /> <br /><span style="font-size: 12pt;">You can view the invoice on the following link: <a href="{invoice_link}">{invoice_number}</a></span><br /> <br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (30, 'ticket', 'auto-close-ticket', 'english', 'Auto Close Ticket', 'Ticket Auto Closed', '<p><span style="font-size: 12pt;">Hi {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;">Ticket {ticket_subject} has been auto close due to inactivity.</span><br /><br /><span style="font-size: 12pt;"><strong>Ticket #</strong>: <a href="{ticket_public_url}">{ticket_id}</a></span><br /><span style="font-size: 12pt;"><strong>Department</strong>: {ticket_department}</span><br /><span style="font-size: 12pt;"><strong>Priority:</strong> {ticket_priority}</span><br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span></p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (31, 'project', 'new-project-discussion-created-to-staff', 'english', 'New Project Discussion (Sent to Project Members)', 'New Project Discussion Created - {project_name}', '<p>Hi {staff_firstname}<br /><br />New project discussion created from <strong>{discussion_creator}</strong><br /><br /><strong>Subject:</strong> {discussion_subject}<br /><strong>Description:</strong> {discussion_description}<br /><br />You can view the discussion on the following link: <a href="{discussion_link}">{discussion_subject}</a><br /><br />Kind Regards,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (32, 'project', 'new-project-discussion-created-to-customer', 'english', 'New Project Discussion (Sent to Customer Contacts)', 'New Project Discussion Created - {project_name}', '<p>Hello {contact_firstname} {contact_lastname}<br /><br />New project discussion created from <strong>{discussion_creator}</strong><br /><br /><strong>Subject:</strong> {discussion_subject}<br /><strong>Description:</strong> {discussion_description}<br /><br />You can view the discussion on the following link: <a href="{discussion_link}">{discussion_subject}</a><br /><br />Kind Regards,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (33, 'project', 'new-project-file-uploaded-to-customer', 'english', 'New Project File(s) Uploaded (Sent to Customer Contacts)', 'New Project File(s) Uploaded - {project_name}', '<p>Hello {contact_firstname} {contact_lastname}<br /><br />New project file is uploaded on <strong>{project_name}</strong> from <strong>{file_creator}</strong><br /><br />You can view the project on the following link: <a href="{project_link}">{project_name}</a><br /><br />To view the file in our CRM you can click on the following link: <a href="{discussion_link}">{discussion_subject}</a><br /><br />Kind Regards,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (34, 'project', 'new-project-file-uploaded-to-staff', 'english', 'New Project File(s) Uploaded (Sent to Project Members)', 'New Project File(s) Uploaded - {project_name}', '<p>Hello&nbsp;{staff_firstname}</p>
-<p>New project&nbsp;file is uploaded on&nbsp;<strong>{project_name}</strong> from&nbsp;<strong>{file_creator}</strong></p>
-<p>You can view the project on the following link: <a href="{project_link}">{project_name}<br /></a><br />To view&nbsp;the file you can click on the following link: <a href="{discussion_link}">{discussion_subject}</a></p>
-<p>Kind Regards,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (35, 'project', 'new-project-discussion-comment-to-customer', 'english', 'New Discussion Comment  (Sent to Customer Contacts)', 'New Discussion Comment', '<p><span style="font-size: 12pt;">Hello {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;">New discussion comment has been made on <strong>{discussion_subject}</strong> from <strong>{comment_creator}</strong></span><br /><br /><span style="font-size: 12pt;"><strong>Discussion subject:</strong> {discussion_subject}</span><br /><span style="font-size: 12pt;"><strong>Comment</strong>: {discussion_comment}</span><br /><br /><span style="font-size: 12pt;">You can view the discussion on the following link: <a href="{discussion_link}">{discussion_subject}</a></span><br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span></p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (36, 'project', 'new-project-discussion-comment-to-staff', 'english', 'New Discussion Comment (Sent to Project Members)', 'New Discussion Comment', '<p>Hi {staff_firstname}<br /><br />New discussion comment has been made on <strong>{discussion_subject}</strong> from <strong>{comment_creator}</strong><br /><br /><strong>Discussion subject:</strong> {discussion_subject}<br /><strong>Comment:</strong> {discussion_comment}<br /><br />You can view the discussion on the following link: <a href="{discussion_link}">{discussion_subject}</a><br /><br />Kind Regards,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (37, 'project', 'staff-added-as-project-member', 'english', 'Staff Added as Project Member', 'New project assigned to you', '<p>Hi {staff_firstname}<br /><br />New project has been assigned to you.<br /><br />You can view the project on the following link <a href="{project_link}">{project_name}</a><br /><br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (38, 'estimate', 'estimate-expiry-reminder', 'english', 'Estimate Expiration Reminder', 'Estimate Expiration Reminder', '<p><span style="font-size: 12pt;">Hello {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;">The estimate with <strong># {estimate_number}</strong> will expire on <strong>{estimate_expirydate}</strong></span><br /><br /><span style="font-size: 12pt;">You can view the estimate on the following link: <a href="{estimate_link}">{estimate_number}</a></span><br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span></p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (39, 'proposals', 'proposal-expiry-reminder', 'english', 'Proposal Expiration Reminder', 'Proposal Expiration Reminder', '<p>Hello {proposal_proposal_to}<br /><br />The proposal {proposal_number}&nbsp;will expire on <strong>{proposal_open_till}</strong><br /><br />You can view the proposal on the following link: <a href="{proposal_link}">{proposal_number}</a><br /><br />Kind Regards,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (40, 'staff', 'new-staff-created', 'english', 'New Staff Created (Welcome Email)', 'You are added as staff member', 'Hi {staff_firstname}<br /><br />You are added as member on our CRM.<br /><br />Please use the following logic credentials:<br /><br /><strong>Email:</strong> {staff_email}<br /><strong>Password:</strong> {password}<br /><br />Click <a href="{admin_url}">here </a>to login in the dashboard.<br /><br />Best Regards,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (41, 'client', 'contact-forgot-password', 'english', 'Forgot Password', 'Create New Password', '<h2>Create a new password</h2>
-Forgot your password?<br /> To create a new password, just follow this link:<br /> <br /><a href="{reset_password_url}">Reset Password</a><br /> <br /> You received this email, because it was requested by a {companyname}&nbsp;user. This is part of the procedure to create a new password on the system. If you DID NOT request a new password then please ignore this email and your password will remain the same. <br /><br /> {email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (42, 'client', 'contact-password-reseted', 'english', 'Password Reset - Confirmation', 'Your password has been changed', '<strong><span style="font-size: 14pt;">You have changed your password.</span><br /></strong><br /> Please, keep it in your records so you don''t forget it.<br /> <br /> Your email address for login is: {contact_email}<br /><br />If this wasnt you, please contact us.<br /><br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (43, 'client', 'contact-set-password', 'english', 'Set New Password', 'Set new password on {companyname} ', '<h2><span style="font-size: 14pt;">Setup your new password on {companyname}</span></h2>
-Please use the following link to set up your new password:<br /><br /><a href="{set_password_url}">Set new password</a><br /><br />Keep it in your records so you don''t forget it.<br /><br />Please set your new password in <strong>48 hours</strong>. After that, you won''t be able to set your password because this link will expire.<br /><br />You can login at: <a href="{crm_url}">{crm_url}</a><br />Your email address for login: {contact_email}<br /><br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (44, 'staff', 'staff-forgot-password', 'english', 'Forgot Password', 'Create New Password', '<h2><span style="font-size: 14pt;">Create a new password</span></h2>
-Forgot your password?<br /> To create a new password, just follow this link:<br /> <br /><a href="{reset_password_url}">Reset Password</a><br /> <br /> You received this email, because it was requested by a <strong>{companyname}</strong>&nbsp;user. This is part of the procedure to create a new password on the system. If you DID NOT request a new password then please ignore this email and your password will remain the same. <br /><br /> {email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (45, 'staff', 'staff-password-reseted', 'english', 'Password Reset - Confirmation', 'Your password has been changed', '<span style="font-size: 14pt;"><strong>You have changed your password.<br /></strong></span><br /> Please, keep it in your records so you don''t forget it.<br /> <br /> Your email address for login is: {staff_email}<br /><br /> If this wasnt you, please contact us.<br /><br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (46, 'project', 'assigned-to-project', 'english', 'New Project Created (Sent to Customer Contacts)', 'New Project Created', '<p>Hello&nbsp;{contact_firstname}&nbsp;{contact_lastname}</p>
-<p>New project is assigned to your company.<br /><br /><strong>Project Name:</strong>&nbsp;{project_name}<br /><strong>Project Start Date:</strong>&nbsp;{project_start_date}</p>
-<p>You can view the project on the following link:&nbsp;<a href="{project_link}">{project_name}</a></p>
-<p>We are looking forward hearing from you.<br /><br />Kind Regards,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (47, 'tasks', 'task-added-attachment-to-contacts', 'english', 'New Attachment(s) on Task (Sent to Customer Contacts)', 'New Attachment on Task - {task_name}', '<span>Hi {contact_firstname} {contact_lastname}</span><br /><br /><strong>{task_user_take_action}</strong><span> added an attachment on the following task:</span><br /><br /><strong>Name:</strong><span> {task_name}</span><br /><br /><span>You can view the task on the following link: </span><a href="{task_link}">{task_name}</a><br /><br /><span>Kind Regards,</span><br /><span>{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (48, 'tasks', 'task-commented-to-contacts', 'english', 'New Comment on Task (Sent to Customer Contacts)', 'New Comment on Task - {task_name}', '<span>Dear {contact_firstname} {contact_lastname}</span><br /><br /><span>A comment has been made on the following task:</span><br /><br /><strong>Name:</strong><span> {task_name}</span><br /><strong>Comment:</strong><span> {task_comment}</span><br /><br /><span>You can view the task on the following link: </span><a href="{task_link}">{task_name}</a><br /><br /><span>Kind Regards,</span><br /><span>{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (49, 'leads', 'new-lead-assigned', 'english', 'New Lead Assigned to Staff Member', 'New lead assigned to you', '<p>Hello {lead_assigned}<br /><br />New lead is assigned to you.<br /><br /><strong>Lead Name:</strong>&nbsp;{lead_name}<br /><strong>Lead Email:</strong>&nbsp;{lead_email}<br /><br />You can view the lead on the following link: <a href="{lead_link}">{lead_name}</a><br /><br />Kind Regards,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (50, 'client', 'client-statement', 'english', 'Statement - Account Summary', 'Account Statement from {statement_from} to {statement_to}', 'Dear {contact_firstname} {contact_lastname}, <br /><br />Its been a great experience working with you.<br /><br />Attached with this email is a list of all transactions for the period between {statement_from} to {statement_to}<br /><br />For your information your account balance due is total:&nbsp;{statement_balance_due}<br /><br />Please contact us if you need more information.<br /> <br />Kind Regards,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (51, 'ticket', 'ticket-assigned-to-admin', 'english', 'New Ticket Assigned (Sent to Staff)', 'New support ticket has been assigned to you', '<p><span style="font-size: 12pt;">Hi</span></p>
-<p><span style="font-size: 12pt;">A new support ticket&nbsp;has been assigned to you.</span><br /><br /><span style="font-size: 12pt;"><strong>Subject</strong>: {ticket_subject}</span><br /><span style="font-size: 12pt;"><strong>Department</strong>: {ticket_department}</span><br /><span style="font-size: 12pt;"><strong>Priority</strong>: {ticket_priority}</span><br /><br /><span style="font-size: 12pt;"><strong>Ticket message:</strong></span><br /><span style="font-size: 12pt;">{ticket_message}</span><br /><br /><span style="font-size: 12pt;">You can view the ticket on the following link: <a href="{ticket_url}">#{ticket_id}</a></span><br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span></p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (52, 'client', 'new-client-registered-to-admin', 'english', 'New Customer Registration (Sent to admins)', 'New Customer Registration', 'Hello.<br /><br />New customer registration on your customer portal:<br /><br /><strong>Firstname:</strong>&nbsp;{contact_firstname}<br /><strong>Lastname:</strong>&nbsp;{contact_lastname}<br /><strong>Company:</strong>&nbsp;{client_company}<br /><strong>Email:</strong>&nbsp;{contact_email}<br /><br />Best Regards', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (53, 'leads', 'new-web-to-lead-form-submitted', 'english', 'Web to lead form submitted - Sent to lead', '{lead_name} - We Received Your Request', 'Hello {lead_name}.<br /><br /><strong>Your request has been received.</strong><br /><br />This email is to let you know that we received your request and we will get back to you as soon as possible with more information.<br /><br />Best Regards,<br />{email_signature}', '{companyname} | CRM', '', 0, 0, 0);
-INSERT INTO "tblemailtemplates" VALUES (54, 'staff', 'two-factor-authentication', 'english', 'Two Factor Authentication', 'Confirm Your Login', '<p>Hi {staff_firstname}</p>
-<p style="text-align: left;">You received this email because you have enabled two factor authentication in your account.<br />Use the following code to confirm your login:</p>
+INSERT INTO "tblemailtemplates" VALUES (21, 'proposals', 'proposal-send-to-customer', 'portuguese', 'Enviar Proposta ao Cliente', 'Proposta Com Número {proposal_number} Criada', 'Prezado(a) {proposal_proposal_to}<br /><br />Por favor, encontre nossa proposta anexada.<br /><br />Esta proposta é válida até: {proposal_open_till}<br />Você pode visualizar a proposta no seguinte link: <a href="{proposal_link}">{proposal_number}</a><br /><br />Por favor, não hesite em comentar online se tiver alguma dúvida.<br /><br />Aguardamos sua comunicação.<br /><br />Atenciosamente,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (22, 'proposals', 'proposal-client-declined', 'portuguese', 'Ação do Cliente - Recusada (Enviado à Equipe)', 'Cliente Recusou Proposta', 'Olá<br /> <br />O cliente <strong>{proposal_proposal_to}</strong> recusou a proposta <strong>{proposal_subject}</strong><br /> <br />Visualize a proposta no seguinte link <a href="{proposal_link}">{proposal_number}</a>&nbsp;ou na área de administração.<br /> <br />Atenciosamente,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (23, 'proposals', 'proposal-client-thank-you', 'portuguese', 'E-mail de Agradecimento (Enviado ao Cliente Após Aceite)', 'Obrigado por aceitar a proposta', 'Prezado(a) {proposal_proposal_to}<br /> <br />Obrigado(a) por aceitar a proposta.<br /> <br />Esperamos fazer negócios com você.<br /> <br />Entraremos em contato o mais breve possível.<br /> <br />Atenciosamente,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (24, 'proposals', 'proposal-comment-to-client', 'portuguese', 'Novo Comentário (Enviado ao Cliente/Lead)', 'Novo Comentário na Proposta', 'Prezado(a) {proposal_proposal_to}<br /> <br />Um novo comentário foi feito na seguinte proposta: <strong>{proposal_number}</strong><br /> <br />Você pode visualizar e responder ao comentário no seguinte link: <a href="{proposal_link}">{proposal_number}</a><br /> <br />Atenciosamente,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (25, 'proposals', 'proposal-comment-to-admin', 'portuguese', 'Novo Comentário (Enviado à Equipe) ', 'Novo Comentário na Proposta', 'Olá<br /> <br />Um novo comentário foi feito na proposta <strong>{proposal_subject}</strong><br /> <br />Você pode visualizar e responder ao comentário no seguinte link: <a href="{proposal_link}">{proposal_number}</a>&nbsp;ou na área de administração.<br /> <br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (26, 'estimate', 'estimate-thank-you-to-customer', 'portuguese', 'E-mail de Agradecimento (Enviado ao Cliente Após Aceite)', 'Obrigado por aceitar o orçamento', '<span style="font-size: 12pt;">Prezado(a) {contact_firstname} {contact_lastname}</span><br /> <br /><span style="font-size: 12pt;">Obrigado(a) por aceitar o orçamento.</span><br /> <br /><span style="font-size: 12pt;">Esperamos fazer negócios com você.</span><br /> <br /><span style="font-size: 12pt;">Entraremos em contato o mais breve possível.</span><br /> <br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (27, 'tasks', 'task-deadline-notification', 'portuguese', 'Lembrete de Prazo de Tarefa - Enviado aos Membros Atribuídos', 'Lembrete de Prazo de Tarefa', 'Olá {staff_firstname}&nbsp;{staff_lastname}<br /><br />Este é um e-mail automático de {companyname}.<br /><br />O prazo da tarefa <strong>{task_name}</strong> é em <strong>{task_duedate}</strong>. <br />Esta tarefa ainda não foi finalizada.<br /><br />Você pode visualizar a tarefa no seguinte link: <a href="{task_link}">{task_name}</a><br /><br />Atenciosamente,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (28, 'contract', 'send-contract', 'portuguese', 'Enviar Contrato ao Cliente', 'Contrato - {contract_subject}', '<p><span style="font-size: 12pt;">Olá&nbsp;{contact_firstname}&nbsp;{contact_lastname}</span><br /><br /><span style="font-size: 12pt;">Por favor, encontre o <a href="{contract_link}">{contract_subject}</a> anexado.<br /><br />Descrição: {contract_description}<br /><br /></span><span style="font-size: 12pt;">Aguardamos seu contato.</span><br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span></p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (29, 'invoice', 'invoice-payment-recorded-to-staff', 'portuguese', 'Pagamento de Fatura Registrado (Enviado à Equipe)', 'Novo Pagamento de Fatura', '<span style="font-size: 12pt;">Olá</span><br /><br /><span style="font-size: 12pt;">O cliente registrou o pagamento da fatura <strong># {invoice_number}</strong></span><br /> <br /><span style="font-size: 12pt;">Você pode visualizar a fatura no seguinte link: <a href="{invoice_link}">{invoice_number}</a></span><br /> <br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (30, 'ticket', 'auto-close-ticket', 'portuguese', 'Ticket Fechado Automaticamente', 'Ticket Fechado Automaticamente', '<p><span style="font-size: 12pt;">Olá {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;">O ticket {ticket_subject} foi fechado automaticamente devido à inatividade.</span><br /><br /><span style="font-size: 12pt;"><strong>Ticket #</strong>: <a href="{ticket_public_url}">{ticket_id}</a></span><br /><span style="font-size: 12pt;"><strong>Departamento</strong>: {ticket_department}</span><br /><span style="font-size: 12pt;"><strong>Prioridade:</strong> {ticket_priority}</span><br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span></p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (31, 'project', 'new-project-discussion-created-to-staff', 'portuguese', 'Nova Discussão de Projeto (Enviado aos Membros do Projeto)', 'Nova Discussão de Projeto Criada - {project_name}', '<p>Olá {staff_firstname}<br /><br />Nova discussão de projeto criada por <strong>{discussion_creator}</strong><br /><br /><strong>Assunto:</strong> {discussion_subject}<br /><strong>Descrição:</strong> {discussion_description}<br /><br />Você pode visualizar a discussão no seguinte link: <a href="{discussion_link}">{discussion_subject}</a><br /><br />Atenciosamente,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (32, 'project', 'new-project-discussion-created-to-customer', 'portuguese', 'Nova Discussão de Projeto (Enviado aos Contatos do Cliente)', 'Nova Discussão de Projeto Criada - {project_name}', '<p>Olá {contact_firstname} {contact_lastname}<br /><br />Nova discussão de projeto criada por <strong>{discussion_creator}</strong><br /><br /><strong>Assunto:</strong> {discussion_subject}<br /><strong>Descrição:</strong> {discussion_description}<br /><br />Você pode visualizar a discussão no seguinte link: <a href="{discussion_link}">{discussion_subject}</a><br /><br />Atenciosamente,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (33, 'project', 'new-project-file-uploaded-to-customer', 'portuguese', 'Novo(s) Arquivo(s) de Projeto Carregado(s) (Enviado aos Contatos do Cliente)', 'Novo(s) Arquivo(s) de Projeto Carregado(s) - {project_name}', '<p>Olá {contact_firstname} {contact_lastname}<br /><br />Um novo arquivo de projeto foi carregado em <strong>{project_name}</strong> por <strong>{file_creator}</strong><br /><br />Você pode visualizar o projeto no seguinte link: <a href="{project_link}">{project_name}</a><br /><br />Para visualizar o arquivo em nosso CRM, você pode clicar no seguinte link: <a href="{discussion_link}">{discussion_subject}</a><br /><br />Atenciosamente,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (34, 'project', 'new-project-file-uploaded-to-staff', 'portuguese', 'Novo(s) Arquivo(s) de Projeto Carregado(s) (Enviado aos Membros do Projeto)', 'Novo(s) Arquivo(s) de Projeto Carregado(s) - {project_name}', '<p>Olá&nbsp;{staff_firstname}</p>
+<p>Um novo arquivo de projeto foi carregado em&nbsp;<strong>{project_name}</strong> por&nbsp;<strong>{file_creator}</strong></p>
+<p>Você pode visualizar o projeto no seguinte link: <a href="{project_link}">{project_name}<br /></a><br />Para visualizar&nbsp;o arquivo, você pode clicar no seguinte link: <a href="{discussion_link}">{discussion_subject}</a></p>
+<p>Atenciosamente,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (35, 'project', 'new-project-discussion-comment-to-customer', 'portuguese', 'Novo Comentário de Discussão (Enviado aos Contatos do Cliente)', 'Novo Comentário de Discussão', '<p><span style="font-size: 12pt;">Olá {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;">Um novo comentário de discussão foi feito em <strong>{discussion_subject}</strong> por <strong>{comment_creator}</strong></span><br /><br /><span style="font-size: 12pt;"><strong>Assunto da Discussão:</strong> {discussion_subject}</span><br /><span style="font-size: 12pt;"><strong>Comentário</strong>: {discussion_comment}</span><br /><br /><span style="font-size: 12pt;">Você pode visualizar a discussão no seguinte link: <a href="{discussion_link}">{discussion_subject}</a></span><br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span></p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (36, 'project', 'new-project-discussion-comment-to-staff', 'portuguese', 'Novo Comentário de Discussão (Enviado aos Membros do Projeto)', 'Novo Comentário de Discussão', '<p>Olá {staff_firstname}<br /><br />Um novo comentário de discussão foi feito em <strong>{discussion_subject}</strong> por <strong>{comment_creator}</strong><br /><br /><strong>Assunto da Discussão:</strong> {discussion_subject}<br /><strong>Comentário:</strong> {discussion_comment}<br /><br />Você pode visualizar a discussão no seguinte link: <a href="{discussion_link}">{discussion_subject}</a><br /><br />Atenciosamente,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (37, 'project', 'staff-added-as-project-member', 'portuguese', 'Equipe Adicionada como Membro do Projeto', 'Novo projeto atribuído a você', '<p>Olá {staff_firstname}<br /><br />Um novo projeto foi atribuído a você.<br /><br />Você pode visualizar o projeto no seguinte link <a href="{project_link}">{project_name}</a><br /><br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (38, 'estimate', 'estimate-expiry-reminder', 'portuguese', 'Lembrete de Vencimento de Orçamento', 'Lembrete de Vencimento de Orçamento', '<p><span style="font-size: 12pt;">Olá {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;">O orçamento número <strong># {estimate_number}</strong> vencerá em <strong>{estimate_expirydate}</strong></span><br /><br /><span style="font-size: 12pt;">Você pode visualizar o orçamento no seguinte link: <a href="{estimate_link}">{estimate_number}</a></span><br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span></p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (39, 'proposals', 'proposal-expiry-reminder', 'portuguese', 'Lembrete de Vencimento de Proposta', 'Lembrete de Vencimento de Proposta', '<p>Olá {proposal_proposal_to}<br /><br />A proposta {proposal_number}&nbsp;vencerá em <strong>{proposal_open_till}</strong><br /><br />Você pode visualizar a proposta no seguinte link: <a href="{proposal_link}">{proposal_number}</a><br /><br />Atenciosamente,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (40, 'staff', 'new-staff-created', 'portuguese', 'Novo Membro da Equipe Criado (Email de Boas-Vindas)', 'Você foi adicionado(a) como membro da equipe', 'Olá {staff_firstname}<br /><br />Você foi adicionado(a) como membro em nosso CRM.<br /><br />Por favor, use as seguintes credenciais de login:<br /><br /><strong>Email:</strong> {staff_email}<br /><strong>Senha:</strong> {password}<br /><br />Clique <a href="{admin_url}">aqui </a>para fazer login no painel.<br /><br />Atenciosamente,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (41, 'client', 'contact-forgot-password', 'portuguese', 'Esqueceu a Senha', 'Criar Nova Senha', '<h2>Criar uma nova senha</h2>
+Esqueceu sua senha?<br /> Para criar uma nova senha, basta seguir este link:<br /> <br /><a href="{reset_password_url}">Redefinir Senha</a><br /> <br /> Você recebeu este e-mail porque foi solicitado por um usuário de <strong>{companyname}</strong>. Isso faz parte do procedimento para criar uma nova senha no sistema. Se você NÃO solicitou uma nova senha, por favor, ignore este e-mail e sua senha permanecerá a mesma. <br /><br /> {email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (42, 'client', 'contact-password-reseted', 'portuguese', 'Redefinição de Senha - Confirmação', 'Sua senha foi alterada', '<strong><span style="font-size: 14pt;">Sua senha foi alterada.</span><br /></strong><br /> Por favor, guarde-a em seus registros para não esquecê-la.<br /> <br /> Seu endereço de e-mail para login é: {contact_email}<br /><br />Se esta não foi uma ação sua, por favor, entre em contato conosco.<br /><br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (43, 'client', 'contact-set-password', 'portuguese', 'Definir Nova Senha', 'Definir nova senha em {companyname} ', '<h2><span style="font-size: 14pt;">Configure sua nova senha em {companyname}</span></h2>
+Por favor, use o link a seguir para configurar sua nova senha:<br /><br /><a href="{set_password_url}">Definir nova senha</a><br /><br />Guarde-a em seus registros para não esquecê-la.<br /><br />Por favor, defina sua nova senha em <strong>48 horas</strong>. Depois disso, você não poderá definir sua senha porque este link expirará.<br /><br />Você pode fazer login em: <a href="{crm_url}">{crm_url}</a><br />Seu endereço de e-mail para login: {contact_email}<br /><br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (44, 'staff', 'staff-forgot-password', 'portuguese', 'Esqueceu a Senha', 'Criar Nova Senha', '<h2><span style="font-size: 14pt;">Criar uma nova senha</span></h2>
+Esqueceu sua senha?<br /> Para criar uma nova senha, basta seguir este link:<br /> <br /><a href="{reset_password_url}">Redefinir Senha</a><br /> <br /> Você recebeu este e-mail porque foi solicitado por um usuário de <strong>{companyname}</strong>. Isso faz parte do procedimento para criar uma nova senha no sistema. Se você NÃO solicitou uma nova senha, por favor, ignore este e-mail e sua senha permanecerá a mesma. <br /><br /> {email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (45, 'staff', 'staff-password-reseted', 'portuguese', 'Redefinição de Senha - Confirmação', 'Sua senha foi alterada', '<span style="font-size: 14pt;"><strong>Sua senha foi alterada.<br /></strong></span><br /> Por favor, guarde-a em seus registros para não esquecê-la.<br /> <br /> Seu endereço de e-mail para login é: {staff_email}<br /><br /> Se esta não foi uma ação sua, por favor, entre em contato conosco.<br /><br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (46, 'project', 'assigned-to-project', 'portuguese', 'Novo Projeto Criado (Enviado aos Contatos do Cliente)', 'Novo Projeto Criado', '<p>Olá&nbsp;{contact_firstname}&nbsp;{contact_lastname}</p>
+<p>Um novo projeto foi atribuído à sua empresa.<br /><br /><strong>Nome do Projeto:</strong>&nbsp;{project_name}<br /><strong>Data de Início do Projeto:</strong>&nbsp;{project_start_date}</p>
+<p>Você pode visualizar o projeto no seguinte link:&nbsp;<a href="{project_link}">{project_name}</a></p>
+<p>Aguardamos seu contato.<br /><br />Atenciosamente,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (47, 'tasks', 'task-added-attachment-to-contacts', 'portuguese', 'Novo(s) Anexo(s) na Tarefa (Enviado aos Contatos do Cliente)', 'Novo Anexo na Tarefa - {task_name}', '<span>Olá {contact_firstname} {contact_lastname}</span><br /><br /><strong>{task_user_take_action}</strong><span> adicionou um anexo na seguinte tarefa:</span><br /><br /><strong>Nome:</strong><span> {task_name}</span><br /><br /><span>Você pode visualizar a tarefa no seguinte link: </span><a href="{task_link}">{task_name}</a><br /><br /><span>Atenciosamente,</span><br /><span>{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (48, 'tasks', 'task-commented-to-contacts', 'portuguese', 'Novo Comentário na Tarefa (Enviado aos Contatos do Cliente)', 'Novo Comentário na Tarefa - {task_name}', '<span>Prezado(a) {contact_firstname} {contact_lastname}</span><br /><br /><span>Um comentário foi feito na seguinte tarefa:</span><br /><br /><strong>Nome:</strong><span> {task_name}</span><br /><strong>Comentário:</strong><span> {task_comment}</span><br /><br /><span>Você pode visualizar a tarefa no seguinte link: </span><a href="{task_link}">{task_name}</a><br /><br /><span>Atenciosamente,</span><br /><span>{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (49, 'leads', 'new-lead-assigned', 'portuguese', 'Novo Lead Atribuído ao Membro da Equipe', 'Novo lead atribuído a você', '<p>Olá {lead_assigned}<br /><br />Um novo lead foi atribuído a você.<br /><br /><strong>Nome do Lead:</strong>&nbsp;{lead_name}<br /><strong>E-mail do Lead:</strong>&nbsp;{lead_email}<br /><br />Você pode visualizar o lead no seguinte link: <a href="{lead_link}">{lead_name}</a><br /><br />Atenciosamente,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (50, 'client', 'client-statement', 'portuguese', 'Extrato - Resumo da Conta', 'Extrato da Conta de {statement_from} a {statement_to}', 'Prezado(a) {contact_firstname} {contact_lastname}, <br /><br />Tem sido uma ótima experiência trabalhar com você.<br /><br />Anexado a este e-mail está uma lista de todas as transações para o período entre {statement_from} e {statement_to}<br /><br />Para sua informação, o saldo devedor da sua conta é total:&nbsp;{statement_balance_due}<br /><br />Entre em contato conosco se precisar de mais informações.<br /> <br />Atenciosamente,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (51, 'ticket', 'ticket-assigned-to-admin', 'portuguese', 'Novo Ticket Atribuído (Enviado à Equipe)', 'Um novo ticket de suporte foi atribuído a você', '<p><span style="font-size: 12pt;">Olá</span></p>
+<p><span style="font-size: 12pt;">Um novo ticket de suporte foi atribuído a você.</span><br /><br /><span style="font-size: 12pt;"><strong>Assunto</strong>: {ticket_subject}</span><br /><span style="font-size: 12pt;"><strong>Departamento</strong>: {ticket_department}</span><br /><span style="font-size: 12pt;"><strong>Prioridade</strong>: {ticket_priority}</span><br /><br /><span style="font-size: 12pt;"><strong>Mensagem do Ticket:</strong></span><br /><span style="font-size: 12pt;">{ticket_message}</span><br /><br /><span style="font-size: 12pt;">Você pode visualizar o ticket no seguinte link: <a href="{ticket_url}">#{ticket_id}</a></span><br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span></p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (52, 'client', 'new-client-registered-to-admin', 'portuguese', 'Novo Registro de Cliente (Enviado aos administradores)', 'Novo Registro de Cliente', 'Olá.<br /><br />Novo registro de cliente em seu portal do cliente:<br /><br /><strong>Primeiro Nome:</strong>&nbsp;{contact_firstname}<br /><strong>Sobrenome:</strong>&nbsp;{contact_lastname}<br /><strong>Empresa:</strong>&nbsp;{client_company}<br /><strong>E-mail:</strong>&nbsp;{contact_email}<br /><br />Atenciosamente', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (53, 'leads', 'new-web-to-lead-form-submitted', 'portuguese', 'Formulário Web para Lead Enviado - Enviado ao lead', '{lead_name} - Recebemos Sua Solicitação', 'Olá {lead_name}.<br /><br /><strong>Sua solicitação foi recebida.</strong><br /><br />Este e-mail é para informar que recebemos sua solicitação e entraremos em contato o mais breve possível com mais informações.<br /><br />Atenciosamente,<br />{email_signature}', '{companyname} | CRM', '', 0, 0, 0);
+INSERT INTO "tblemailtemplates" VALUES (54, 'staff', 'two-factor-authentication', 'portuguese', 'Autenticação de Dois Fatores', 'Confirme Seu Login', '<p>Olá {staff_firstname}</p>
+<p style="text-align: left;">Você recebeu este e-mail porque ativou a autenticação de dois fatores em sua conta.<br />Use o seguinte código para confirmar seu login:</p>
 <p style="text-align: left;"><span style="font-size: 18pt;"><strong>{two_factor_auth_code}<br /><br /></strong><span style="font-size: 12pt;">{email_signature}</span><strong><br /><br /><br /><br /></strong></span></p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (55, 'project', 'project-finished-to-customer', 'english', 'Project Marked as Finished (Sent to Customer Contacts)', 'Project Marked as Finished', '<p>Hello&nbsp;{contact_firstname}&nbsp;{contact_lastname}</p>
-<p>You are receiving this email because project&nbsp;<strong>{project_name}</strong> has been marked as finished. This project is assigned under your company and we just wanted to keep you up to date.<br /><br />You can view the project on the following link:&nbsp;<a href="{project_link}">{project_name}</a></p>
-<p>If you have any questions don''t hesitate to contact us.<br /><br />Kind Regards,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (56, 'credit_note', 'credit-note-send-to-client', 'english', 'Send Credit Note To Email', 'Credit Note With Number #{credit_note_number} Created', 'Dear&nbsp;{contact_firstname}&nbsp;{contact_lastname}<br /><br />We have attached the credit note with number <strong>#{credit_note_number} </strong>for your reference.<br /><br /><strong>Date:</strong>&nbsp;{credit_note_date}<br /><strong>Total Amount:</strong>&nbsp;{credit_note_total}<br /><br /><span style="font-size: 12pt;">Please contact us for more information.</span><br /> <br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (57, 'tasks', 'task-status-change-to-staff', 'english', 'Task Status Changed (Sent to Staff)', 'Task Status Changed', '<span style="font-size: 12pt;">Hi {staff_firstname}</span><br /><br /><span style="font-size: 12pt;"><strong>{task_user_take_action}</strong> marked task as <strong>{task_status}</strong></span><br /><br /><span style="font-size: 12pt;"><strong>Name:</strong> {task_name}</span><br /><span style="font-size: 12pt;"><strong>Due date:</strong> {task_duedate}</span><br /><br /><span style="font-size: 12pt;">You can view the task on the following link: <a href="{task_link}">{task_name}</a></span><br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (58, 'tasks', 'task-status-change-to-contacts', 'english', 'Task Status Changed (Sent to Customer Contacts)', 'Task Status Changed', '<span style="font-size: 12pt;">Hi {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;"><strong>{task_user_take_action}</strong> marked task as <strong>{task_status}</strong></span><br /><br /><span style="font-size: 12pt;"><strong>Name:</strong> {task_name}</span><br /><span style="font-size: 12pt;"><strong>Due date:</strong> {task_duedate}</span><br /><br /><span style="font-size: 12pt;">You can view the task on the following link: <a href="{task_link}">{task_name}</a></span><br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (59, 'staff', 'reminder-email-staff', 'english', 'Staff Reminder Email', 'You Have a New Reminder!', '<p>Hello&nbsp;{staff_firstname}<br /><br /><strong>You have a new reminder&nbsp;linked to&nbsp;{staff_reminder_relation_name}!<br /><br />Reminder description:</strong><br />{staff_reminder_description}<br /><br />Click <a href="{staff_reminder_relation_link}">here</a> to view&nbsp;<a href="{staff_reminder_relation_link}">{staff_reminder_relation_name}</a><br /><br />Best Regards<br /><br /></p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (60, 'contract', 'contract-comment-to-client', 'english', 'New Comment  (Sent to Customer Contacts)', 'New Contract Comment', 'Dear {contact_firstname} {contact_lastname}<br /> <br />A new comment has been made on the following contract: <strong>{contract_subject}</strong><br /> <br />You can view and reply to the comment on the following link: <a href="{contract_link}">{contract_subject}</a><br /> <br />Kind Regards,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (61, 'contract', 'contract-comment-to-admin', 'english', 'New Comment (Sent to Staff) ', 'New Contract Comment', 'Hi {staff_firstname}<br /><br />A new comment has been made to the contract&nbsp;<strong>{contract_subject}</strong><br /><br />You can view and reply to the comment on the following link: <a href="{contract_link}">{contract_subject}</a>&nbsp;or from the admin area.<br /><br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (62, 'subscriptions', 'send-subscription', 'english', 'Send Subscription to Customer', 'Subscription Created', 'Hello&nbsp;{contact_firstname}&nbsp;{contact_lastname}<br /><br />We have prepared the subscription&nbsp;<strong>{subscription_name}</strong> for your company.<br /><br />Click <a href="{subscription_link}">here</a> to review the subscription and subscribe.<br /><br />Best Regards,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (63, 'subscriptions', 'subscription-payment-failed', 'english', 'Subscription Payment Failed', 'Your most recent invoice payment failed', 'Hello&nbsp;{contact_firstname}&nbsp;{contact_lastname}<br /><br br="" />Unfortunately, your most recent invoice payment for&nbsp;<strong>{subscription_name}</strong> was declined.<br /><br />This could be due to a change in your card number, your card expiring,<br />cancellation of your credit card, or the card issuer not recognizing the<br />payment and therefore taking action to prevent it.<br /><br />Please update your payment information as soon as possible by logging in here:<br /><a href="{crm_url}/login">{crm_url}/login</a><br /><br />Best Regards,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (64, 'subscriptions', 'subscription-canceled', 'english', 'Subscription Canceled (Sent to customer primary contact)', 'Your subscription has been canceled', 'Hello&nbsp;{contact_firstname}&nbsp;{contact_lastname}<br /><br />Your subscription&nbsp;<strong>{subscription_name} </strong>has been canceled, if you have any questions don''t hesitate to contact us.<br /><br />It was a pleasure doing business with you.<br /><br />Best Regards,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (65, 'subscriptions', 'subscription-payment-succeeded', 'english', 'Subscription Payment Succeeded (Sent to customer primary contact)', 'Subscription  Payment Receipt - {subscription_name}', 'Hello&nbsp;{contact_firstname}&nbsp;{contact_lastname}<br /><br />This email is to let you know that we received your payment for subscription&nbsp;<strong>{subscription_name}&nbsp;</strong>of&nbsp;<strong><span>{payment_total}<br /><br /></span></strong>The invoice associated with it is now with status&nbsp;<strong>{invoice_status}<br /></strong><br />Thank you for your confidence.<br /><br />Best Regards,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (66, 'contract', 'contract-expiration-to-staff', 'english', 'Contract Expiration Reminder (Sent to Staff)', 'Contract Expiration Reminder', 'Hi {staff_firstname}<br /><br /><span style="font-size: 12pt;">This is a reminder that the following contract will expire soon:</span><br /><br /><span style="font-size: 12pt;"><strong>Subject:</strong> {contract_subject}</span><br /><span style="font-size: 12pt;"><strong>Description:</strong> {contract_description}</span><br /><span style="font-size: 12pt;"><strong>Date Start:</strong> {contract_datestart}</span><br /><span style="font-size: 12pt;"><strong>Date End:</strong> {contract_dateend}</span><br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (67, 'gdpr', 'gdpr-removal-request', 'english', 'Removal Request From Contact (Sent to administrators)', 'Data Removal Request Received', 'Hello&nbsp;{staff_firstname}&nbsp;{staff_lastname}<br /><br />Data removal has been requested by&nbsp;{contact_firstname} {contact_lastname}<br /><br />You can review this request and take proper actions directly from the admin area.', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (68, 'gdpr', 'gdpr-removal-request-lead', 'english', 'Removal Request From Lead (Sent to administrators)', 'Data Removal Request Received', 'Hello&nbsp;{staff_firstname}&nbsp;{staff_lastname}<br /><br />Data removal has been requested by {lead_name}<br /><br />You can review this request and take proper actions directly from the admin area.<br /><br />To view the lead inside the admin area click here:&nbsp;<a href="{lead_link}">{lead_link}</a>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (69, 'client', 'client-registration-confirmed', 'english', 'Customer Registration Confirmed', 'Your registration is confirmed', '<p>Dear {contact_firstname} {contact_lastname}<br /><br />We just wanted to let you know that your registration at&nbsp;{companyname} is successfully confirmed and your account is now active.<br /><br />You can login at&nbsp;<a href="{crm_url}">{crm_url}</a> with the email and password you provided during registration.<br /><br />Please contact us if you need any help.<br /><br />Kind Regards, <br />{email_signature}</p>
-<p><br />(This is an automated email, so please don''t reply to this email address)</p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (70, 'contract', 'contract-signed-to-staff', 'english', 'Contract Signed (Sent to Staff)', 'Customer Signed a Contract', 'Hi {staff_firstname}<br /><br />A contract with subject&nbsp;<strong>{contract_subject} </strong>has been successfully signed by the customer.<br /><br />You can view the contract at the following link: <a href="{contract_link}">{contract_subject}</a>&nbsp;or from the admin area.<br /><br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (71, 'subscriptions', 'customer-subscribed-to-staff', 'english', 'Customer Subscribed to a Subscription (Sent to administrators and subscription creator)', 'Customer Subscribed to a Subscription', 'The customer <strong>{client_company}</strong> subscribed to a subscription with name&nbsp;<strong>{subscription_name}</strong><br /><br /><strong>ID</strong>:&nbsp;{subscription_id}<br /><strong>Subscription name</strong>:&nbsp;{subscription_name}<br /><strong>Subscription description</strong>:&nbsp;{subscription_description}<br /><br />You can view the subscription by clicking <a href="{subscription_link}">here</a><br />
+INSERT INTO "tblemailtemplates" VALUES (55, 'project', 'project-finished-to-customer', 'portuguese', 'Projeto Marcado como Concluído (Enviado aos Contatos do Cliente)', 'Projeto Marcado como Concluído', '<p>Olá&nbsp;{contact_firstname}&nbsp;{contact_lastname}</p>
+<p>Você está recebendo este e-mail porque o projeto&nbsp;<strong>{project_name}</strong> foi marcado como concluído. Este projeto está atribuído à sua empresa e gostaríamos apenas de mantê-lo(a) atualizado(a).<br /><br />Você pode visualizar o projeto no seguinte link:&nbsp;<a href="{project_link}">{project_name}</a></p>
+<p>Se tiver alguma dúvida, não hesite em nos contatar.<br /><br />Atenciosamente,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (56, 'credit_note', 'credit-note-send-to-client', 'portuguese', 'Enviar Nota de Crédito Por E-mail', 'Nota de Crédito Com Número #{credit_note_number} Criada', 'Prezado(a)&nbsp;{contact_firstname}&nbsp;{contact_lastname}<br /><br />Anexamos a nota de crédito com o número <strong>#{credit_note_number} </strong>para sua referência.<br /><br /><strong>Data:</strong>&nbsp;{credit_note_date}<br /><strong>Valor Total:</strong>&nbsp;{credit_note_total}<br /><br /><span style="font-size: 12pt;">Entre em contato conosco para mais informações.</span><br /> <br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (57, 'tasks', 'task-status-change-to-staff', 'portuguese', 'Status da Tarefa Alterado (Enviado à Equipe)', 'Status da Tarefa Alterado', '<span style="font-size: 12pt;">Olá {staff_firstname}</span><br /><br /><span style="font-size: 12pt;"><strong>{task_user_take_action}</strong> marcou a tarefa como <strong>{task_status}</strong></span><br /><br /><span style="font-size: 12pt;"><strong>Nome:</strong> {task_name}</span><br /><span style="font-size: 12pt;"><strong>Data de vencimento:</strong> {task_duedate}</span><br /><br /><span style="font-size: 12pt;">Você pode visualizar a tarefa no seguinte link: <a href="{task_link}">{task_name}</a></span><br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (58, 'tasks', 'task-status-change-to-contacts', 'portuguese', 'Status da Tarefa Alterado (Enviado aos Contatos do Cliente)', 'Status da Tarefa Alterado', '<span style="font-size: 12pt;">Olá {contact_firstname} {contact_lastname}</span><br /><br /><span style="font-size: 12pt;"><strong>{task_user_take_action}</strong> marcou a tarefa como <strong>{task_status}</strong></span><br /><br /><span style="font-size: 12pt;"><strong>Nome:</strong> {task_name}</span><br /><span style="font-size: 12pt;"><strong>Data de vencimento:</strong> {task_duedate}</span><br /><br /><span style="font-size: 12pt;">Você pode visualizar a tarefa no seguinte link: <a href="{task_link}">{task_name}</a></span><br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (59, 'staff', 'reminder-email-staff', 'portuguese', 'E-mail de Lembrete para a Equipe', 'Você Tem um Novo Lembrete!', '<p>Olá&nbsp;{staff_firstname}<br /><br /><strong>Você tem um novo lembrete&nbsp;vinculado a&nbsp;{staff_reminder_relation_name}!.<br /><br />Descrição do lembrete:</strong><br />{staff_reminder_description}<br /><br />Clique <a href="{staff_reminder_relation_link}">aqui</a> para visualizar&nbsp;<a href="{staff_reminder_relation_link}">{staff_reminder_relation_name}</a><br /><br />Atenciosamente<br /><br /></p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (60, 'contract', 'contract-comment-to-client', 'portuguese', 'Novo Comentário (Enviado aos Contatos do Cliente)', 'Novo Comentário de Contrato', 'Prezado(a) {contact_firstname} {contact_lastname}<br /> <br />Um novo comentário foi feito no seguinte contrato: <strong>{contract_subject}</strong><br /> <br />Você pode visualizar e responder ao comentário no seguinte link: <a href="{contract_link}">{contract_subject}</a><br /> <br />Atenciosamente,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (61, 'contract', 'contract-comment-to-admin', 'portuguese', 'Novo Comentário (Enviado à Equipe) ', 'Novo Comentário de Contrato', 'Olá {staff_firstname}<br /><br />Um novo comentário foi feito no contrato&nbsp;<strong>{contract_subject}</strong><br /><br />Você pode visualizar e responder ao comentário no seguinte link: <a href="{contract_link}">{contract_subject}</a>&nbsp;ou na área de administração.<br /><br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (62, 'subscriptions', 'send-subscription', 'portuguese', 'Enviar Assinatura ao Cliente', 'Assinatura Criada', 'Olá&nbsp;{contact_firstname}&nbsp;{contact_lastname}<br /><br />Preparamos a assinatura&nbsp;<strong>{subscription_name}</strong> para sua empresa.<br /><br />Clique <a href="{subscription_link}">aqui</a> para revisar a assinatura e assinar.<br /><br />Atenciosamente,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (63, 'subscriptions', 'subscription-payment-failed', 'portuguese', 'Pagamento da Assinatura Falhou', 'Seu pagamento de fatura mais recente falhou', 'Olá&nbsp;{contact_firstname}&nbsp;{contact_lastname}<br /><br br="" />Infelizmente, seu pagamento de fatura mais recente para&nbsp;<strong>{subscription_name}</strong> foi recusado.<br /><br />Isso pode ser devido a uma alteração no número do seu cartão, seu cartão expirando,<br />cancelamento do seu cartão de crédito, ou a emissora do cartão não reconhecendo o<br />pagamento e, portanto, tomando medidas para impedi-lo.<br /><br />Por favor, atualize suas informações de pagamento o mais rápido possível fazendo login aqui:<br /><a href="{crm_url}/login">{crm_url}/login</a><br /><br />Atenciosamente,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (64, 'subscriptions', 'subscription-canceled', 'portuguese', 'Assinatura Cancelada (Enviado ao contato principal do cliente)', 'Sua assinatura foi cancelada', 'Olá&nbsp;{contact_firstname}&nbsp;{contact_lastname}<br /><br />Sua assinatura&nbsp;<strong>{subscription_name} </strong>foi cancelada, se você tiver alguma dúvida, não hesite em nos contatar.<br /><br />Foi um prazer fazer negócios com você.<br /><br />Atenciosamente,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (65, 'subscriptions', 'subscription-payment-succeeded', 'portuguese', 'Pagamento da Assinatura Realizado com Sucesso (Enviado ao contato principal do cliente)', 'Recibo de Pagamento de Assinatura - {subscription_name}', 'Olá&nbsp;{contact_firstname}&nbsp;{contact_lastname}<br /><br />Este e-mail é para informar que recebemos seu pagamento pela assinatura&nbsp;<strong>{subscription_name}&nbsp;</strong>de&nbsp;<strong><span>{payment_total}<br /><br /></span></strong>A fatura associada agora está com o status&nbsp;<strong>{invoice_status}<br /></strong><br />Obrigado(a) pela sua confiança.<br /><br />Atenciosamente,<br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (66, 'contract', 'contract-expiration-to-staff', 'portuguese', 'Lembrete de Vencimento de Contrato (Enviado à Equipe)', 'Lembrete de Vencimento de Contrato', 'Olá {staff_firstname}<br /><br /><span style="font-size: 12pt;">Este é um lembrete de que o seguinte contrato expirará em breve:</span><br /><br /><span style="font-size: 12pt;"><strong>Assunto:</strong> {contract_subject}</span><br /><span style="font-size: 12pt;"><strong>Descrição:</strong> {contract_description}</span><br /><span style="font-size: 12pt;"><strong>Data de Início:</strong> {contract_datestart}</span><br /><span style="font-size: 12pt;"><strong>Data de Término:</strong> {contract_dateend}</span><br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (67, 'gdpr', 'gdpr-removal-request', 'portuguese', 'Solicitação de Remoção de Contato (Enviado aos administradores)', 'Solicitação de Remoção de Dados Recebida', 'Olá&nbsp;{staff_firstname}&nbsp;{staff_lastname}<br /><br />Uma solicitação de remoção de dados foi feita por&nbsp;{contact_firstname} {contact_lastname}<br /><br />Você pode revisar esta solicitação e tomar as medidas adequadas diretamente na área de administração.', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (68, 'gdpr', 'gdpr-removal-request-lead', 'portuguese', 'Solicitação de Remoção de Lead (Enviado aos administradores)', 'Solicitação de Remoção de Dados Recebida', 'Olá&nbsp;{staff_firstname}&nbsp;{staff_lastname}<br /><br />Uma solicitação de remoção de dados foi feita por {lead_name}<br /><br />Você pode revisar esta solicitação e tomar as medidas adequadas diretamente na área de administração.<br /><br />Para visualizar o lead na área de administração, clique aqui:&nbsp;<a href="{lead_link}">{lead_link}</a>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (69, 'client', 'client-registration-confirmed', 'portuguese', 'Registro de Cliente Confirmado', 'Seu registro foi confirmado', '<p>Prezado(a) {contact_firstname} {contact_lastname}<br /><br />Gostaríamos de informar que seu registro em&nbsp;{companyname} foi confirmado com sucesso e sua conta agora está ativa.<br /><br />Você pode fazer login em&nbsp;<a href="{crm_url}">{crm_url}</a> com o e-mail e a senha que você forneceu durante o registro.<br /><br />Por favor, entre em contato se precisar de ajuda.<br /><br />Atenciosamente, <br />{email_signature}</p>
+<p><br />(Este é um e-mail automático, por favor, não responda a este endereço de e-mail)</p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (70, 'contract', 'contract-signed-to-staff', 'portuguese', 'Contrato Assinado (Enviado à Equipe)', 'Cliente Assinou um Contrato', 'Olá {staff_firstname}<br /><br />Um contrato com o assunto&nbsp;<strong>{contract_subject} </strong>foi assinado com sucesso pelo cliente.<br /><br />Você pode visualizar o contrato no seguinte link: <a href="{contract_link}">{contract_subject}</a>&nbsp;ou na área de administração.<br /><br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (71, 'subscriptions', 'customer-subscribed-to-staff', 'portuguese', 'Cliente Assinou uma Assinatura (Enviado aos administradores e criador da assinatura)', 'Cliente Assinou uma Assinatura', 'O cliente <strong>{client_company}</strong> assinou uma assinatura com o nome&nbsp;<strong>{subscription_name}</strong><br /><br /><strong>ID</strong>:&nbsp;{subscription_id}<br /><strong>Nome da assinatura</strong>:&nbsp;{subscription_name}<br /><strong>Descrição da assinatura</strong>:&nbsp;{subscription_description}<br /><br />Você pode visualizar a assinatura clicando <a href="{subscription_link}">aqui</a><br />
 <div style="text-align: center;"><span style="font-size: 10pt;">&nbsp;</span></div>
-Best Regards,<br />{email_signature}<br /><br /><span style="font-size: 10pt;"><span style="color: #999999;">You are receiving this email because you are either administrator or you are creator of the subscription.</span></span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (72, 'client', 'contact-verification-email', 'english', 'Email Verification (Sent to Contact After Registration)', 'Verify Email Address', '<p>Hello&nbsp;{contact_firstname}<br /><br />Please click the button below to verify your email address.<br /><br /><a href="{email_verification_url}">Verify Email Address</a><br /><br />If you did not create an account, no further action is required</p>
+Atenciosamente,<br />{email_signature}<br /><br /><span style="font-size: 10pt;"><span style="color: #999999;">Você está recebendo este e-mail porque é administrador ou criador da assinatura.</span></span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (72, 'client', 'contact-verification-email', 'portuguese', 'Verificação de E-mail (Enviado ao Contato Após o Registro)', 'Verificar Endereço de E-mail', '<p>Olá&nbsp;{contact_firstname}<br /><br />Por favor, clique no botão abaixo para verificar seu endereço de e-mail.<br /><br /><a href="{email_verification_url}">Verificar Endereço de E-mail</a><br /><br />Se você não criou uma conta, nenhuma ação adicional é necessária</p>
 <p><br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (73, 'client', 'new-customer-profile-file-uploaded-to-staff', 'english', 'New Customer Profile File(s) Uploaded (Sent to Staff)', 'Customer Uploaded New File(s) in Profile', 'Hi!<br /><br />New file(s) is uploaded into the customer ({client_company}) profile by&nbsp;{contact_firstname}<br /><br />You can check the uploaded files into the admin area by clicking <a href="{customer_profile_files_admin_link}">here</a> or at the following link:&nbsp;{customer_profile_files_admin_link}<br /><br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (74, 'staff', 'event-notification-to-staff', 'english', 'Event Notification (Calendar)', 'Upcoming Event - {event_title}', 'Hi {staff_firstname}! <br /><br />This is a reminder for event <a href=\"{event_link}\">{event_title}</a> scheduled at {event_start_date}. <br /><br />Regards.', '', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (75, 'subscriptions', 'subscription-payment-requires-action', 'english', 'Credit Card Authorization Required - SCA', 'Important: Confirm your subscription {subscription_name} payment', '<p>Hello {contact_firstname}</p>
-<p><strong>Your bank sometimes requires an additional step to make sure an online transaction was authorized.</strong><br /><br />Because of European regulation to protect consumers, many online payments now require two-factor authentication. Your bank ultimately decides when authentication is required to confirm a payment, but you may notice this step when you start paying for a service or when the cost changes.<br /><br />In order to pay the subscription <strong>{subscription_name}</strong>, you will need to&nbsp;confirm your payment by clicking on the follow link: <strong><a href="{subscription_authorize_payment_link}">{subscription_authorize_payment_link}</a></strong><br /><br />To view the subscription, please click at the following link: <a href="{subscription_link}"><span>{subscription_link}</span></a><br />or you can login in our dedicated area here: <a href="{crm_url}/login">{crm_url}/login</a> in case you want to update your credit card or view the subscriptions you are subscribed.<br /><br />Best Regards,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (76, 'invoice', 'invoice-due-notice', 'english', 'Invoice Due Notice', 'Your {invoice_number} will be due soon', '<span style="font-size: 12pt;">Hi {contact_firstname} {contact_lastname}<br /><br /></span>You invoice <span style="font-size: 12pt;"><strong># {invoice_number} </strong>will be due on <strong>{invoice_duedate}</strong></span><br /><br /><span style="font-size: 12pt;">You can view the invoice on the following link: <a href="{invoice_link}">{invoice_number}</a></span><br /><br /><span style="font-size: 12pt;">Kind Regards,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (77, 'estimate_request', 'estimate-request-submitted-to-staff', 'english', 'Estimate Request Submitted (Sent to Staff)', 'New Estimate Request Submitted', '<span> Hello,&nbsp;</span><br /><br />{estimate_request_email} submitted an estimate request via the {estimate_request_form_name} form.<br /><br />You can view the request at the following link: <a href="{estimate_request_link}">{estimate_request_link}</a><br /><br />==<br /><br />{estimate_request_submitted_data}<br /><br />Kind Regards,<br /><span>{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (78, 'estimate_request', 'estimate-request-assigned', 'english', 'Estimate Request Assigned (Sent to Staff)', 'New Estimate Request Assigned', '<span> Hello {estimate_request_assigned},&nbsp;</span><br /><br />Estimate request #{estimate_request_id} has been assigned to you.<br /><br />You can view the request at the following link: <a href="{estimate_request_link}">{estimate_request_link}</a><br /><br />Kind Regards,<br /><span>{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (79, 'estimate_request', 'estimate-request-received-to-user', 'english', 'Estimate Request Received (Sent to User)', 'Estimate Request Received', 'Hello,<br /><br /><strong>Your request has been received.</strong><br /><br />This email is to let you know that we received your request and we will get back to you as soon as possible with more information.<br /><br />Best Regards,<br />{email_signature}', '{companyname} | CRM', '', 0, 0, 0);
-INSERT INTO "tblemailtemplates" VALUES (80, 'notifications', 'non-billed-tasks-reminder', 'english', 'Non-billed tasks reminder (sent to selected staff members)', 'Action required: Completed tasks are not billed', 'Hello {staff_firstname}<br><br>The following tasks are marked as complete but not yet billed:<br><br>{unbilled_tasks_list}<br><br>Kind Regards,<br><br>{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (81, 'invoice', 'invoices-batch-payments', 'english', 'Invoices Payments Recorded in Batch (Sent to Customer)', 'We have received your payments', 'Hello {contact_firstname} {contact_lastname}<br><br>Thank you for the payments. Please find the payments details below:<br><br>{batch_payments_list}<br><br>We are looking forward working with you.<br><br>Kind Regards,<br><br>{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
-INSERT INTO "tblemailtemplates" VALUES (82, 'contract', 'contract-sign-reminder', 'english', 'Contract Sign Reminder (Sent to Customer)', 'Contract Sign Reminder', '<p>Hello {contact_firstname} {contact_lastname}<br /><br />This is a reminder to review and sign the contract:<a href="{contract_link}">{contract_subject}</a></p><p>You can view and sign by visiting: <a href="{contract_link}">{contract_subject}</a></p><p><br />We are looking forward working with you.<br /><br />Kind Regards,<br /><br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
-
--- ----------------------------
--- Table structure for tblestimate_request_forms
--- ----------------------------
+INSERT INTO "tblemailtemplates" VALUES (73, 'client', 'new-customer-profile-file-uploaded-to-staff', 'portuguese', 'Novo(s) Arquivo(s) de Perfil de Cliente Carregado(s) (Enviado à Equipe)', 'Cliente Carregou Novo(s) Arquivo(s) no Perfil', 'Olá!<br /><br />Novo(s) arquivo(s) foi(ram) carregado(s) no perfil do cliente ({client_company}) por&nbsp;{contact_firstname}<br /><br />Você pode verificar os arquivos carregados na área de administração clicando <a href="{customer_profile_files_admin_link}">aqui</a> ou no seguinte link:&nbsp;{customer_profile_files_admin_link}<br /><br />{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (74, 'staff', 'event-notification-to-staff', 'portuguese', 'Notificação de Evento (Calendário)', 'Próximo Evento - {event_title}', 'Olá {staff_firstname}! <br /><br />Este é um lembrete para o evento <a href=\"{event_link}\">{event_title}</a> agendado para {event_start_date}. <br /><br />Atenciosamente.', '', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (75, 'subscriptions', 'subscription-payment-requires-action', 'portuguese', 'Autorização de Cartão de Crédito Necessária - SCA', 'Importante: Confirme o pagamento da sua assinatura {subscription_name}', '<p>Olá {contact_firstname}</p>
+<p><strong>Seu banco às vezes exige uma etapa adicional para garantir que uma transação online foi autorizada.</strong><br /><br />Devido à regulamentação europeia para proteger os consumidores, muitos pagamentos online agora exigem autenticação de dois fatores. Seu banco decide, em última instância, quando a autenticação é necessária para confirmar um pagamento, mas você pode notar esta etapa ao começar a pagar por um serviço ou quando o custo muda.<br /><br />Para pagar a assinatura <strong>{subscription_name}</strong>, você precisará confirmar seu pagamento clicando no seguinte link: <strong><a href="{subscription_authorize_payment_link}">{subscription_authorize_payment_link}</a></strong><br /><br />Para visualizar a assinatura, por favor, clique no seguinte link: <a href="{subscription_link}"><span>{subscription_link}</span></a><br />ou você pode fazer login em nossa área dedicada aqui: <a href="{crm_url}/login">{crm_url}/login</a> caso queira atualizar seu cartão de crédito ou visualizar as assinaturas às quais você está inscrito(a).<br /><br />Atenciosamente,<br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (76, 'invoice', 'invoice-due-notice', 'portuguese', 'Aviso de Vencimento de Fatura', 'Sua fatura {invoice_number} vencerá em breve', '<span style="font-size: 12pt;">Olá {contact_firstname} {contact_lastname}<br /><br /></span>Sua fatura <span style="font-size: 12pt;"><strong># {invoice_number} </strong>vencerá em <strong>{invoice_duedate}</strong></span><br /><br /><span style="font-size: 12pt;">Você pode visualizar a fatura no seguinte link: <a href="{invoice_link}">{invoice_number}</a></span><br /><br /><span style="font-size: 12pt;">Atenciosamente,</span><br /><span style="font-size: 12pt;">{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (77, 'estimate_request', 'estimate-request-submitted-to-staff', 'portuguese', 'Solicitação de Orçamento Enviada (Enviado à Equipe)', 'Nova Solicitação de Orçamento Enviada', '<span> Olá,&nbsp;</span><br /><br />{estimate_request_email} enviou uma solicitação de orçamento através do formulário {estimate_request_form_name}.<br /><br />Você pode visualizar a solicitação no seguinte link: <a href="{estimate_request_link}">{estimate_request_link}</a><br /><br />==<br /><br />{estimate_request_submitted_data}<br /><br />Atenciosamente,<br /><span>{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (78, 'estimate_request', 'estimate-request-assigned', 'portuguese', 'Solicitação de Orçamento Atribuída (Enviado à Equipe)', 'Nova Solicitação de Orçamento Atribuída', '<span> Olá {estimate_request_assigned},&nbsp;</span><br /><br />A solicitação de orçamento #{estimate_request_id} foi atribuída a você.<br /><br />Você pode visualizar a solicitação no seguinte link: <a href="{estimate_request_link}">{estimate_request_link}</a><br /><br />Atenciosamente,<br /><span>{email_signature}</span>', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (79, 'estimate_request', 'estimate-request-received-to-user', 'portuguese', 'Solicitação de Orçamento Recebida (Enviado ao Usuário)', 'Solicitação de Orçamento Recebida', 'Olá,<br /><br /><strong>Sua solicitação foi recebida.</strong><br /><br />Este e-mail é para informar que recebemos sua solicitação e entraremos em contato o mais breve possível com mais informações.<br /><br />Atenciosamente,<br />{email_signature}', '{companyname} | CRM', '', 0, 0, 0);
+INSERT INTO "tblemailtemplates" VALUES (80, 'notifications', 'non-billed-tasks-reminder', 'portuguese', 'Lembrete de Tarefas Não Faturadas (enviado aos membros da equipe selecionados)', 'Ação necessária: Tarefas concluídas não faturadas', 'Olá {staff_firstname}<br><br>As seguintes tarefas estão marcadas como concluídas, mas ainda não foram faturadas:<br><br>{unbilled_tasks_list}<br><br>Atenciosamente,<br><br>{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (81, 'invoice', 'invoices-batch-payments', 'portuguese', 'Pagamentos de Faturas Registrados em Lote (Enviado ao Cliente)', 'Recebemos seus pagamentos', 'Olá {contact_firstname} {contact_lastname}<br><br>Obrigado(a) pelos pagamentos. Por favor, encontre os detalhes dos pagamentos abaixo:<br><br>{batch_payments_list}<br><br>Esperamos trabalhar com você.<br><br>Atenciosamente,<br><br>{email_signature}', '{companyname} | CRM', '', 0, 1, 0);
+INSERT INTO "tblemailtemplates" VALUES (82, 'contract', 'contract-sign-reminder', 'portuguese', 'Lembrete de Assinatura de Contrato (Enviado ao Cliente)', 'Lembrete de Assinatura de Contrato', '<p>Olá {contact_firstname} {contact_lastname}<br /><br />Este é um lembrete para revisar e assinar o contrato:<a href="{contract_link}">{contract_subject}</a></p><p>Você pode visualizar e assinar visitando: <a href="{contract_link}">{contract_subject}</a></p><p><br />Esperamos trabalhar com você.<br /><br />Atenciosamente,<br /><br />{email_signature}</p>', '{companyname} | CRM', '', 0, 1, 0);
 DROP TABLE IF EXISTS "tblestimate_request_forms";
 CREATE TABLE "tblestimate_request_forms" (
   "id" integer NOT NULL,
@@ -933,14 +737,6 @@ CREATE TABLE "tblestimate_request_forms" (
   "notify_request_submitted" integer NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblestimate_request_forms
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblestimate_request_status
--- ----------------------------
 DROP TABLE IF EXISTS "tblestimate_request_status";
 CREATE TABLE "tblestimate_request_status" (
   "id" integer NOT NULL,
@@ -950,17 +746,9 @@ CREATE TABLE "tblestimate_request_status" (
   "flag" text(30),
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblestimate_request_status
--- ----------------------------
 INSERT INTO "tblestimate_request_status" VALUES (1, 'Cancelled', 1, '#808080', 'cancelled');
 INSERT INTO "tblestimate_request_status" VALUES (2, 'Processing', 2, '#007bff', 'processing');
 INSERT INTO "tblestimate_request_status" VALUES (3, 'Completed', 3, '#28a745', 'completed');
-
--- ----------------------------
--- Table structure for tblestimate_requests
--- ----------------------------
 DROP TABLE IF EXISTS "tblestimate_requests";
 CREATE TABLE "tblestimate_requests" (
   "id" integer NOT NULL,
@@ -975,14 +763,6 @@ CREATE TABLE "tblestimate_requests" (
   "date_added" text NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblestimate_requests
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblestimates
--- ----------------------------
 DROP TABLE IF EXISTS "tblestimates";
 CREATE TABLE "tblestimates" (
   "id" integer NOT NULL,
@@ -1040,14 +820,6 @@ CREATE TABLE "tblestimates" (
   "short_link" text(100),
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblestimates
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblevents
--- ----------------------------
 DROP TABLE IF EXISTS "tblevents";
 CREATE TABLE "tblevents" (
   "eventid" integer NOT NULL,
@@ -1063,14 +835,6 @@ CREATE TABLE "tblevents" (
   "reminder_before_type" text(10),
   PRIMARY KEY ("eventid")
 );
-
--- ----------------------------
--- Records of tblevents
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblexpenses
--- ----------------------------
 DROP TABLE IF EXISTS "tblexpenses";
 CREATE TABLE "tblexpenses" (
   "id" integer NOT NULL,
@@ -1102,14 +866,6 @@ CREATE TABLE "tblexpenses" (
   "addedfrom" integer NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblexpenses
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblexpenses_categories
--- ----------------------------
 DROP TABLE IF EXISTS "tblexpenses_categories";
 CREATE TABLE "tblexpenses_categories" (
   "id" integer NOT NULL,
@@ -1117,14 +873,6 @@ CREATE TABLE "tblexpenses_categories" (
   "description" text,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblexpenses_categories
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblfiles
--- ----------------------------
 DROP TABLE IF EXISTS "tblfiles";
 CREATE TABLE "tblfiles" (
   "id" integer NOT NULL,
@@ -1143,14 +891,6 @@ CREATE TABLE "tblfiles" (
   "dateadded" text NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblfiles
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblfilter_defaults
--- ----------------------------
 DROP TABLE IF EXISTS "tblfilter_defaults";
 CREATE TABLE "tblfilter_defaults" (
   "filter_id" integer NOT NULL,
@@ -1160,14 +900,6 @@ CREATE TABLE "tblfilter_defaults" (
   CONSTRAINT "tblfilter_defaults_ibfk_1" FOREIGN KEY ("filter_id") REFERENCES "tblfilters" ("id") ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT "tblfilter_defaults_ibfk_2" FOREIGN KEY ("staff_id") REFERENCES "tblstaff" ("staffid") ON DELETE CASCADE ON UPDATE RESTRICT
 );
-
--- ----------------------------
--- Records of tblfilter_defaults
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblfilters
--- ----------------------------
 DROP TABLE IF EXISTS "tblfilters";
 CREATE TABLE "tblfilters" (
   "id" integer NOT NULL,
@@ -1178,14 +910,6 @@ CREATE TABLE "tblfilters" (
   "is_shared" integer NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblfilters
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblform_question_box
--- ----------------------------
 DROP TABLE IF EXISTS "tblform_question_box";
 CREATE TABLE "tblform_question_box" (
   "boxid" integer NOT NULL,
@@ -1193,14 +917,6 @@ CREATE TABLE "tblform_question_box" (
   "questionid" integer NOT NULL,
   PRIMARY KEY ("boxid")
 );
-
--- ----------------------------
--- Records of tblform_question_box
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblform_question_box_description
--- ----------------------------
 DROP TABLE IF EXISTS "tblform_question_box_description";
 CREATE TABLE "tblform_question_box_description" (
   "questionboxdescriptionid" integer NOT NULL,
@@ -1209,14 +925,6 @@ CREATE TABLE "tblform_question_box_description" (
   "questionid" integer NOT NULL,
   PRIMARY KEY ("questionboxdescriptionid")
 );
-
--- ----------------------------
--- Records of tblform_question_box_description
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblform_questions
--- ----------------------------
 DROP TABLE IF EXISTS "tblform_questions";
 CREATE TABLE "tblform_questions" (
   "questionid" integer NOT NULL,
@@ -1227,14 +935,6 @@ CREATE TABLE "tblform_questions" (
   "question_order" integer NOT NULL,
   PRIMARY KEY ("questionid")
 );
-
--- ----------------------------
--- Records of tblform_questions
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblform_results
--- ----------------------------
 DROP TABLE IF EXISTS "tblform_results";
 CREATE TABLE "tblform_results" (
   "resultid" integer NOT NULL,
@@ -1247,14 +947,6 @@ CREATE TABLE "tblform_results" (
   "resultsetid" integer NOT NULL,
   PRIMARY KEY ("resultid")
 );
-
--- ----------------------------
--- Records of tblform_results
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblgdpr_requests
--- ----------------------------
 DROP TABLE IF EXISTS "tblgdpr_requests";
 CREATE TABLE "tblgdpr_requests" (
   "id" integer NOT NULL,
@@ -1268,14 +960,6 @@ CREATE TABLE "tblgdpr_requests" (
   "description" text,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblgdpr_requests
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblinvoicepaymentrecords
--- ----------------------------
 DROP TABLE IF EXISTS "tblinvoicepaymentrecords";
 CREATE TABLE "tblinvoicepaymentrecords" (
   "id" integer NOT NULL,
@@ -1289,14 +973,6 @@ CREATE TABLE "tblinvoicepaymentrecords" (
   "transactionid" text,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblinvoicepaymentrecords
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblinvoices
--- ----------------------------
 DROP TABLE IF EXISTS "tblinvoices";
 CREATE TABLE "tblinvoices" (
   "id" integer NOT NULL,
@@ -1356,14 +1032,6 @@ CREATE TABLE "tblinvoices" (
   "short_link" text(100),
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblinvoices
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblitem_tax
--- ----------------------------
 DROP TABLE IF EXISTS "tblitem_tax";
 CREATE TABLE "tblitem_tax" (
   "id" integer NOT NULL,
@@ -1374,14 +1042,6 @@ CREATE TABLE "tblitem_tax" (
   "taxname" text(100) NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblitem_tax
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblitemable
--- ----------------------------
 DROP TABLE IF EXISTS "tblitemable";
 CREATE TABLE "tblitemable" (
   "id" integer NOT NULL,
@@ -1395,14 +1055,6 @@ CREATE TABLE "tblitemable" (
   "item_order" integer,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblitemable
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblitems
--- ----------------------------
 DROP TABLE IF EXISTS "tblitems";
 CREATE TABLE "tblitems" (
   "id" integer NOT NULL,
@@ -1415,28 +1067,12 @@ CREATE TABLE "tblitems" (
   "group_id" integer NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblitems
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblitems_groups
--- ----------------------------
 DROP TABLE IF EXISTS "tblitems_groups";
 CREATE TABLE "tblitems_groups" (
   "id" integer NOT NULL,
   "name" text(50) NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblitems_groups
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblknowedge_base_article_feedback
--- ----------------------------
 DROP TABLE IF EXISTS "tblknowedge_base_article_feedback";
 CREATE TABLE "tblknowedge_base_article_feedback" (
   "articleanswerid" integer NOT NULL,
@@ -1446,14 +1082,6 @@ CREATE TABLE "tblknowedge_base_article_feedback" (
   "date" text NOT NULL,
   PRIMARY KEY ("articleanswerid")
 );
-
--- ----------------------------
--- Records of tblknowedge_base_article_feedback
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblknowledge_base
--- ----------------------------
 DROP TABLE IF EXISTS "tblknowledge_base";
 CREATE TABLE "tblknowledge_base" (
   "articleid" integer NOT NULL,
@@ -1467,14 +1095,6 @@ CREATE TABLE "tblknowledge_base" (
   "staff_article" integer NOT NULL,
   PRIMARY KEY ("articleid")
 );
-
--- ----------------------------
--- Records of tblknowledge_base
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblknowledge_base_groups
--- ----------------------------
 DROP TABLE IF EXISTS "tblknowledge_base_groups";
 CREATE TABLE "tblknowledge_base_groups" (
   "groupid" integer NOT NULL,
@@ -1486,14 +1106,6 @@ CREATE TABLE "tblknowledge_base_groups" (
   "group_order" integer,
   PRIMARY KEY ("groupid")
 );
-
--- ----------------------------
--- Records of tblknowledge_base_groups
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbllead_activity_log
--- ----------------------------
 DROP TABLE IF EXISTS "tbllead_activity_log";
 CREATE TABLE "tbllead_activity_log" (
   "id" integer NOT NULL,
@@ -1506,14 +1118,6 @@ CREATE TABLE "tbllead_activity_log" (
   "custom_activity" integer(1) NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tbllead_activity_log
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbllead_integration_emails
--- ----------------------------
 DROP TABLE IF EXISTS "tbllead_integration_emails";
 CREATE TABLE "tbllead_integration_emails" (
   "id" integer NOT NULL,
@@ -1524,14 +1128,6 @@ CREATE TABLE "tbllead_integration_emails" (
   "emailid" integer NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tbllead_integration_emails
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblleads
--- ----------------------------
 DROP TABLE IF EXISTS "tblleads";
 CREATE TABLE "tblleads" (
   "id" integer NOT NULL,
@@ -1570,14 +1166,6 @@ CREATE TABLE "tblleads" (
   "lead_value" real(15,2),
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblleads
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblleads_email_integration
--- ----------------------------
 DROP TABLE IF EXISTS "tblleads_email_integration";
 CREATE TABLE "tblleads_email_integration" (
   "id" integer NOT NULL,
@@ -1602,31 +1190,15 @@ CREATE TABLE "tblleads_email_integration" (
   "create_task_if_customer" integer NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblleads_email_integration
--- ----------------------------
 INSERT INTO "tblleads_email_integration" VALUES (1, 0, '', '', '', 10, 0, 0, 0, 'tls', 'INBOX', '', 1, 1, 'assigned', '', 0, 1, 0, 1);
-
--- ----------------------------
--- Table structure for tblleads_sources
--- ----------------------------
 DROP TABLE IF EXISTS "tblleads_sources";
 CREATE TABLE "tblleads_sources" (
   "id" integer NOT NULL,
   "name" text(150) NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblleads_sources
--- ----------------------------
 INSERT INTO "tblleads_sources" VALUES (1, 'Google');
 INSERT INTO "tblleads_sources" VALUES (2, 'Facebook');
-
--- ----------------------------
--- Table structure for tblleads_status
--- ----------------------------
 DROP TABLE IF EXISTS "tblleads_status";
 CREATE TABLE "tblleads_status" (
   "id" integer NOT NULL,
@@ -1636,15 +1208,7 @@ CREATE TABLE "tblleads_status" (
   "isdefault" integer NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblleads_status
--- ----------------------------
 INSERT INTO "tblleads_status" VALUES (1, 'Customer', 1000, '#7cb342', 1);
-
--- ----------------------------
--- Table structure for tblmail_queue
--- ----------------------------
 DROP TABLE IF EXISTS "tblmail_queue";
 CREATE TABLE "tblmail_queue" (
   "id" integer NOT NULL,
@@ -1660,27 +1224,11 @@ CREATE TABLE "tblmail_queue" (
   "attachments" text,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblmail_queue
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblmigrations
--- ----------------------------
 DROP TABLE IF EXISTS "tblmigrations";
 CREATE TABLE "tblmigrations" (
   "version" integer NOT NULL
 );
-
--- ----------------------------
--- Records of tblmigrations
--- ----------------------------
 INSERT INTO "tblmigrations" VALUES (330);
-
--- ----------------------------
--- Table structure for tblmilestones
--- ----------------------------
 DROP TABLE IF EXISTS "tblmilestones";
 CREATE TABLE "tblmilestones" (
   "id" integer NOT NULL,
@@ -1696,14 +1244,6 @@ CREATE TABLE "tblmilestones" (
   "hide_from_customer" integer,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblmilestones
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblmodules
--- ----------------------------
 DROP TABLE IF EXISTS "tblmodules";
 CREATE TABLE "tblmodules" (
   "id" integer NOT NULL,
@@ -1712,14 +1252,6 @@ CREATE TABLE "tblmodules" (
   "active" integer(1) NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblmodules
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblnewsfeed_comment_likes
--- ----------------------------
 DROP TABLE IF EXISTS "tblnewsfeed_comment_likes";
 CREATE TABLE "tblnewsfeed_comment_likes" (
   "id" integer NOT NULL,
@@ -1729,14 +1261,6 @@ CREATE TABLE "tblnewsfeed_comment_likes" (
   "dateliked" text NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblnewsfeed_comment_likes
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblnewsfeed_post_comments
--- ----------------------------
 DROP TABLE IF EXISTS "tblnewsfeed_post_comments";
 CREATE TABLE "tblnewsfeed_post_comments" (
   "id" integer NOT NULL,
@@ -1746,14 +1270,6 @@ CREATE TABLE "tblnewsfeed_post_comments" (
   "dateadded" text NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblnewsfeed_post_comments
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblnewsfeed_post_likes
--- ----------------------------
 DROP TABLE IF EXISTS "tblnewsfeed_post_likes";
 CREATE TABLE "tblnewsfeed_post_likes" (
   "id" integer NOT NULL,
@@ -1762,14 +1278,6 @@ CREATE TABLE "tblnewsfeed_post_likes" (
   "dateliked" text NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblnewsfeed_post_likes
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblnewsfeed_posts
--- ----------------------------
 DROP TABLE IF EXISTS "tblnewsfeed_posts";
 CREATE TABLE "tblnewsfeed_posts" (
   "postid" integer NOT NULL,
@@ -1781,14 +1289,6 @@ CREATE TABLE "tblnewsfeed_posts" (
   "datepinned" text,
   PRIMARY KEY ("postid")
 );
-
--- ----------------------------
--- Records of tblnewsfeed_posts
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblnotes
--- ----------------------------
 DROP TABLE IF EXISTS "tblnotes";
 CREATE TABLE "tblnotes" (
   "id" integer NOT NULL,
@@ -1800,14 +1300,6 @@ CREATE TABLE "tblnotes" (
   "dateadded" text NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblnotes
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblnotifications
--- ----------------------------
 DROP TABLE IF EXISTS "tblnotifications";
 CREATE TABLE "tblnotifications" (
   "id" integer NOT NULL,
@@ -1824,14 +1316,6 @@ CREATE TABLE "tblnotifications" (
   "additional_data" text,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblnotifications
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbloptions
--- ----------------------------
 DROP TABLE IF EXISTS "tbloptions";
 CREATE TABLE "tbloptions" (
   "id" integer NOT NULL,
@@ -1840,10 +1324,6 @@ CREATE TABLE "tbloptions" (
   "autoload" integer(1) NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tbloptions
--- ----------------------------
 INSERT INTO "tbloptions" VALUES (1, 'dateformat', 'Y-m-d|%Y-%m-%d', 1);
 INSERT INTO "tbloptions" VALUES (2, 'companyname', '', 1);
 INSERT INTO "tbloptions" VALUES (3, 'services', '1', 1);
@@ -2362,10 +1842,6 @@ INSERT INTO "tbloptions" VALUES (358, 'sms_twilio_phone_number', '', 1);
 INSERT INTO "tbloptions" VALUES (359, 'sms_twilio_sender_id', '', 1);
 INSERT INTO "tbloptions" VALUES (360, 'sms_twilio_active', '0', 1);
 INSERT INTO "tbloptions" VALUES (361, 'sms_twilio_initialized', '1', 1);
-
--- ----------------------------
--- Table structure for tblpayment_attempts
--- ----------------------------
 DROP TABLE IF EXISTS "tblpayment_attempts";
 CREATE TABLE "tblpayment_attempts" (
   "id" integer NOT NULL,
@@ -2377,14 +1853,6 @@ CREATE TABLE "tblpayment_attempts" (
   "created_at" text NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblpayment_attempts
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblpayment_modes
--- ----------------------------
 DROP TABLE IF EXISTS "tblpayment_modes";
 CREATE TABLE "tblpayment_modes" (
   "id" integer NOT NULL,
@@ -2397,15 +1865,7 @@ CREATE TABLE "tblpayment_modes" (
   "active" integer(1) NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblpayment_modes
--- ----------------------------
 INSERT INTO "tblpayment_modes" VALUES (1, 'Bank', NULL, 0, 0, 0, 1, 1);
-
--- ----------------------------
--- Table structure for tblpinned_projects
--- ----------------------------
 DROP TABLE IF EXISTS "tblpinned_projects";
 CREATE TABLE "tblpinned_projects" (
   "id" integer NOT NULL,
@@ -2413,14 +1873,6 @@ CREATE TABLE "tblpinned_projects" (
   "staff_id" integer NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblpinned_projects
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblproject_activity
--- ----------------------------
 DROP TABLE IF EXISTS "tblproject_activity";
 CREATE TABLE "tblproject_activity" (
   "id" integer NOT NULL,
@@ -2434,14 +1886,6 @@ CREATE TABLE "tblproject_activity" (
   "dateadded" text NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblproject_activity
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblproject_files
--- ----------------------------
 DROP TABLE IF EXISTS "tblproject_files";
 CREATE TABLE "tblproject_files" (
   "id" integer NOT NULL,
@@ -2461,14 +1905,6 @@ CREATE TABLE "tblproject_files" (
   "thumbnail_link" text,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblproject_files
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblproject_members
--- ----------------------------
 DROP TABLE IF EXISTS "tblproject_members";
 CREATE TABLE "tblproject_members" (
   "id" integer NOT NULL,
@@ -2476,14 +1912,6 @@ CREATE TABLE "tblproject_members" (
   "staff_id" integer NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblproject_members
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblproject_notes
--- ----------------------------
 DROP TABLE IF EXISTS "tblproject_notes";
 CREATE TABLE "tblproject_notes" (
   "id" integer NOT NULL,
@@ -2492,14 +1920,6 @@ CREATE TABLE "tblproject_notes" (
   "staff_id" integer NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblproject_notes
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblproject_settings
--- ----------------------------
 DROP TABLE IF EXISTS "tblproject_settings";
 CREATE TABLE "tblproject_settings" (
   "id" integer NOT NULL,
@@ -2508,14 +1928,6 @@ CREATE TABLE "tblproject_settings" (
   "value" text,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblproject_settings
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblprojectdiscussioncomments
--- ----------------------------
 DROP TABLE IF EXISTS "tblprojectdiscussioncomments";
 CREATE TABLE "tblprojectdiscussioncomments" (
   "id" integer NOT NULL,
@@ -2532,14 +1944,6 @@ CREATE TABLE "tblprojectdiscussioncomments" (
   "file_mime_type" text(70),
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblprojectdiscussioncomments
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblprojectdiscussions
--- ----------------------------
 DROP TABLE IF EXISTS "tblprojectdiscussions";
 CREATE TABLE "tblprojectdiscussions" (
   "id" integer NOT NULL,
@@ -2553,14 +1957,6 @@ CREATE TABLE "tblprojectdiscussions" (
   "contact_id" integer NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblprojectdiscussions
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblprojects
--- ----------------------------
 DROP TABLE IF EXISTS "tblprojects";
 CREATE TABLE "tblprojects" (
   "id" integer NOT NULL,
@@ -2583,14 +1979,6 @@ CREATE TABLE "tblprojects" (
   "notify_contacts" text,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblprojects
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblproposal_comments
--- ----------------------------
 DROP TABLE IF EXISTS "tblproposal_comments";
 CREATE TABLE "tblproposal_comments" (
   "id" integer NOT NULL,
@@ -2600,14 +1988,6 @@ CREATE TABLE "tblproposal_comments" (
   "dateadded" text NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblproposal_comments
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblproposals
--- ----------------------------
 DROP TABLE IF EXISTS "tblproposals";
 CREATE TABLE "tblproposals" (
   "id" integer NOT NULL,
@@ -2655,14 +2035,6 @@ CREATE TABLE "tblproposals" (
   "short_link" text(100),
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblproposals
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblrelated_items
--- ----------------------------
 DROP TABLE IF EXISTS "tblrelated_items";
 CREATE TABLE "tblrelated_items" (
   "id" integer NOT NULL,
@@ -2671,14 +2043,6 @@ CREATE TABLE "tblrelated_items" (
   "item_id" integer NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblrelated_items
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblreminders
--- ----------------------------
 DROP TABLE IF EXISTS "tblreminders";
 CREATE TABLE "tblreminders" (
   "id" integer NOT NULL,
@@ -2692,14 +2056,6 @@ CREATE TABLE "tblreminders" (
   "creator" integer NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblreminders
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblroles
--- ----------------------------
 DROP TABLE IF EXISTS "tblroles";
 CREATE TABLE "tblroles" (
   "roleid" integer NOT NULL,
@@ -2707,15 +2063,7 @@ CREATE TABLE "tblroles" (
   "permissions" text,
   PRIMARY KEY ("roleid")
 );
-
--- ----------------------------
--- Records of tblroles
--- ----------------------------
 INSERT INTO "tblroles" VALUES (1, 'Employee', NULL);
-
--- ----------------------------
--- Table structure for tblsales_activity
--- ----------------------------
 DROP TABLE IF EXISTS "tblsales_activity";
 CREATE TABLE "tblsales_activity" (
   "id" integer NOT NULL,
@@ -2728,14 +2076,6 @@ CREATE TABLE "tblsales_activity" (
   "date" text NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblsales_activity
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblscheduled_emails
--- ----------------------------
 DROP TABLE IF EXISTS "tblscheduled_emails";
 CREATE TABLE "tblscheduled_emails" (
   "id" integer NOT NULL,
@@ -2748,28 +2088,12 @@ CREATE TABLE "tblscheduled_emails" (
   "template" text(197) NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblscheduled_emails
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblservices
--- ----------------------------
 DROP TABLE IF EXISTS "tblservices";
 CREATE TABLE "tblservices" (
   "serviceid" integer NOT NULL,
   "name" text(50) NOT NULL,
   PRIMARY KEY ("serviceid")
 );
-
--- ----------------------------
--- Records of tblservices
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblsessions
--- ----------------------------
 DROP TABLE IF EXISTS "tblsessions";
 CREATE TABLE "tblsessions" (
   "id" text(128) NOT NULL,
@@ -2778,29 +2102,13 @@ CREATE TABLE "tblsessions" (
   "data" blob NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblsessions
--- ----------------------------
 INSERT INTO "tblsessions" VALUES ('83712d5431ece64e817f70ff619ba888', '127.0.0.1', 1745309668, '__ci_last_regenerate|i:1745309664;_prev_url|s:38:"http://perfexcrm.test/production/index";staff_user_id|s:1:"1";staff_logged_in|b:1;setup-menu-open|s:0:"";red_url|s:22:"http://perfexcrm.test/";');
 INSERT INTO "tblsessions" VALUES ('c68e7dab84d3f97b97727a8e872b9299', '::1', 1750862885, '__ci_last_regenerate|i:1750862826;_prev_url|s:27:"http://localhost:8765/admin";staff_user_id|s:1:"1";staff_logged_in|b:1;setup-menu-open|s:0:"";');
-
--- ----------------------------
--- Table structure for tblshared_customer_files
--- ----------------------------
 DROP TABLE IF EXISTS "tblshared_customer_files";
 CREATE TABLE "tblshared_customer_files" (
   "file_id" integer NOT NULL,
   "contact_id" integer NOT NULL
 );
-
--- ----------------------------
--- Records of tblshared_customer_files
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblspam_filters
--- ----------------------------
 DROP TABLE IF EXISTS "tblspam_filters";
 CREATE TABLE "tblspam_filters" (
   "id" integer NOT NULL,
@@ -2809,14 +2117,6 @@ CREATE TABLE "tblspam_filters" (
   "value" text NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblspam_filters
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblstaff
--- ----------------------------
 DROP TABLE IF EXISTS "tblstaff";
 CREATE TABLE "tblstaff" (
   "staffid" integer NOT NULL,
@@ -2851,10 +2151,6 @@ CREATE TABLE "tblstaff" (
   "google_auth_secret" text,
   PRIMARY KEY ("staffid")
 );
-
--- ----------------------------
--- Table structure for tblstaff_departments
--- ----------------------------
 DROP TABLE IF EXISTS "tblstaff_departments";
 CREATE TABLE "tblstaff_departments" (
   "staffdepartmentid" integer NOT NULL,
@@ -2862,28 +2158,12 @@ CREATE TABLE "tblstaff_departments" (
   "departmentid" integer NOT NULL,
   PRIMARY KEY ("staffdepartmentid")
 );
-
--- ----------------------------
--- Records of tblstaff_departments
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblstaff_permissions
--- ----------------------------
 DROP TABLE IF EXISTS "tblstaff_permissions";
 CREATE TABLE "tblstaff_permissions" (
   "staff_id" integer NOT NULL,
   "feature" text(40) NOT NULL,
   "capability" text(100) NOT NULL
 );
-
--- ----------------------------
--- Records of tblstaff_permissions
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblsubscriptions
--- ----------------------------
 DROP TABLE IF EXISTS "tblsubscriptions";
 CREATE TABLE "tblsubscriptions" (
   "id" integer NOT NULL,
@@ -2913,14 +2193,6 @@ CREATE TABLE "tblsubscriptions" (
   "last_sent_at" text,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblsubscriptions
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbltaggables
--- ----------------------------
 DROP TABLE IF EXISTS "tbltaggables";
 CREATE TABLE "tbltaggables" (
   "rel_id" integer NOT NULL,
@@ -2928,28 +2200,12 @@ CREATE TABLE "tbltaggables" (
   "tag_id" integer NOT NULL,
   "tag_order" integer NOT NULL
 );
-
--- ----------------------------
--- Records of tbltaggables
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbltags
--- ----------------------------
 DROP TABLE IF EXISTS "tbltags";
 CREATE TABLE "tbltags" (
   "id" integer NOT NULL,
   "name" text(100) NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tbltags
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbltask_assigned
--- ----------------------------
 DROP TABLE IF EXISTS "tbltask_assigned";
 CREATE TABLE "tbltask_assigned" (
   "id" integer NOT NULL,
@@ -2959,14 +2215,6 @@ CREATE TABLE "tbltask_assigned" (
   "is_assigned_from_contact" integer(1) NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tbltask_assigned
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbltask_checklist_items
--- ----------------------------
 DROP TABLE IF EXISTS "tbltask_checklist_items";
 CREATE TABLE "tbltask_checklist_items" (
   "id" integer NOT NULL,
@@ -2980,14 +2228,6 @@ CREATE TABLE "tbltask_checklist_items" (
   "assigned" integer,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tbltask_checklist_items
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbltask_comments
--- ----------------------------
 DROP TABLE IF EXISTS "tbltask_comments";
 CREATE TABLE "tbltask_comments" (
   "id" integer NOT NULL,
@@ -2999,14 +2239,6 @@ CREATE TABLE "tbltask_comments" (
   "dateadded" text NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tbltask_comments
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbltask_followers
--- ----------------------------
 DROP TABLE IF EXISTS "tbltask_followers";
 CREATE TABLE "tbltask_followers" (
   "id" integer NOT NULL,
@@ -3014,14 +2246,6 @@ CREATE TABLE "tbltask_followers" (
   "taskid" integer NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tbltask_followers
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbltasks
--- ----------------------------
 DROP TABLE IF EXISTS "tbltasks";
 CREATE TABLE "tbltasks" (
   "id" integer NOT NULL,
@@ -3057,28 +2281,12 @@ CREATE TABLE "tbltasks" (
   "deadline_notified" integer NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tbltasks
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbltasks_checklist_templates
--- ----------------------------
 DROP TABLE IF EXISTS "tbltasks_checklist_templates";
 CREATE TABLE "tbltasks_checklist_templates" (
   "id" integer NOT NULL,
   "description" text,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tbltasks_checklist_templates
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbltaskstimers
--- ----------------------------
 DROP TABLE IF EXISTS "tbltaskstimers";
 CREATE TABLE "tbltaskstimers" (
   "id" integer NOT NULL,
@@ -3090,14 +2298,6 @@ CREATE TABLE "tbltaskstimers" (
   "note" text,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tbltaskstimers
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbltaxes
--- ----------------------------
 DROP TABLE IF EXISTS "tbltaxes";
 CREATE TABLE "tbltaxes" (
   "id" integer NOT NULL,
@@ -3105,14 +2305,6 @@ CREATE TABLE "tbltaxes" (
   "taxrate" real(15,2) NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tbltaxes
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbltemplates
--- ----------------------------
 DROP TABLE IF EXISTS "tbltemplates";
 CREATE TABLE "tbltemplates" (
   "id" integer NOT NULL,
@@ -3122,14 +2314,6 @@ CREATE TABLE "tbltemplates" (
   "content" text,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tbltemplates
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblticket_attachments
--- ----------------------------
 DROP TABLE IF EXISTS "tblticket_attachments";
 CREATE TABLE "tblticket_attachments" (
   "id" integer NOT NULL,
@@ -3140,14 +2324,6 @@ CREATE TABLE "tblticket_attachments" (
   "dateadded" text NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblticket_attachments
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblticket_replies
--- ----------------------------
 DROP TABLE IF EXISTS "tblticket_replies";
 CREATE TABLE "tblticket_replies" (
   "id" integer NOT NULL,
@@ -3162,14 +2338,6 @@ CREATE TABLE "tblticket_replies" (
   "admin" integer,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblticket_replies
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbltickets
--- ----------------------------
 DROP TABLE IF EXISTS "tbltickets";
 CREATE TABLE "tbltickets" (
   "ticketid" integer NOT NULL,
@@ -3197,14 +2365,6 @@ CREATE TABLE "tbltickets" (
   "cc" text(191),
   PRIMARY KEY ("ticketid")
 );
-
--- ----------------------------
--- Records of tbltickets
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbltickets_pipe_log
--- ----------------------------
 DROP TABLE IF EXISTS "tbltickets_pipe_log";
 CREATE TABLE "tbltickets_pipe_log" (
   "id" integer NOT NULL,
@@ -3217,14 +2377,6 @@ CREATE TABLE "tbltickets_pipe_log" (
   "status" text(100) NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tbltickets_pipe_log
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbltickets_predefined_replies
--- ----------------------------
 DROP TABLE IF EXISTS "tbltickets_predefined_replies";
 CREATE TABLE "tbltickets_predefined_replies" (
   "id" integer NOT NULL,
@@ -3232,31 +2384,15 @@ CREATE TABLE "tbltickets_predefined_replies" (
   "message" text NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tbltickets_predefined_replies
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbltickets_priorities
--- ----------------------------
 DROP TABLE IF EXISTS "tbltickets_priorities";
 CREATE TABLE "tbltickets_priorities" (
   "priorityid" integer NOT NULL,
   "name" text(50) NOT NULL,
   PRIMARY KEY ("priorityid")
 );
-
--- ----------------------------
--- Records of tbltickets_priorities
--- ----------------------------
-INSERT INTO "tbltickets_priorities" VALUES (1, 'Low');
-INSERT INTO "tbltickets_priorities" VALUES (2, 'Medium');
-INSERT INTO "tbltickets_priorities" VALUES (3, 'High');
-
--- ----------------------------
--- Table structure for tbltickets_status
--- ----------------------------
+INSERT INTO "tbltickets_priorities" VALUES (1, 'Baixo');
+INSERT INTO "tbltickets_priorities" VALUES (2, 'Médio');
+INSERT INTO "tbltickets_priorities" VALUES (3, 'Alto');
 DROP TABLE IF EXISTS "tbltickets_status";
 CREATE TABLE "tbltickets_status" (
   "ticketstatusid" integer NOT NULL,
@@ -3266,19 +2402,11 @@ CREATE TABLE "tbltickets_status" (
   "statusorder" integer,
   PRIMARY KEY ("ticketstatusid")
 );
-
--- ----------------------------
--- Records of tbltickets_status
--- ----------------------------
-INSERT INTO "tbltickets_status" VALUES (1, 'Open', 1, '#ff2d42', 1);
-INSERT INTO "tbltickets_status" VALUES (2, 'In progress', 1, '#22c55e', 2);
-INSERT INTO "tbltickets_status" VALUES (3, 'Answered', 1, '#2563eb', 3);
-INSERT INTO "tbltickets_status" VALUES (4, 'On Hold', 1, '#64748b', 4);
-INSERT INTO "tbltickets_status" VALUES (5, 'Closed', 1, '#03a9f4', 5);
-
--- ----------------------------
--- Table structure for tbltodos
--- ----------------------------
+INSERT INTO "tbltickets_status" VALUES (1, 'Aberto', 1, '#ff2d42', 1);
+INSERT INTO "tbltickets_status" VALUES (2, 'Em progresso', 1, '#22c55e', 2);
+INSERT INTO "tbltickets_status" VALUES (3, 'Respondido', 1, '#2563eb', 3);
+INSERT INTO "tbltickets_status" VALUES (4, 'Pendente', 1, '#64748b', 4);
+INSERT INTO "tbltickets_status" VALUES (5, 'Fechado', 1, '#03a9f4', 5);
 DROP TABLE IF EXISTS "tbltodos";
 CREATE TABLE "tbltodos" (
   "todoid" integer NOT NULL,
@@ -3290,14 +2418,6 @@ CREATE TABLE "tbltodos" (
   "item_order" integer,
   PRIMARY KEY ("todoid")
 );
-
--- ----------------------------
--- Records of tbltodos
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbltracked_mails
--- ----------------------------
 DROP TABLE IF EXISTS "tbltracked_mails";
 CREATE TABLE "tbltracked_mails" (
   "id" integer NOT NULL,
@@ -3311,14 +2431,6 @@ CREATE TABLE "tbltracked_mails" (
   "subject" text,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tbltracked_mails
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbltwocheckout_log
--- ----------------------------
 DROP TABLE IF EXISTS "tbltwocheckout_log";
 CREATE TABLE "tbltwocheckout_log" (
   "id" integer NOT NULL,
@@ -3330,14 +2442,6 @@ CREATE TABLE "tbltwocheckout_log" (
   PRIMARY KEY ("id"),
   CONSTRAINT "tbltwocheckout_log_ibfk_1" FOREIGN KEY ("invoice_id") REFERENCES "tblinvoices" ("id") ON DELETE CASCADE ON UPDATE RESTRICT
 );
-
--- ----------------------------
--- Records of tbltwocheckout_log
--- ----------------------------
-
--- ----------------------------
--- Table structure for tbluser_auto_login
--- ----------------------------
 DROP TABLE IF EXISTS "tbluser_auto_login";
 CREATE TABLE "tbluser_auto_login" (
   "key_id" text(32) NOT NULL,
@@ -3347,15 +2451,7 @@ CREATE TABLE "tbluser_auto_login" (
   "last_login" text NOT NULL,
   "staff" integer NOT NULL
 );
-
--- ----------------------------
--- Records of tbluser_auto_login
--- ----------------------------
 INSERT INTO "tbluser_auto_login" VALUES ('988fbda842b1bb3c2662174e192489a6', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '::1', '2025-06-25 11:47:50', 1);
-
--- ----------------------------
--- Table structure for tbluser_meta
--- ----------------------------
 DROP TABLE IF EXISTS "tbluser_meta";
 CREATE TABLE "tbluser_meta" (
   "umeta_id" integer NOT NULL,
@@ -3366,14 +2462,6 @@ CREATE TABLE "tbluser_meta" (
   "meta_value" text,
   PRIMARY KEY ("umeta_id")
 );
-
--- ----------------------------
--- Records of tbluser_meta
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblvault
--- ----------------------------
 DROP TABLE IF EXISTS "tblvault";
 CREATE TABLE "tblvault" (
   "id" integer NOT NULL,
@@ -3392,14 +2480,6 @@ CREATE TABLE "tblvault" (
   "date_created" text NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblvault
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblviews_tracking
--- ----------------------------
 DROP TABLE IF EXISTS "tblviews_tracking";
 CREATE TABLE "tblviews_tracking" (
   "id" integer NOT NULL,
@@ -3409,14 +2489,6 @@ CREATE TABLE "tblviews_tracking" (
   "view_ip" text(40) NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblviews_tracking
--- ----------------------------
-
--- ----------------------------
--- Table structure for tblweb_to_lead
--- ----------------------------
 DROP TABLE IF EXISTS "tblweb_to_lead";
 CREATE TABLE "tblweb_to_lead" (
   "id" integer NOT NULL,
@@ -3446,22 +2518,10 @@ CREATE TABLE "tblweb_to_lead" (
   "dateadded" text NOT NULL,
   PRIMARY KEY ("id")
 );
-
--- ----------------------------
--- Records of tblweb_to_lead
--- ----------------------------
-
--- ----------------------------
--- Indexes structure for table tblactivity_log
--- ----------------------------
 CREATE INDEX "staffid"
 ON "tblactivity_log" (
   "staffid" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblclients
--- ----------------------------
 CREATE INDEX "active"
 ON "tblclients" (
   "active" ASC
@@ -3478,10 +2538,6 @@ CREATE INDEX "leadid"
 ON "tblclients" (
   "leadid" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblconsents
--- ----------------------------
 CREATE INDEX "contact_id"
 ON "tblconsents" (
   "contact_id" ASC
@@ -3494,10 +2550,6 @@ CREATE INDEX "purpose_id"
 ON "tblconsents" (
   "purpose_id" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblcontacts
--- ----------------------------
 CREATE INDEX "email"
 ON "tblcontacts" (
   "email" ASC
@@ -3518,10 +2570,6 @@ CREATE INDEX "userid"
 ON "tblcontacts" (
   "userid" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblcontracts
--- ----------------------------
 CREATE INDEX "client"
 ON "tblcontracts" (
   "client" ASC
@@ -3530,10 +2578,6 @@ CREATE INDEX "contract_type"
 ON "tblcontracts" (
   "contract_type" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblcreditnotes
--- ----------------------------
 CREATE INDEX "clientid"
 ON "tblcreditnotes" (
   "clientid" ASC
@@ -3550,10 +2594,6 @@ CREATE INDEX "project_id"
 ON "tblcreditnotes" (
   "project_id" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblcustomer_admins
--- ----------------------------
 CREATE INDEX "customer_id"
 ON "tblcustomer_admins" (
   "customer_id" ASC
@@ -3562,26 +2602,14 @@ CREATE INDEX "staff_id"
 ON "tblcustomer_admins" (
   "staff_id" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblcustomer_groups
--- ----------------------------
 CREATE INDEX "groupid"
 ON "tblcustomer_groups" (
   "groupid" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblcustomers_groups
--- ----------------------------
 CREATE INDEX "name"
 ON "tblcustomers_groups" (
   "name" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblcustomfieldsvalues
--- ----------------------------
 CREATE INDEX "fieldid"
 ON "tblcustomfieldsvalues" (
   "fieldid" ASC
@@ -3594,10 +2622,6 @@ CREATE INDEX "relid"
 ON "tblcustomfieldsvalues" (
   "relid" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tbldismissed_announcements
--- ----------------------------
 CREATE INDEX "announcementid"
 ON "tbldismissed_announcements" (
   "announcementid" ASC
@@ -3606,10 +2630,6 @@ CREATE INDEX "staff"
 ON "tbldismissed_announcements" (
   "staff" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblestimates
--- ----------------------------
 CREATE INDEX "sale_agent"
 ON "tblestimates" (
   "sale_agent" ASC
@@ -3618,18 +2638,10 @@ CREATE INDEX "status"
 ON "tblestimates" (
   "status" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblexpenses
--- ----------------------------
 CREATE INDEX "category"
 ON "tblexpenses" (
   "category" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblfiles
--- ----------------------------
 CREATE INDEX "rel_id"
 ON "tblfiles" (
   "rel_id" ASC
@@ -3638,18 +2650,10 @@ CREATE INDEX "rel_type"
 ON "tblfiles" (
   "rel_type" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblfilter_defaults
--- ----------------------------
 CREATE INDEX "filter_id"
 ON "tblfilter_defaults" (
   "filter_id" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblinvoicepaymentrecords
--- ----------------------------
 CREATE INDEX "invoiceid"
 ON "tblinvoicepaymentrecords" (
   "invoiceid" ASC
@@ -3658,26 +2662,14 @@ CREATE INDEX "paymentmethod"
 ON "tblinvoicepaymentrecords" (
   "paymentmethod" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblinvoices
--- ----------------------------
 CREATE INDEX "total"
 ON "tblinvoices" (
   "total" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblitem_tax
--- ----------------------------
 CREATE INDEX "itemid"
 ON "tblitem_tax" (
   "itemid" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblitemable
--- ----------------------------
 CREATE INDEX "qty"
 ON "tblitemable" (
   "qty" ASC
@@ -3686,10 +2678,6 @@ CREATE INDEX "rate"
 ON "tblitemable" (
   "rate" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblitems
--- ----------------------------
 CREATE INDEX "group_id"
 ON "tblitems" (
   "group_id" ASC
@@ -3702,10 +2690,6 @@ CREATE INDEX "tax2"
 ON "tblitems" (
   "tax2" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblleads
--- ----------------------------
 CREATE INDEX "assigned"
 ON "tblleads" (
   "assigned" ASC
@@ -3730,50 +2714,26 @@ CREATE INDEX "source"
 ON "tblleads" (
   "source" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblsessions
--- ----------------------------
 CREATE INDEX "ci_sessions_timestamp"
 ON "tblsessions" (
   "timestamp" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tblsubscriptions
--- ----------------------------
 CREATE INDEX "tax_id"
 ON "tblsubscriptions" (
   "tax_id" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tbltaggables
--- ----------------------------
 CREATE INDEX "tag_id"
 ON "tbltaggables" (
   "tag_id" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tbltask_assigned
--- ----------------------------
 CREATE INDEX "taskid"
 ON "tbltask_assigned" (
   "taskid" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tbltask_comments
--- ----------------------------
 CREATE INDEX "file_id"
 ON "tbltask_comments" (
   "file_id" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tbltasks
--- ----------------------------
 CREATE INDEX "kanban_order"
 ON "tbltasks" (
   "kanban_order" ASC
@@ -3782,18 +2742,10 @@ CREATE INDEX "milestone"
 ON "tbltasks" (
   "milestone" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tbltaskstimers
--- ----------------------------
 CREATE INDEX "task_id"
 ON "tbltaskstimers" (
   "task_id" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tbltickets
--- ----------------------------
 CREATE INDEX "contactid"
 ON "tbltickets" (
   "contactid" ASC
@@ -3810,13 +2762,8 @@ CREATE INDEX "service"
 ON "tbltickets" (
   "service" ASC
 );
-
--- ----------------------------
--- Indexes structure for table tbltwocheckout_log
--- ----------------------------
 CREATE INDEX "invoice_id"
 ON "tbltwocheckout_log" (
   "invoice_id" ASC
 );
-
 PRAGMA foreign_keys = true;

@@ -2,40 +2,20 @@
 
 namespace App\Controllers;
 
-use PDO;
-use CodeIgniter\Controller;
 use Psr\Log\LoggerInterface;
 use App\Libraries\SqlScriptParser;
 use CodeIgniter\HTTP\RequestInterface;
-use CodeIgniter\Database\Config as DatabaseConfig;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class Install extends Controller
+class Install extends BaseController
 {
-  /**
-   * @var array
-   */
   protected $data = [];
-
-  /**
-   * @var string Caminho para o arquivo SQL do banco de dados.
-   */
-  protected $databaseFile = APPPATH . 'Database/Install/CarolCRM.sql';
-
-  /**
-   * @var string Caminho para o arquivo de configuração principal da aplicação.
-   */
-  // protected $configFile = APPPATH . 'Config/app-config.php';
-
-  /**
-   * Define a estrutura dos passos do instalador para a barra de progresso.
-   */
   protected $steps = [
-    1 => ['id' => 1, 'name' => 'Server Requirements', 'status' => 'upcoming'],
-    2 => ['id' => 2, 'name' => 'File Permissions', 'status' => 'upcoming'],
-    3 => ['id' => 3, 'name' => 'Database Setup', 'status' => 'upcoming'],
-    4 => ['id' => 4, 'name' => 'Admin Login & Settings', 'status' => 'upcoming'],
-    5 => ['id' => 5, 'name' => 'Finish', 'status' => 'upcoming'],
+    1 => ['id' => 1, 'name' => 'Requisitos da Aplicação', 'status' => 'upcoming'],
+    2 => ['id' => 2, 'name' => 'Permissões da Aplicação', 'status' => 'upcoming'],
+    3 => ['id' => 3, 'name' => 'O Banco de Dados', 'status' => 'upcoming'],
+    4 => ['id' => 4, 'name' => 'Administração', 'status' => 'upcoming'],
+    5 => ['id' => 5, 'name' => 'Sucesso', 'status' => 'upcoming'],
   ];
 
   /**
@@ -46,93 +26,72 @@ class Install extends Controller
   {
     parent::initController($request, $response, $logger);
 
-    helper('form'); // Carrega o helper de formulário para set_value() e set_select()
+    helper('form');
 
-    // Verifica se a aplicação já foi instalada (se o arquivo de configuração existe)
-    // if (file_exists($this->configFile)) {
-    //   // Em vez de 'echo view', idealmente redirecionar para a URL base do site.
-    //   // Para o instalador, um view simples indicando que já está instalado é suficiente.
-    //   echo view('install/already_installed');
-    //   exit();
-    // }
+    // Verifica se a aplicação já foi instalada (se o banco de dados existe)
+    // Se o banco de dados existir, significa que a aplicação já está instalada.
+    // Você será redirecionado para a página inicial da aplicação.
+    if (file_exists(CAROL_DB)) {
+      echo view('install/aplicacao_instalada');
+      exit();
+    }
 
-
-    // --- INICIALIZAÇÃO GARANTIDA DE DADOS ESSENCIAIS ---
     $this->data['current_step'] = (int) $this->request->getPost('step') ?: 1;
-    $this->data['page'] = $this->getPageNameForStep($this->data['current_step']); // Garante que 'page' sempre existe
-    $this->data['base_url'] = $this->guess_base_url();
-    $this->data['steps'] = $this->steps;
-    // --- FIM DA INICIALIZAÇÃO GARANTIDA ---
-    // Inicializa o array de passos para a view. Será atualizado na lógica principal.
+    $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
+    $this->data['base_url'] = base_url();
     $this->data['steps'] = $this->steps;
   }
 
   /**
    * Lida com o processo de instalação passo a passo.
-   * Esta é a função principal que controla o fluxo.
+   * Esta é a função principal que controla o fluxo de instalação.
    */
   public function index()
   {
-    $action = $this->request->getPost('action'); // Pega o valor do input 'action' se existir, senão é null
-
     $currentStepData = []; // Para armazenar resultados da etapa processada
 
     // Verifica se a requisição é um POST (envio de formulário de alguma etapa)
     if ($this->request->getMethod() === 'POST') {
       $postedStep = (int) $this->request->getPost('step');
-      log_message('debug', 'Processing POST for step: ' . $postedStep);
 
       switch ($postedStep) {
-        case 1: // Requisitos do Servidor - Se passou, vá para permissões de arquivo
-          $serverRequirementsResult = $this->checkRequirements();
+        case 1: // Requisitos da Aplicação - Se passou, vá para o passo 2
+          $serverRequirementsResult = $this->VerificaRequisitos();
           if ($serverRequirementsResult['error'] === false) {
-            $this->data['current_step'] = 2; // Avanca para a próxima etapa
-            $this->data['page'] = 'file_permissions';
-            // IMPORTANTE: Agora que estamos na etapa 2, precisamos obter os dados para a etapa 2!
-            $currentStepData = $this->checkFilePermissions(); // CHAMA A FUNÇÃO CORRETA AQUI!
+            $this->data['current_step'] = 2; // Avanca para passo2
+            $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
+            $currentStepData = $this->VerificaPermissoes(); // Obtém os dados do passo2
           } else {
-            // Permanece na etapa 1 se os requisitos do servidor não foram atendidos
+            // Permanece nessa etapa se o passo1 não foi atendido
             $this->data['current_step'] = 1;
-            $this->data['page'] = 'requirements';
-            $currentStepData = $this->checkRequirements(); // Obtém os dados da etapa 1 novamente
+            $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
+            $currentStepData = $this->VerificaRequisitos(); // Obtém os dados do passo1 novamente
           }
-          log_message('debug', 'After POST case 1 - Next Step: ' . $this->data['current_step'] . ', Next Page: ' . $this->data['page']);
           break;
 
-
-        // print_r(($this->data));
-        // print_r($this->request->getMethod());
-        // // print_r($this->request->getMethod() === 'post');
-        // print_r($this->request->getMethod() === 'POST');
-        // exit(); 
-
-        // Lógica para processar o formulário POST (avançar etapa)
-
-        case 2: // Permissões de Arquivo - Se passou, vá para configuração do banco de dados
-          $filePermissionsResult = $this->checkFilePermissions();
+        case 2: // Permissões da Aplicação - Se passou, vá para o passo3
+          $filePermissionsResult = $this->VerificaPermissoes();
           if ($filePermissionsResult['error'] === false) {
             $this->data['current_step'] = 3;
-            $this->data['page'] = 'database_setup';
-            $currentStepData = []; // Não há dados iniciais complexos para Database Setup
+            $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
+            $currentStepData = []; // Não há dados iniciais para o passo3
           } else {
             $this->data['current_step'] = 2;
-            $this->data['page'] = 'file_permissions';
-            $currentStepData = $this->checkFilePermissions(); // Obtém os dados da etapa 2 novamente
+            $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
+            $currentStepData = $this->VerificaPermissoes(); // Obtém os dados da etapa 2 novamente
           }
-          log_message('debug', 'After POST case 2 - Next Step: ' . $this->data['current_step'] . ', Next Page: ' . $this->data['page']);
+
           break;
 
-
-        case 3: // Configuração do Banco de Dados (POST: apenas avança)
+        case 3: // O Banco de Dados
           $this->data['current_step'] = 4;
-          $this->data['page'] = 'install';
+          $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
           $currentStepData['timezone'] = 'America/Sao_Paulo';
 
           break;
 
-
-        case 4: // Formulário da Etapa 4 (Admin Login) foi enviado
-          // Passa todos os dados necessários para o performInstallation
+        case 4: // Administração
+          // Passa todos os dados necessários para a função performInstallation
           $selectedTimezone = $this->request->getPost('timezone') ?? 'America/Sao_Paulo';
 
           $currentStepData = $this->performInstallation(
@@ -156,13 +115,12 @@ class Install extends Controller
           }
 
           if ($currentStepData['success'] === true) {
-            // Instalação finalizada, avança para a tela de sucesso
             $this->data['current_step'] = 5;
-            $this->data['page'] = 'finish';
+            $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
           } else {
-            // Erro na instalação final, permanece nesta etapa
+            // Erro no passo4, permanece nesta etapa
             $this->data['current_step'] = 4;
-            $this->data['page'] = 'install';
+            $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
             $this->data['admin_error'] = true;
             $this->data['admin_error_msg'] = $currentStepData['error_msg'];
             // Repopula o formulário para o usuário não perder os dados digitados
@@ -172,31 +130,29 @@ class Install extends Controller
               'password' => $this->request->getPost('password'),
               'database' => $this->request->getPost('database'),
             ];
-            // Certifique-se que o timezone selecionado anteriormente é repopulado
-            $currentStepData['timezone'] = $selectedTimezone; // Mantém o valor que o usuário digitou/selecionou
+            $currentStepData['timezone'] = $selectedTimezone;
           }
           break;
 
-        // Não deveria haver um POST para a etapa 5 (Finish), mas por segurança
+        // Não deveria haver um POST para a etapa 5 (Finish), mas por segurança...
         case 5:
           // Se já na etapa final e tentar POST, apenas permanece
           $this->data['current_step'] = 5;
-          $this->data['page'] = 'finish';
+          $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
           break;
 
         default:
           // Caso de segurança, retorna para a primeira etapa
           $this->data['current_step'] = 1;
-          $this->data['page'] = 'requirements';
+          $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
           break;
       }
     } else {
-      // Requisição GET (primeiro carregamento da página ou recarga sem POST)
       // Garante que sempre comece na primeira etapa e pré-carrega os requisitos
       $this->data['current_step'] = 1;
-      $this->data['page'] = 'requirements';
+      $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
       // Chama a função da primeira etapa para preencher os dados iniciais dos requisitos
-      $currentStepData = $this->checkRequirements();
+      $currentStepData = $this->VerificaRequisitos();
     }
 
     // Mescla os dados retornados pelo método da etapa com os dados do controller
@@ -206,12 +162,8 @@ class Install extends Controller
     // Atualiza o status dos passos para a barra de progresso com base no current_step atual
     $this->updateStepStatuses();
 
-    log_message('debug', 'Final Current Step: ' . $this->data['current_step']);
-    log_message('debug', 'Final Page: ' . $this->data['page']);
-    log_message('debug', 'Rendering view install/html');
-
-    // Renderiza a view principal (html.php) com todos os dados preparados
-    echo view('install/html', $this->data);
+    // Renderiza a view principal (passo0.php) com todos os dados preparados
+    echo view('install/passo0', $this->data);
   }
 
   /**
@@ -223,17 +175,17 @@ class Install extends Controller
   {
     switch ($stepId) {
       case 1:
-        return 'requirements';
+        return 'passo1'; // Requisitos da Aplicação
       case 2:
-        return 'file_permissions';
+        return 'passo2'; // Permissões da Aplicação
       case 3:
-        return 'database';
+        return 'passo3'; // O Banco de Dados
       case 4:
-        return 'install'; // 'install' é a view para o admin login/config
+        return 'passo4'; // Administração, instalação
       case 5:
-        return 'finish';
+        return 'passo5'; // Sucesso
       default:
-        return 'requirements'; // Padrão
+        return 'passo1'; // Padrão
     }
   }
 
@@ -258,28 +210,27 @@ class Install extends Controller
   }
 
   /**
-   * Step 1: Check server requirements.
+   * Passo 1: Verifica os requisitos.
    * Retorna um array com o status de erro e os dados para a view.
    */
-  protected function checkRequirements(): array
+  protected function VerificaRequisitos(): array
   {
     $error = false;
     $result = [];
 
     $result['requirement1'] = (version_compare(PHP_VERSION, '8.1') >= 0)
-      ? "<span class='badge bg-success'>v." . PHP_VERSION . '</span>'
-      : ($error = true) && "<span class='badge bg-danger'>Your PHP version is " . PHP_VERSION . '</span>';
+      ? "<span class='badge bg-success'>Sua versão do PHP é " . PHP_VERSION . '</span>'
+      : ($error = true) && "<span class='badge bg-danger'>Sua versão do PHP é " . PHP_VERSION . '</span>';
 
     $extensions = [
-      'mysqli'   => 'MySQLi PHP Extension',
-      'pdo'      => 'PDO PHP Extension',
-      'curl'     => 'cURL PHP Extension',
-      'openssl'  => 'OpenSSL PHP Extension',
-      'mbstring' => 'MBString PHP Extension',
-      'iconv'    => 'iconv PHP Extension',
-      'imap'     => 'IMAP PHP Extension',
-      'gd'       => 'GD PHP Extension',
-      'zip'      => 'Zip PHP Extension',
+      'pdo_sqlite' => 'Extensão PHP PDO SQLite',
+      'curl'       => 'Extensão PHP cURL',
+      'openssl'    => 'Extensão PHP OpenSSL',
+      'mbstring'   => 'Extensão PHP MBString',
+      'iconv'      => 'Extensão PHP iconv',
+      'imap'       => 'Extensão PHP IMAP',
+      'gd'         => 'Extensão PHP GD',
+      'zip'        => 'Extensão PHP Zip',
     ];
 
     foreach ($extensions as $ext => $name) {
@@ -289,33 +240,30 @@ class Install extends Controller
       }
       $reqName = 'requirement' . (array_search($ext, array_keys($extensions)) + 2);
       $result[$reqName] = $status
-        ? "<span class='badge bg-success'>Enabled</span>"
-        : ($error = true) && "<span class='badge bg-danger'>Not enabled</span>";
+        ? "<span class='badge bg-success'>Habilitada</span>"
+        : ($error = true) && "<span class='badge bg-danger'>Não habilitada</span>";
     }
 
     $urlFopen = ini_get('allow_url_fopen');
-    $result['requirement11'] = ($urlFopen === '1' || strcasecmp($urlFopen, 'On') === 0 || strcasecmp($urlFopen, 'true') === 0 || strcasecmp($urlFopen, 'yes') === 0)
-      ? "<span class='badge bg-success'>Enabled</span>"
-      : ($error = true) && "<span class='badge bg-danger'>Allow_url_fopen is not enabled!</span>";
+    $result['requirement10'] = ($urlFopen === '1' || strcasecmp($urlFopen, 'On') === 0 || strcasecmp($urlFopen, 'true') === 0 || strcasecmp($urlFopen, 'yes') === 0)
+      ? "<span class='badge bg-success'>Habilitada</span>"
+      : ($error = true) && "<span class='badge bg-danger'>Allow_url_fopen não habilitada!</span>";
 
     $result['error'] = $error;
     return $result;
   }
 
   /**
-   * Step 2: Check file and folder permissions.
+   * Passo 2: Verifica as permissões.
    * Verifica se os diretórios/arquivos existem, se não, tenta criá-los,
    * e então verifica/garante que sejam graváveis.
    * Retorna um array com o status de erro e os dados para a view.
    */
-  protected function checkFilePermissions(): array
+  protected function VerificaPermissoes(): array
   {
     $error = false;
     $result = [];
 
-    // --- DEFINIÇÃO E VERIFICAÇÃO DE PERMISSÕES ---
-    // A chave é o nome da variável que a view espera.
-    // O valor é o caminho RELATIVO que será verificado.
     $checks = [
       'requirement_estimates'             => ['path' => 'uploads/estimates', 'type' => 'dir'],
       'requirement_proposals'             => ['path' => 'uploads/proposals', 'type' => 'dir'],
@@ -333,14 +281,7 @@ class Install extends Controller
       'clients'                           => ['path' => 'uploads/clients', 'type' => 'dir'],
       'client_profile_images'             => ['path' => 'uploads/client_profile_images', 'type' => 'dir'],
       'temp_folder_writable'              => ['path' => 'temp', 'type' => 'dir'],
-
-      // Para pastas e arquivos dentro de 'app/Config' (antigo 'application/config')
-      // 'config_folder_writable'            => ['path' => 'app/Config', 'type' => 'dir'],
-      // 'config_file_writable'              => ['path' => 'app/Config/config.php', 'type' => 'file'],
-      // 'app_config_sample_writable'        => ['path' => 'app/Config/app-config-sample.php', 'type' => 'file'],
-
-      // Para a pasta de logs dentro de 'writable/'
-      'log_folder_writable'               => ['path' => 'writable/logs', 'type' => 'dir'],
+      'log_folder_writable'               => ['path' => 'writable/logs', 'type' => 'dir'], // Pasta de logs dentro de 'writable/'
     ];
 
     foreach ($checks as $varName => $item) {
@@ -350,70 +291,58 @@ class Install extends Controller
       $permissionMode = ''; // Permissão numérica (e.g., 0755, 0644)
       $statusOk = true; // Assumimos OK, e alteramos se houver problema
 
-      // --- Lógica para determinar o caminho absoluto e a permissão padrão ---
+      // --- Lógica para determinar o caminho absoluto e a permissão padrão 
       if (str_starts_with($relativePath, 'uploads/') || $relativePath === 'temp') {
         $fullPath = ROOTPATH . str_replace('/', DIRECTORY_SEPARATOR, $relativePath);
         $permissionMode = '0755';
-      } elseif (str_starts_with($relativePath, 'app/Config')) {
-        $cleanPath = str_replace('app/', '', $relativePath);
-        $fullPath = APPPATH . str_replace('/', DIRECTORY_SEPARATOR, $cleanPath);
-        $permissionMode = ($type === 'file') ? '0644' : '0755';
       } elseif (str_starts_with($relativePath, 'writable/')) {
         $cleanPath = str_replace('writable/', '', $relativePath);
         $fullPath = WRITEPATH . str_replace('/', DIRECTORY_SEPARATOR, $cleanPath);
         $permissionMode = '0755';
       } else {
-        log_message('error', 'Caminho de permissão não mapeado: ' . $relativePath);
         $fullPath = ROOTPATH . str_replace('/', DIRECTORY_SEPARATOR, $relativePath);
-        $permissionMode = '0755'; // Fallback genérico
+        $permissionMode = '0755';
       }
-      // --- FIM DA LÓGICA DE CAMINHO ABSOLUTO ---
 
       // 1. Verificar existência e tentar criar se for diretório
       if ($type === 'dir' && !is_dir($fullPath)) {
-        log_message('info', 'Tentando criar diretório: ' . $fullPath);
         // Permissão 0755 ou 0777 dependendo do seu ambiente e segurança
         // 0755 é um bom padrão, 0777 é mais permissivo (cuidado)
         if (!mkdir($fullPath, 0755, true)) { // true para recursivo
           $statusOk = false;
-          $message = "No (Could not create directory: " . $relativePath . ") - Permissions " . $permissionMode;
-          log_message('error', 'Falha ao criar diretório: ' . $fullPath);
+          $message = "Não foi possível criar a pasta: " . $relativePath . " - Permissões " . $permissionMode;
         }
       } elseif ($type === 'file' && !file_exists($fullPath)) {
         // Para arquivos, apenas verificamos, não criamos automaticamente a menos que haja um conteúdo padrão
         // Se o arquivo não existe, consideramos um erro de permissão por não poder criar/escrever nele depois
         $statusOk = false;
-        $message = "No (File does not exist: " . $relativePath . ") - Permissions " . $permissionMode;
-        log_message('error', 'Arquivo não existe: ' . $fullPath);
+        $message = "O arquivo não existe: " . $relativePath . " - Permissões " . $permissionMode;
       }
 
       // 2. Verificar se é gravável e tentar corrigir permissões (se for Unix/Linux)
-      if ($statusOk && !$this->is_really_writable($fullPath)) {
-        log_message('info', 'Diretório/Arquivo não gravável, tentando chmod: ' . $fullPath . ' para ' . $permissionMode);
+      if ($statusOk && !$this->carol->eh_gravavel($fullPath)) {
         // Tenta aplicar as permissões. fileperms() retorna int, então 0xxx precisa ser octal.
         if (@chmod($fullPath, octdec($permissionMode))) {
           // Re-verifica se realmente se tornou gravável após o chmod
-          if (!$this->is_really_writable($fullPath)) {
+          if (!$this->carol->eh_gravavel($fullPath)) {
             $statusOk = false;
-            $message = "No (Not writable after chmod " . $permissionMode . ": " . $relativePath . ") - Permissions " . $permissionMode;
-            log_message('error', 'Falha ao tornar gravável após chmod: ' . $fullPath);
+            $message = "Sem permissão de escrita após chmod " . $permissionMode . ": " . $relativePath . " - Permissões " . $permissionMode;
           }
         } else {
           $statusOk = false;
-          $message = "No (Not writable and chmod failed: " . $relativePath . ") - Permissions " . $permissionMode;
-          log_message('error', 'Chmod falhou para: ' . $fullPath);
+          $message = "Sem permissão de escrita e chmod falhou: " . $relativePath . " - Permissões " . $permissionMode;
         }
       }
 
       // 3. Status final (após criação e tentativa de chmod)
-      if ($statusOk && $this->is_really_writable($fullPath)) { // Verifica uma última vez se está realmente gravável
+      if ($statusOk && $this->carol->eh_gravavel($fullPath)) { // Verifica uma última vez se está realmente gravável
         $result[$varName] = "<span class='badge bg-success'>Ok</span>";
       } else {
         $error = true;
         // Se $statusOk já foi false e $message já foi definido, use-o.
         // Caso contrário (e.g., já existia mas não era gravável e chmod falhou), defina a mensagem.
         if (!isset($message)) {
-          $message = "No (Not writable: " . $relativePath . ") - Permissions " . $permissionMode;
+          $message = "Sem permissão de escrita: " . $relativePath . " - Permissões " . $permissionMode;
         }
         $result[$varName] = "<span class='badge bg-danger'>" . $message . "</span>";
       }
@@ -424,33 +353,7 @@ class Install extends Controller
   }
 
   /**
-   * Step 3: Setup database connection.
-   * Agora recebe os dados do POST como parâmetros e retorna um array.
-   */
-  protected function setupDatabase(string $hostname, string $username, string $password, string $database): array
-  {
-    $result = ['success' => false, 'error_msg' => ''];
-
-    try {
-      $db = \Config\Database::connect([
-        'hostname' => $hostname,
-        'username' => $username,
-        'password' => $password,
-        'database' => $database,
-        'DBDriver' => 'MySQLi',
-      ]);
-      // Tentativa de conexão bem-sucedida
-      $db->close();
-      $result['success'] = true;
-    } catch (\Exception $e) {
-      $result['error_msg'] = 'Error connecting to database: ' . $e->getMessage();
-    }
-
-    return $result;
-  }
-
-  /**
-   * Step 4: Performs the actual installation: DB setup, user creation, config file.
+   * Passo 4: Administração.
    * Agora recebe os dados como parâmetros e retorna um array.
    */
   protected function performInstallation(
@@ -462,7 +365,7 @@ class Install extends Controller
     string $base_url,
     string $timezone
   ): array {
-    // --- 1. Validações adicionais ---
+    // 1. Validações adicionais
     if (empty($admin_email)) {
       return ['success' => false, 'error_msg' => 'Endereço de e-mail do administrador é obrigatório.'];
     }
@@ -480,62 +383,55 @@ class Install extends Controller
     }
 
     $db = null; // Inicializa a conexão DB
-    $dbPath = WRITEPATH . 'database' . DIRECTORY_SEPARATOR . 'CarolCRM.db';
 
     try {
-      // --- 2. Garantir o arquivo SQLite existe e que o diretório é gravável ---
-      $dbDir = dirname($dbPath);
+      // 2. Garantir o arquivo SQLite existe e que o diretório é gravável
+      $dbDir = dirname(CAROL_DB);
       if (!is_dir($dbDir)) {
         if (!mkdir($dbDir, 0755, true)) {
           throw new \Exception("Não foi possível criar o diretório do banco de dados: {$dbDir}. Verifique as permissões.");
         }
       }
       // Se o arquivo não existe, o PDO o cria ao tentar conectar
-      if (!file_exists($dbPath)) {
+      if (!file_exists(CAROL_DB)) {
         // Tentar criar o arquivo vazio para garantir a permissão antes da conexão real
-        file_put_contents($dbPath, '');
-        if (!is_writable($dbPath)) {
-          throw new \Exception("Arquivo do banco de dados não é gravável: {$dbPath}. Verifique as permissões.");
+        file_put_contents(CAROL_DB, '');
+        if (!is_writable(CAROL_DB)) {
+          throw new \Exception("Arquivo do banco de dados não é gravável: {CAROL_DB}. Verifique as permissões.");
         }
-        log_message('info', 'Arquivo SQLite CarolCRM.db criado em: ' . $dbPath);
-      } elseif (!is_writable($dbPath)) {
-        throw new \Exception("Arquivo do banco de dados não é gravável: {$dbPath}. Verifique as permissões.");
+      } elseif (!is_writable(CAROL_DB)) {
+        throw new \Exception("Arquivo do banco de dados não é gravável: {CAROL_DB}. Verifique as permissões.");
       }
 
-      // --- 3. Conectar ao banco de dados SQLite ---
+      // 3. Conectar ao banco de dados SQLite
       // Use a configuração padrão, mas force o driver e o caminho
       $db = \Config\Database::connect([
         'DBDriver' => 'SQLite3',
-        'database' => $dbPath, // Caminho completo para o arquivo DB
+        'database' => CAROL_DB, // Caminho completo para o arquivo DB
         'foreignKeys' => true, // Importante para SQLite
       ]);
 
       // Testar a conexão
       $db->simpleQuery('SELECT 1');
 
-      // --- 4. Carregar e executar o script SQL ---
-
-      if (!file_exists($this->databaseFile)) {
-        throw new \Exception("Arquivo SQL de instalação não encontrado: " . $this->databaseFile);
+      // 4. Carregar e executar o script SQL 
+      $databaseSQLFile = APPPATH . 'Database/Install/CarolCRM.sql';
+      if (!file_exists($databaseSQLFile)) {
+        throw new \Exception("Arquivo SQL de instalação não encontrado: " . $databaseSQLFile);
       }
 
-      // Certifique-se que esta linha está lendo o conteúdo do arquivo
-      $sqlContent = file_get_contents($this->databaseFile);
-
+      $sqlContent = file_get_contents($databaseSQLFile);
       $parser = new SqlScriptParser();
-      // E esta linha passa o CONTEÚDO para o parser
       $sqlStatements = $parser->parse($sqlContent);
 
       foreach ($sqlStatements as $statement) {
         $distilled = $parser->removeComments($statement);
         if (!empty($distilled)) {
-          // Executa a query diretamente com a conexão do CI4
           $db->query($distilled);
         }
       }
-      log_message('info', 'Esquema do banco de dados SQL executado com sucesso.');
 
-      // --- 5. Criar usuário administrador ---
+      // 5. Criar usuário administrador
       $hashedPassword = password_hash($admin_password, PASSWORD_DEFAULT);
 
       // Escapar valores para evitar SQL Injection (mesmo com SQLite)
@@ -547,10 +443,10 @@ class Install extends Controller
       // Ajuste a query para inserir na tblstaff, preenchendo todas as colunas
       // com os valores dinâmicos e 'NULL' para os campos que não são definidos pelo instalador.
       $insertSql = "INSERT INTO `tblstaff` VALUES (" .
-        "1, " .                           // staffid: Usamos 1, pois é o primeiro admin
-        "{$email}, " .            // email: Do formulário do admin
-        "{$fname}, " .            // firstname: Do formulário do admin
-        "{$lname}, " .            // lastname: Do formulário do admin
+        "1, " .                          // staffid: Usamos 1, pois é o primeiro registro
+        "{$email}, " .                   // email: Do formulário do admin
+        "{$fname}, " .                   // firstname: Do formulário do admin
+        "{$lname}, " .                   // lastname: Do formulário do admin
         "NULL, " .                       // (provavelmente 'direction')
         "NULL, " .                       // (provavelmente 'media_path_slug')
         "NULL, " .                       // (provavelmente 'media_path_id')
@@ -580,16 +476,12 @@ class Install extends Controller
         ")";
 
       $db->query($insertSql);
-      log_message('info', 'Usuário administrador criado com sucesso.');
 
-
-      // --- 6. Atualizar o arquivo .env (base_url e timezone) ---
-      // Note: Este é um método auxiliar que você precisaria implementar.
-      // Ele lê o .env, modifica a linha e salva.
+      // 6. Atualizar o arquivo .env (base_url e timezone)
       $this->updateDotEnv('app.baseURL', $base_url);
-      $this->updateDotEnv('app.appTimezone', $timezone); // Supondo que você tenha uma config app.appTimezone
+      $this->updateDotEnv('app.appTimezone', $timezone);
 
-      // --- 7. Criar/Atualizar .htaccess na pasta public ---
+      // 7. Criar/Atualizar .htaccess na pasta public
       $htaccessContent = 'RewriteEngine On' . PHP_EOL .
         'RewriteCond %{REQUEST_FILENAME} !-f' . PHP_EOL .
         'RewriteCond %{REQUEST_FILENAME} !-d' . PHP_EOL .
@@ -597,10 +489,9 @@ class Install extends Controller
         'AddDefaultCharset utf-8';
 
       $publicHtaccessPath = FCPATH . '.htaccess';
-      if ($this->is_really_writable(FCPATH)) { // Verifica se a pasta public é gravável
+      if ($this->carol->eh_gravavel(FCPATH)) { // Verifica se a pasta public é gravável
         if (!file_exists($publicHtaccessPath) || is_writable($publicHtaccessPath)) {
           file_put_contents($publicHtaccessPath, $htaccessContent);
-          log_message('info', '.htaccess criado/atualizado em public/.htaccess');
         } else {
           log_message('warning', 'Não foi possível escrever ou criar .htaccess em ' . $publicHtaccessPath . '. Permissões insuficientes.');
         }
@@ -610,7 +501,6 @@ class Install extends Controller
 
       return ['success' => true];
     } catch (\Throwable $th) {
-      log_message('error', 'Installation error: ' . $th->getMessage());
       return ['success' => false, 'error_msg' => 'Ocorreu um erro durante a instalação: ' . $th->getMessage()];
     } finally {
       if ($db) {
@@ -619,77 +509,8 @@ class Install extends Controller
     }
   }
 
-
   /**
-   * Step 5: Finish installation.
-   * Não precisa de lógica complexa, apenas define a view.
-   */
-  protected function finishInstallation()
-  {
-    // Nada específico para fazer aqui, a view 'finish.php' já lida com a exibição
-    // Retorna um array vazio ou com uma flag de sucesso se desejar
-    return ['success' => true];
-  }
-
-  /**
-   * Helper para `is_really_writable`, movido para o Controller.
-   * Para uso em produção, considere mover para um helper de filesystem.
-   */
-  private function is_really_writable($file)
-  {
-    // Definições de constantes que deveriam vir do CI3 original ou ser definidas
-    // define('FILE_READ_MODE', 0644);
-    // define('FILE_WRITE_MODE', 0666);
-    // define('FOPEN_WRITE_CREATE_DESTRUCTIVE', 'wb'); // Ou 'w' dependendo do caso
-
-    // Se estamos em um sistema tipo Unix e temos funções Posix, use-as para diretórios
-    if (DIRECTORY_SEPARATOR === '/' && function_exists('posix_getpwuid') && function_exists('fileowner')) {
-      $owner = posix_getpwuid(fileowner($file));
-      if ($owner && $owner['name'] === get_current_user()) {
-        return is_writable($file);
-      }
-    }
-
-    // Para sistemas não-Posix, ou se o proprietário não corresponder, ou para arquivos
-    if (is_file($file)) {
-      // VFS ou outros sistemas de arquivos não-padrão podem precisar de uma verificação de arquivo temporário
-      if (($fp = @fopen($file, 'ab')) === false) {
-        return false;
-      }
-      fclose($fp);
-      return true;
-    } elseif (is_dir($file)) {
-      $temp_file = rtrim($file, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . uniqid(mt_rand()) . '.tmp';
-      if (($fp = @fopen($temp_file, 'ab')) === false) {
-        return false;
-      }
-      fclose($fp);
-      @unlink($temp_file);
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
-   * Helper para adivinhar a URL base.
-   */
-  protected function guess_base_url()
-  {
-    $base_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
-    if (isset($_SERVER['REQUEST_URI'])) {
-      // Remover o segmento do instalador da URL
-      $uri = $_SERVER['REQUEST_URI'];
-      // Tenta encontrar e remover o '/install' ou '/install/index.php'
-      $base_url_segment = preg_replace('/(\/)?install(\/index.php)?(\/.*)?$/', '', $uri);
-      $base_url .= $base_url_segment;
-    }
-    return rtrim($base_url, '/') . '/';
-  }
-
-
-  /**
-   * Helper para atualizar uma chave no arquivo .env
+   * Função para atualizar uma chave no arquivo .env
    * @param string $key A chave a ser atualizada (ex: 'app.baseURL')
    * @param string $value O novo valor
    * @return bool True se atualizado, false caso contrário
