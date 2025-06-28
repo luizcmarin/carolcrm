@@ -1,5 +1,3 @@
-<?php
-?>
 <nav aria-label="Progress">
   <ol role="list"
     class="d-flex flex-column flex-md-row w-100 divide-y divide-gray-200 rounded-3 border border-gray-200 mb-4 bg-white">
@@ -20,7 +18,7 @@
         <?php } elseif ($step['status'] === 'current') { ?>
           <div class="d-flex align-items-center px-4 py-3 text-sm font-weight-medium" aria-current="step">
             <span
-              class="d-flex h-7 w-7 flex-shrink-0 align-items-center justify-content-center rounded-circle border border-2 border-primary">
+              class="d-flex h-7 w-7 p-2 flex-shrink-0 align-items-center justify-content-center rounded-circle border border-2 border-primary">
               <span class="text-primary">
                 <?= $step['id']; ?>
               </span>
@@ -33,7 +31,7 @@
           <div class="d-flex align-items-center">
             <span class="d-flex align-items-center px-4 py-3 text-sm font-weight-medium">
               <span
-                class="d-flex h-7 w-7 flex-shrink-0 align-items-center justify-content-center rounded-circle border border-2 border-secondary">
+                class="d-flex h-7 w-7 p-2 flex-shrink-0 align-items-center justify-content-center rounded-circle border border-2 border-secondary">
                 <span class="text-secondary">
                   <?= $step['id']; ?>
                 </span>
@@ -44,7 +42,7 @@
             </span>
           </div>
         <?php } ?>
-        <?php if ($stepIdx !== count($steps) - 1) { ?>
+        <?php if ($stepIdx !== count($steps)) { ?>
           <div class="position-absolute top-0 end-0 d-none d-md-block h-100" style="width: 20px;" aria-hidden="true">
             <svg class="h-100 w-100 text-gray-300" viewBox="0 0 22 80" fill="none"
               preserveAspectRatio="none">

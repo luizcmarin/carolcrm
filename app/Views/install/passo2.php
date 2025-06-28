@@ -1,22 +1,20 @@
-<?php
-?>
-<form action="<?= url_to('Install::index'); ?>" method="post" accept-charset="utf-8">
+<form action="<?= base_url('install'); ?>" method="post" accept-charset="utf-8">
   <?= csrf_field(); ?>
   <input type="hidden" name="step" value="2">
   <div class="row">
     <div class="col-md-12">
-      <h4 class="fw-bold mb-0">Permissões da Aplicação</h4>
+      <h4 class="fw-bold mb-2">Permissões da Aplicação</h4>
       <p class="text-muted">
-        Please make sure that all the files and folders listed below are writable.
+        Por favor, certifique-se de que todos os arquivos e pastas listados abaixo tenham permissão de escrita.
         <br />
-        You may need to change the permissions of the files/folders via your hosting control panel or FTP client.
+        Você pode precisar alterar as permissões dos arquivos/pastas através do painel de controle da sua hospedagem ou fale com seu serviço de suporte.
       </p>
       <hr />
       <table class="table table-hover">
         <thead>
           <tr>
-            <th><b>File/Folder</b></th>
-            <th><b>Result</b></th>
+            <th><b>Arquivo/Pasta</b></th>
+            <th><b>Resultado</b></th>
           </tr>
         </thead>
         <tbody>
@@ -93,9 +91,9 @@
       <hr />
       <div class="text-end">
         <?php if ($error === true) { ?>
-          <a class="btn btn-primary opacity-50" disabled>Next</a>
+          <a class="btn btn-primary opacity-50" disabled>Próximo</a>
         <?php } else { ?>
-          <button type="submit" class="btn btn-primary">Next</button>
+          <button type="submit" class="btn btn-primary">Próximo</button>
         <?php } ?>
       </div>
     </div>

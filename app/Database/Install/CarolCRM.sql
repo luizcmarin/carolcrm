@@ -7,7 +7,6 @@ CREATE TABLE "tblactivity_log" (
   "staffid" text(100),
   PRIMARY KEY ("id")
 );
-INSERT INTO "tblactivity_log" VALUES (1, 'User Successfully Logged In [User Id: 1, Is Staff Member: Yes, IP: ::1]', '2025-06-25 11:47:50', 'LUIZ MARIN');
 DROP TABLE IF EXISTS "tblannouncements";
 CREATE TABLE "tblannouncements" (
   "announcementid" integer NOT NULL,

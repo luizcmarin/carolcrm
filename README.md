@@ -1,19 +1,20 @@
 <p align="center">
-  ,ad8888ba,                                        88    ,ad8888ba,   88888888ba   88b           d88  
- d8"'    `"8b                                       88   d8"'    `"8b  88      "8b  888b         d888  
-d8'                                                 88  d8'            88      ,8P  88`8b       d8'88  
-88             ,adPPYYba,  8b,dPPYba,   ,adPPYba,   88  88             88aaaaaa8P'  88 `8b     d8' 88  
-88             ""     `Y8  88P'   "Y8  a8"     "8a  88  88             88""""88'    88  `8b   d8'  88  
-Y8,            ,adPPPPP88  88          8b       d8  88  Y8,            88    `8b    88   `8b d8'   88  
- Y8a.    .a8P  88,    ,88  88          "8a,   ,a8"  88   Y8a.    .a8P  88     `8b   88    `888'    88  
-  `"Y8888Y"'   `"8bbdP"Y8  88           `"YbbdP"'   88    `"Y8888Y"'   88      `8b  88     `8'     88  
 
-    <h1 align="center">CarolCRM</h1>
-    <br>
 </p>
 
-[![Build Status](https://github.com/luizcmarin/CarolCRM/actions/workflows/quality_checks.yml/badge.svg?branch=main)](https://github.com/luizcmarin/CarolCRM/actions/workflows/quality_checks.yml?query=branch%3Amain)
-[![Static Analysis](https://github.com/luizcmarin/CarolCRM/actions/workflows/quality_checks.yml/badge.svg?branch=main)](https://github.com/luizcmarin/CarolCRM/actions/workflows/quality_checks.yml?query=branch%3Amain)
+<h1 align="center">CarolCRM: Sistema de CRM para Gerenciamento de Clientes</h1>
+
+<p align="center">
+  <img alt="Status do CI/CD - Análise de Qualidade (Psalm, ComposerRequireChecker)" src="https://github.com/luizcmarin/CarolCRM/actions/workflows/quality_checks.yml/badge.svg?branch=main">
+</p>
+
+<p align="center">
+  Um sistema de Customer Relationship Management (CRM) completo e intuitivo, desenvolvido com CodeIgniter 4, para auxiliar pequenas e médias empresas a gerenciar seus clientes, interações, vendas e pipelines de forma eficiente.
+</p>
+
+<p align="center">
+  Construído com foco em modularidade, performance e facilidade de uso, o CarolCRM é a ferramenta ideal para otimizar seus processos de relacionamento com o cliente.
+</p>
 
 
 **CarolCRM** é um software de Gerenciamento de Relacionamento com o Cliente (CRM) auto-hospedado, perfeito para quase todas as empresas, freelancers e diversas outras utilizações. Com seu design limpo e moderno, **CarolCRM** pode ajudar você a parecer mais profissional para seus clientes e, ao mesmo tempo, melhorar o desempenho do seu negócio.

@@ -24,6 +24,6 @@ defined('EXIT_DATABASE')       || define('EXIT_DATABASE', 8);       // database 
 defined('EXIT__AUTO_MIN')      || define('EXIT__AUTO_MIN', 9);      // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125);    // highest automatically-assigned error code
 
-defined('CAROL_DB_PATH')       || define('CAROL_DB_PATH', APPPATH . 'writable/database/');  // caminho do banco de dados
+defined('CAROL_DB_PATH')       || define('CAROL_DB_PATH', WRITEPATH . 'database/');  // caminho do banco de dados
 defined('CAROL_DB_NAME')       || define('CAROL_DB_NAME', 'CarolCRM.db');                   // nome do banco de dados
 defined('CAROL_DB')            || define('CAROL_DB', CAROL_DB_PATH . CAROL_DB_NAME);        // banco de dados

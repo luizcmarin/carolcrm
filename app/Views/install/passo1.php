@@ -1,91 +1,82 @@
-<?php
-?>
-<form action="<?= url_to('Install::index'); ?>" method="post" accept-charset="utf-8">
+<form action="<?= base_url('install'); ?>" method="post" accept-charset="utf-8">
   <?= csrf_field(); ?>
   <input type="hidden" name="step" value="1">
   <div class="row">
     <div class="col-md-12">
-      <h4 class="fw-bold mb-0">Requerimentos da Aplicação</h4>
+      <h4 class="fw-bold mb-2">Requisitos da Aplicação</h4>
       <p class="text-muted">
-        Please make sure that all requirements are passed on your server.
-        <br />
-        If any requirements fail, please contact your hosting provider for assistance.
+        Por favor, certifique-se de que todos os requisitos sejam atendidos no seu servidor.<br>
+        Se algum requisito não for cumprido, entre em contato com o suporte para obter assistência.
       </p>
       <hr />
       <ul class="list-group">
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          PHP Version >= 8.1
+          Versão do PHP >= 8.4
           <span class="ms-auto">
             <?= $requirement1; ?>
           </span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          MySQLi PHP Extension
+          PHP Extensão PDO SQLite
           <span class="ms-auto">
             <?= $requirement2; ?>
           </span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          PDO PHP Extension
+          PHP Extensão cURL
           <span class="ms-auto">
             <?= $requirement3; ?>
           </span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          cURL PHP Extension
+          PHP Extensão OpenSSL
           <span class="ms-auto">
             <?= $requirement4; ?>
           </span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          OpenSSL PHP Extension
+          PHP Extensão MBString
           <span class="ms-auto">
             <?= $requirement5; ?>
           </span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          MBString PHP Extension
+          PHP Extensão iconv
           <span class="ms-auto">
             <?= $requirement6; ?>
           </span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          iconv PHP Extension
+          PHP Extensão IMAP
           <span class="ms-auto">
             <?= $requirement7; ?>
           </span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          IMAP PHP Extension
+          PHP Extensão GD
           <span class="ms-auto">
             <?= $requirement8; ?>
           </span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          GD PHP Extension
+          PHP Extensão Zip
           <span class="ms-auto">
             <?= $requirement9; ?>
           </span>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          Zip PHP Extension
-          <span class="ms-auto">
-            <?= $requirement10; ?>
-          </span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
           allow_url_fopen
           <span class="ms-auto">
-            <?= $requirement11; ?>
+            <?= $requirement10; ?>
           </span>
         </li>
       </ul>
       <hr />
       <div class="text-end">
         <?php if ($error === true) { ?>
-          <a class="btn btn-primary opacity-50" disabled>Next</a>
+          <a class="btn btn-primary opacity-50" disabled>Próximo</a>
         <?php } else { ?>
-          <button type="submit" class="btn btn-primary">Next</button>
+          <button type="submit" class="btn btn-primary">Próximo</button>
         <?php } ?>
       </div>
     </div>

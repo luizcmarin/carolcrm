@@ -11,18 +11,18 @@ use CodeIgniter\Router\RouteCollection;
 // então permitimos o acesso à rota de instalação e bloqueamos o resto.
 if (! file_exists(CAROL_DB)) {
   // Redireciona todas as requisições (exceto assets) para o instalador
-  $routes->get('/', 'Installer::index'); // Sua rota principal do instalador
-  $routes->get('install', 'Installer::index');
+  $routes->get('/', 'Install::index'); // Sua rota principal do instalador
+  $routes->get('install', 'Install::index');
   $routes->post('/install', 'Install::index'); // Para lidar com submissões de formulário
 
   // Bloqueia todas as outras rotas da aplicação para evitar acesso antes da instalação
   $routes->addPlaceholder('segment', '([a-zA-Z0-9_-]+)'); // Adiciona placeholder para reuso
 
   $routes->group('/', function ($routes) {
-    $routes->setDefaultController('Installer'); // Garante que qualquer rota não definida vá para o instalador
-    $routes->addRedirect('/', 'Installer::index'); // Redireciona a raiz
-    $routes->addRedirect('{segment}', 'Installer::index'); // Redireciona qualquer segmento
-    $routes->addRedirect('{segment}/{segment}', 'Installer::index'); // Redireciona múltiplos segmentos
+    $routes->setDefaultController('Install'); // Garante que qualquer rota não definida vá para o instalador
+    $routes->addRedirect('/', 'Install::index'); // Redireciona a raiz
+    $routes->addRedirect('{segment}', 'Install::index'); // Redireciona qualquer segmento
+    $routes->addRedirect('{segment}/{segment}', 'Install::index'); // Redireciona múltiplos segmentos
   });
 } else {
   // Se o banco de dados EXISTE, a aplicação está instalada.

@@ -59,12 +59,12 @@ class Install extends BaseController
           $serverRequirementsResult = $this->VerificaRequisitos();
           if ($serverRequirementsResult['error'] === false) {
             $this->data['current_step'] = 2; // Avanca para passo2
-            $this->data['page'] = 'passo2';
+            $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
             $currentStepData = $this->VerificaPermissoes(); // Obtém os dados do passo2
           } else {
             // Permanece nessa etapa se o passo1 não foi atendido
             $this->data['current_step'] = 1;
-            $this->data['page'] = 'passo1';
+            $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
             $currentStepData = $this->VerificaRequisitos(); // Obtém os dados do passo1 novamente
           }
           break;
@@ -73,18 +73,19 @@ class Install extends BaseController
           $filePermissionsResult = $this->VerificaPermissoes();
           if ($filePermissionsResult['error'] === false) {
             $this->data['current_step'] = 3;
-            $this->data['page'] = 'passo3';
+            $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
             $currentStepData = []; // Não há dados iniciais para o passo3
           } else {
             $this->data['current_step'] = 2;
-            $this->data['page'] = 'passo2';
+            $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
             $currentStepData = $this->VerificaPermissoes(); // Obtém os dados da etapa 2 novamente
           }
+
           break;
 
         case 3: // O Banco de Dados
           $this->data['current_step'] = 4;
-          $this->data['page'] = 'passo4';
+          $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
           $currentStepData['timezone'] = 'America/Sao_Paulo';
 
           break;
@@ -115,11 +116,11 @@ class Install extends BaseController
 
           if ($currentStepData['success'] === true) {
             $this->data['current_step'] = 5;
-            $this->data['page'] = 'passo5';
+            $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
           } else {
             // Erro no passo4, permanece nesta etapa
             $this->data['current_step'] = 4;
-            $this->data['page'] = 'passo4';
+            $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
             $this->data['admin_error'] = true;
             $this->data['admin_error_msg'] = $currentStepData['error_msg'];
             // Repopula o formulário para o usuário não perder os dados digitados
@@ -133,23 +134,23 @@ class Install extends BaseController
           }
           break;
 
-        // Não deveria haver um POST para a etapa 5 (Finish), mas por segurança
+        // Não deveria haver um POST para a etapa 5 (Finish), mas por segurança...
         case 5:
           // Se já na etapa final e tentar POST, apenas permanece
           $this->data['current_step'] = 5;
-          $this->data['page'] = 'passo5';
+          $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
           break;
 
         default:
           // Caso de segurança, retorna para a primeira etapa
           $this->data['current_step'] = 1;
-          $this->data['page'] = 'passo1';
+          $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
           break;
       }
     } else {
       // Garante que sempre comece na primeira etapa e pré-carrega os requisitos
       $this->data['current_step'] = 1;
-      $this->data['page'] = 'passo1';
+      $this->data['page'] = $this->getPageNameForStep($this->data['current_step']);
       // Chama a função da primeira etapa para preencher os dados iniciais dos requisitos
       $currentStepData = $this->VerificaRequisitos();
     }
@@ -180,7 +181,7 @@ class Install extends BaseController
       case 3:
         return 'passo3'; // O Banco de Dados
       case 4:
-        return 'passo4'; // Administração
+        return 'passo4'; // Administração, instalação
       case 5:
         return 'passo5'; // Sucesso
       default:
@@ -218,19 +219,18 @@ class Install extends BaseController
     $result = [];
 
     $result['requirement1'] = (version_compare(PHP_VERSION, '8.1') >= 0)
-      ? "<span class='badge bg-success'>v." . PHP_VERSION . '</span>'
+      ? "<span class='badge bg-success'>Sua versão do PHP é " . PHP_VERSION . '</span>'
       : ($error = true) && "<span class='badge bg-danger'>Sua versão do PHP é " . PHP_VERSION . '</span>';
 
     $extensions = [
-      'sqlite'   => 'Extensão PHP SQLite3',
-      'pdo'      => 'Extensão PHP PDO',
-      'curl'     => 'Extensão PHP cURL',
-      'openssl'  => 'Extensão PHP OpenSSL',
-      'mbstring' => 'Extensão PHP MBString',
-      'iconv'    => 'Extensão PHP iconv',
-      'imap'     => 'Extensão PHP IMAP',
-      'gd'       => 'Extensão PHP GD',
-      'zip'      => 'Extensão PHP Zip',
+      'pdo_sqlite' => 'Extensão PHP PDO SQLite',
+      'curl'       => 'Extensão PHP cURL',
+      'openssl'    => 'Extensão PHP OpenSSL',
+      'mbstring'   => 'Extensão PHP MBString',
+      'iconv'      => 'Extensão PHP iconv',
+      'imap'       => 'Extensão PHP IMAP',
+      'gd'         => 'Extensão PHP GD',
+      'zip'        => 'Extensão PHP Zip',
     ];
 
     foreach ($extensions as $ext => $name) {
@@ -245,7 +245,7 @@ class Install extends BaseController
     }
 
     $urlFopen = ini_get('allow_url_fopen');
-    $result['requirement11'] = ($urlFopen === '1' || strcasecmp($urlFopen, 'On') === 0 || strcasecmp($urlFopen, 'true') === 0 || strcasecmp($urlFopen, 'yes') === 0)
+    $result['requirement10'] = ($urlFopen === '1' || strcasecmp($urlFopen, 'On') === 0 || strcasecmp($urlFopen, 'true') === 0 || strcasecmp($urlFopen, 'yes') === 0)
       ? "<span class='badge bg-success'>Habilitada</span>"
       : ($error = true) && "<span class='badge bg-danger'>Allow_url_fopen não habilitada!</span>";
 
@@ -415,7 +415,7 @@ class Install extends BaseController
       $db->simpleQuery('SELECT 1');
 
       // 4. Carregar e executar o script SQL 
-      $databaseSQLFile = APPPATH . 'Database/Install/' . CAROL_DB; // caminho do banco de dados 
+      $databaseSQLFile = APPPATH . 'Database/Install/CarolCRM.sql';
       if (!file_exists($databaseSQLFile)) {
         throw new \Exception("Arquivo SQL de instalação não encontrado: " . $databaseSQLFile);
       }
