@@ -14,7 +14,6 @@
             <directory name="docs" />
             <directory name="public" />
             <directory name="tests" />
-            <directory name="uploads" />
             <directory name="vendor" />
             <directory name="writable" />
         </ignoreFiles>
