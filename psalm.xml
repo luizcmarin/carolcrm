@@ -10,13 +10,13 @@
 >
     <projectFiles>
         <directory name="app" />
-        <ignore>
+        <ignoreDirectories>  
             <directory name="docs" />
             <directory name="public" />
             <directory name="tests" />
             <directory name="uploads" />
             <directory name="vendor" />
             <directory name="writable" />
-        </ignore>
+        </ignoreDirectories>
     </projectFiles>
 </psalm>
