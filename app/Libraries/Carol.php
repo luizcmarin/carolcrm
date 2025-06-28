@@ -7,39 +7,37 @@ namespace App\Libraries;
  */
 class Carol
 {
-
   /**
-   * Verifica se um arquivo ou diretório é realmente gravável,
-   * lidando com problemas de sistemas de arquivos em rede ou chroot.
+   * Verifica se um arquivo ou diretório é realmente gravável.
+   * Tenta escrever um byte ou criar um arquivo temporário para maior robustez.
    *
    * @param string $file O caminho para o arquivo ou diretório.
    * @return bool Verdadeiro se for gravável, falso caso contrário.
    */
   function eh_gravavel($file)
   {
-    // Se estamos em um sistema tipo Unix e temos funções Posix, use-as para diretórios
-    if (DIRECTORY_SEPARATOR === '/' && function_exists('posix_getpwuid') && function_exists('fileowner')) {
-      $owner = posix_getpwuid(fileowner($file));
-      if ($owner && $owner['name'] === get_current_user()) {
-        return is_writable($file);
-      }
+    // Primeiro, use a verificação padrão do PHP
+    if (is_writable($file)) {
+      return true;
     }
 
-    // Para sistemas não-Posix, ou se o proprietário não corresponder, ou para arquivos
+    // Se is_writable falhou, tente uma verificação mais robusta abrindo o arquivo/diretório
+    // Isso pode pegar casos onde is_writable é enganoso (e.g., alguns sistemas de arquivos em rede)
     if (is_file($file)) {
-      // VFS ou outros sistemas de arquivos não-padrão podem precisar de uma verificação de arquivo temporário
+      // Tente abrir o arquivo para anexar (ab)
       if (($fp = @fopen($file, 'ab')) === false) {
         return false;
       }
       fclose($fp);
       return true;
     } elseif (is_dir($file)) {
+      // Tente criar um arquivo temporário no diretório
       $temp_file = rtrim($file, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . uniqid(mt_rand()) . '.tmp';
       if (($fp = @fopen($temp_file, 'ab')) === false) {
         return false;
       }
       fclose($fp);
-      @unlink($temp_file);
+      @unlink($temp_file); // Remova o arquivo temporário
       return true;
     }
 
