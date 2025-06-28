@@ -1,3 +1,5 @@
+<?php
+?>
 <form action="<?= site_url('install'); ?>" method="post" accept-charset="utf-8">
   <?= csrf_field(); ?>
   <input type="hidden" name="step" value="4">

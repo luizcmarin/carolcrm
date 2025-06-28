@@ -19,14 +19,12 @@ use CodeIgniter\Config\BaseService;
  */
 class Services extends BaseService
 {
-    /*
-     * public static function example($getShared = true)
-     * {
-     *     if ($getShared) {
-     *         return static::getSharedInstance('example');
-     *     }
-     *
-     *     return new \CodeIgniter\Example();
-     * }
-     */
+    public static function carol(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('carol');
+        }
+
+        return new \App\Libraries\Carol();
+    }
 }

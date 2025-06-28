@@ -3,50 +3,48 @@
 namespace App\Libraries;
 
 /**
- * This class solves the problem of converting an SQL script file into an array of SQL strings. PDO does not
- * generally support SQL strings with multiple statements, e.g. it seems to work with MySQL but not PostgreSQL.
+ * Esta classe resolve o problema de converter um arquivo de script SQL em um array de strings SQL. O PDO geralmente não
+ * suporta strings SQL com múltiplas instruções; por exemplo, parece funcionar com MySQL, mas não com PostgreSQL.
  *
- * The reason this class exists is to deal with the permutations of line comments, block comments and quoted strings
- * that make it tricky to find the semicolons that separate the SQL statements in a script file.
+ * A razão pela qual esta classe existe é para lidar com as permutações de comentários de linha, comentários de bloco e strings entre aspas
+ * que tornam complicado encontrar os pontos e vírgulas que separam as instruções SQL em um arquivo de script.
  *
- * There are two main functions:
+ * Existem duas funções principais:
  *
- * 1. parse($sqlContent) will take the SQL content string and split it into parts demarcated by semicolons.
- * The return array will contain unprocessed SQL fragments that could be just whitespace and/or comments.
+ * 1. parse($sqlContent) pegará a string de conteúdo SQL e a dividirá em partes demarcadas por pontos e vírgulas.
+ * O array de retorno conterá fragmentos SQL não processados que podem ser apenas espaços em branco e/ou comentários.
  *
- * 2. removeComments($sql) takes an SQL fragment (probably obtained via the parse function) and trims it after
- * removing all comments. If there is no actual SQL in the fragment, the return value will be an empty string.
+ * 2. removeComments($sql) pega um fragmento SQL (provavelmente obtido através da função parse) e o trima após
+ * remover todos os comentários. Se não houver SQL real no fragmento, o valor de retorno será uma string vazia.
  *
  * @package App\Libraries
  * @author Dion Truter <dion@truter.org>
- * @author Converted by Gemini AI
- * @author Corrected by Gemini AI for content parsing
+ * @author Convertido por Gemini AI
+ * @author Corrigido por Gemini AI para análise de conteúdo
  */
 class SqlScriptParser
 {
   /**
-   * Parses SQL statements from a given SQL content string, demarcated by semicolons.
-   * The return array will contain unprocessed SQL fragments that could be just whitespace and/or comments.
+   * Analisa as instruções SQL de uma dada string de conteúdo SQL, demarcadas por pontos e vírgulas.
+   * O array de retorno conterá fragmentos SQL não processados que podem ser apenas espaços em branco e/ou comentários.
    *
-   * @param string $sqlContent The full content of the SQL script as a string.
-   * @return string[] An array of SQL statements
+   * @param string $sqlContent O conteúdo completo do script SQL como uma string.
+   * @return string[] Um array de instruções SQL
    */
-  public function parse(string $sqlContent): array // <--- AGORA ESPERA O CONTEÚDO (STRING)
+  public function parse(string $sqlContent): array
   {
     $seekPos = 0;
     $return = [];
-    // A lógica de parsing original é mantida, mas agora opera sobre $sqlContent
-    // e não tenta ler um arquivo.
     while (true) {
-      $nextPos = $this->getSemiColonPos($sqlContent, $seekPos); // Usa $sqlContent
+      $nextPos = $this->getSemiColonPos($sqlContent, $seekPos);
       if ($nextPos === false) {
-        $fragment = substr($sqlContent, $seekPos); // Usa $sqlContent
-        if (trim($fragment) !== '') { // Adicionado para não adicionar fragmentos vazios no final
+        $fragment = substr($sqlContent, $seekPos);
+        if (trim($fragment) !== '') {
           $return[] = $fragment;
         }
         break;
       } else {
-        $return[] = substr($sqlContent, $seekPos, $nextPos - $seekPos); // Usa $sqlContent
+        $return[] = substr($sqlContent, $seekPos, $nextPos - $seekPos);
         $seekPos = $nextPos + 1;
       }
     }
@@ -54,15 +52,14 @@ class SqlScriptParser
   }
 
   /**
-   * Takes an SQL fragment (probably obtained via the parse function) and trims it after removing all comments.
-   * If there is no actual SQL in the fragment, the return value will be an empty string.
+   * Pega um fragmento SQL (provavelmente obtido através da função parse) e o trima após remover todos os comentários.
+   * Se não houver SQL real no fragmento, o valor de retorno será uma string vazia.
    *
-   * @param string $sql An SQL fragment to distill
-   * @return string The distilled SQL fragment
+   * @param string $sql Um fragmento SQL para destilar
+   * @return string O fragmento SQL destilado
    */
   public function removeComments(string $sql): string
   {
-    // ... (este método permanece EXATAMENTE igual)
     $seekPos = 0;
     while (true) {
       $quoteStart = strpos($sql, '\'', $seekPos);
@@ -88,16 +85,15 @@ class SqlScriptParser
   }
 
   /**
-   * Gets the next semicolon separator in an SQL string, while dealing with the permutations of line comments,
-   * block comments and quoted strings that could contain semicolons.
+   * Obtém a próxima posição de ponto e vírgula em uma string SQL, enquanto lida com as permutações de comentários de linha,
+   * comentários de bloco e strings entre aspas que podem conter pontos e vírgulas.
    *
-   * @param string $sql The SQL string
-   * @param int $offset Where to start looking for semicolons
-   * @return bool|int The offset found, or false if no semicolon was found
+   * @param string $sql A string SQL
+   * @param int $offset Onde começar a procurar por pontos e vírgulas
+   * @return bool|int O offset encontrado, ou false se nenhum ponto e vírgula foi encontrado
    */
   private function getSemiColonPos(string &$sql, int $offset)
   {
-    // ... (este método permanece EXATAMENTE igual)
     $seekPos = $offset;
     while (true) {
       $semiColonPos = strpos($sql, ';', $seekPos);
@@ -123,34 +119,19 @@ class SqlScriptParser
     return false;
   }
 
-  // --- REMOVA ESTE MÉTODO INTEIRO! Não é mais necessário. ---
-  // private function getNormalizedContent(string $sqlFile): string
-  // {
-  //     $content = '';
-  //     if (($handle = fopen($sqlFile, 'r')) !== false) {
-  //         while (($line = fgets($handle)) !== false) {
-  //             $content .= "$line\n";
-  //         }
-  //         fclose($handle);
-  //     }
-  //     return $content;
-  // }
-  // --- FIM DA REMOÇÃO ---
-
   /**
-   * Tests Whether var1 is smaller than the other var parameters, knowing that "false" means "not found"
-   * - If var1 is false it is not smaller
-   * - If any other var is false it cannot be bigger
+   * Testa se var1 é menor que os outros parâmetros de var, sabendo que "false" significa "não encontrado".
+   * - Se var1 for false, não é menor.
+   * - Se qualquer outra var for false, não pode ser maior.
    *
    * @param int|bool $var1
    * @param int|bool $var2
    * @param int|bool $var3
    * @param int|bool $var4
-   * @return bool True if var1 is smaller, and false otherwise
+   * @return bool Verdadeiro se var1 for menor, e falso caso contrário
    */
   private function foundFirst($var1, $var2, $var3 = false, $var4 = false): bool
   {
-    // ... (este método permanece EXATAMENTE igual)
     return $var1 !== false
       && ($var1 < $var2 || $var2 === false)
       && ($var1 < $var3 || $var3 === false)
@@ -158,14 +139,13 @@ class SqlScriptParser
   }
 
   /**
-   * @param string $haystack The string being analysed
-   * @param string $needle The marker to look for
-   * @param int $offset Start looking at the offset position
-   * @return bool|int The position to skip to (including the marker length) or false if the marker was not found
+   * @param string $haystack A string sendo analisada
+   * @param string $needle O marcador a procurar
+   * @param int $offset Posição para iniciar a busca
+   * @return bool|int A posição para pular (incluindo o comprimento do marcador) ou false se o marcador não foi encontrado
    */
   private function skipPastMarker(string &$haystack, string $needle, int $offset)
   {
-    // ... (este método permanece EXATAMENTE igual)
     $endPos = strpos($haystack, $needle, $offset);
     if ($endPos === false) {
       return false;
@@ -174,15 +154,14 @@ class SqlScriptParser
   }
 
   /**
-   * Find the next quote character and move past it. Skip all escaped quote characters to do so.
+   * Encontra o próximo caractere de aspas e o pula. Pula todos os caracteres de aspas escapados para fazer isso.
    *
-   * @param string $haystack The string being analysed
-   * @param int $offset Start looking at the offset position
-   * @return bool|int The position to skip to (including the marker length) or false if the marker was not found
+   * @param string $haystack A string sendo analisada
+   * @param int $offset Posição para iniciar a busca
+   * @return bool|int A posição para pular (incluindo o comprimento do marcador) ou false se o marcador não foi encontrado
    */
   private function skipPastQuote(string &$haystack, int $offset)
   {
-    // ... (este método permanece EXATAMENTE igual)
     while (true) {
       $quoteEnd = strpos($haystack, '\'', $offset);
       $doubledQuoteEnd = strpos($haystack, '\'\'', $offset);

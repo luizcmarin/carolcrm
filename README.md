@@ -1,7 +1,35 @@
 <p align="center">
-    <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://yiisoft.github.io/docs/images/yii_logo.svg" height="100px" alt="Yii">
-    </a>
+   _____                _  _____ _____  __  __ 
+  / ____|              | |/ ____|  __ \|  \/  |
+ | |     __ _ _ __ ___ | | |    | |__) | \  / |
+ | |    / _` | '__/ _ \| | |    |  _  /| |\/| |
+ | |___| (_| | | | (_) | | |____| | \ \| |  | |
+  \_____\__,_|_|  \___/|_|\_____|_|  \_\_|  |_|
+                                               
+   ______                 ____________  __  ___
+  / ____/___ __________  / / ____/ __ \/  |/  /
+ / /   / __ `/ ___/ __ \/ / /   / /_/ / /|_/ / 
+/ /___/ /_/ / /  / /_/ / / /___/ _, _/ /  / /  
+\____/\__,_/_/   \____/_/\____/_/ |_/_/  /_/   
+                                               
+┏┓      ┓┏┓┳┓┳┳┓
+┃ ┏┓┏┓┏┓┃┃ ┣┫┃┃┃
+┗┛┗┻┛ ┗┛┗┗┛┛┗┛ ┗
+                
+╔═╗┌─┐┬─┐┌─┐┬  ╔═╗╦═╗╔╦╗
+║  ├─┤├┬┘│ ││  ║  ╠╦╝║║║
+╚═╝┴ ┴┴└─└─┘┴─┘╚═╝╩╚═╩ ╩
+
+  ,ad8888ba,                                        88    ,ad8888ba,   88888888ba   88b           d88  
+ d8"'    `"8b                                       88   d8"'    `"8b  88      "8b  888b         d888  
+d8'                                                 88  d8'            88      ,8P  88`8b       d8'88  
+88             ,adPPYYba,  8b,dPPYba,   ,adPPYba,   88  88             88aaaaaa8P'  88 `8b     d8' 88  
+88             ""     `Y8  88P'   "Y8  a8"     "8a  88  88             88""""88'    88  `8b   d8'  88  
+Y8,            ,adPPPPP88  88          8b       d8  88  Y8,            88    `8b    88   `8b d8'   88  
+ Y8a.    .a8P  88,    ,88  88          "8a,   ,a8"  88   Y8a.    .a8P  88     `8b   88    `888'    88  
+  `"Y8888Y"'   `"8bbdP"Y8  88           `"YbbdP"'   88    `"Y8888Y"'   88      `8b  88     `8'     88  
+                                                                                                       
+                                                                                                      
     <h1 align="center">CarolCRM</h1>
     <br>
 </p>
@@ -15,29 +43,12 @@
 [![type-coverage](https://shepherd.dev/github/yiisoft/_____/coverage.svg)](https://shepherd.dev/github/yiisoft/_____)
 [![psalm-level](https://shepherd.dev/github/yiisoft/_____/level.svg)](https://shepherd.dev/github/yiisoft/_____)
 
-<p align="center">
-    <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://yiisoft.github.io/docs/images/yii_logo.svg" height="100px" alt="Yii">
-    </a>
-    <h1 align="center">Yii _____</h1>
-    <br>
-</p>
+**CarolCRM** é um software de Gerenciamento de Relacionamento com o Cliente (CRM) auto-hospedado, perfeito para quase todas as empresas, freelancers e diversas outras utilizações. Com seu design limpo e moderno, **CarolCRM** pode ajudar você a parecer mais profissional para seus clientes e, ao mesmo tempo, melhorar o desempenho do seu negócio.
 
-[![Latest Stable Version](https://poser.pugx.org/yiisoft/_____/v)](https://packagist.org/packages/yiisoft/_____)
-[![Total Downloads](https://poser.pugx.org/yiisoft/_____/downloads)](https://packagist.org/packages/yiisoft/_____)
-[![Build status](https://github.com/yiisoft/_____/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/yiisoft/_____/actions/workflows/build.yml?query=branch%3Amaster)
-[![Code Coverage](https://codecov.io/gh/yiisoft/_____/branch/master/graph/badge.svg)](https://codecov.io/gh/yiisoft/_____)
-[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fyiisoft%2F_____%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/yiisoft/_____/master)
-[![Static analysis](https://github.com/yiisoft/_____/actions/workflows/static.yml/badge.svg?branch=master)](https://github.com/yiisoft/_____/actions/workflows/static.yml?query=branch%3Amaster)
-[![type-coverage](https://shepherd.dev/github/yiisoft/_____/coverage.svg)](https://shepherd.dev/github/yiisoft/_____)
-[![psalm-level](https://shepherd.dev/github/yiisoft/_____/level.svg)](https://shepherd.dev/github/yiisoft/_____)
-
-O CarolCRM é um software de Gerenciamento de Relacionamento com o Cliente (CRM) auto-hospedado, perfeito para quase todas as empresas, freelancers e diversas outras utilizações. Com seu design limpo e moderno, o CarolCRM pode ajudar você a parecer mais profissional para seus clientes e, ao mesmo tempo, melhorar o desempenho do seu negócio.
-
-Gerenciar clientes é crucial, e o CarolCRM auxilia de várias maneiras:
+Gerenciar clientes é crucial, e **CarolCRM** auxilia de várias maneiras:
 
 * **Gerenciamento de Projetos:** Gerencie e fature projetos com o poderoso recurso de gerenciamento de projetos.
-* **Organização de Tarefas:** Vincule tarefas a diversas funcionalidades do CarolCRM para se manter organizado.
+* **Organização de Tarefas:** Vincule tarefas a diversas funcionalidades do **CarolCRM** para se manter organizado.
 * **Orçamentos e Faturas Profissionais:** Crie orçamentos e faturas com uma ótima aparência e profissionalismo.
 * **Sistema de Suporte Robusto:** Sistema de suporte poderoso com capacidade de importação automática de tickets.
 * **Rastreamento de Tempo:** Acompanhe o tempo gasto em tarefas e fature seus clientes. Capacidade de atribuir múltiplos membros da equipe a uma tarefa e rastrear o tempo por cada membro.
@@ -58,87 +69,133 @@ Gerenciar clientes é crucial, e o CarolCRM auxilia de várias maneiras:
 * **Calendário Integrado:** Ótimo calendário para cada membro da equipe, baseado nas permissões de cada um.
 * **Funcionalidades Adicionais:** Acompanhamentos, relatórios, notas, arquivos e muitos outros recursos.
 
-CRMs precisam focar nos clientes, e o CarolCRM faz exatamente isso com um **poderoso sistema de suporte** que ajuda você a rastrear e resolver problemas rapidamente através do sistema de tickets integrado e lembretes para clientes. Atribua lembretes a si mesmo, a um ou vários membros da equipe, e com um clique, os lembretes podem ser enviados por e-mail e no sistema de notificação interno do aplicativo. Esses recursos e muito mais podem levar a satisfação do cliente ao próximo nível.
+CRMs precisam focar nos clientes, e **CarolCRM** faz exatamente isso com um **poderoso sistema de suporte** que ajuda você a rastrear e resolver problemas rapidamente através do sistema de tickets integrado e lembretes para clientes. Atribua lembretes a si mesmo, a um ou vários membros da equipe, e com um clique, os lembretes podem ser enviados por e-mail e no sistema de notificação interno do aplicativo. Esses recursos e muito mais podem levar a satisfação do cliente ao próximo nível.
 
-O CarolCRM possui muitos recursos projetados para se adequar a diversas aplicações. Leia mais sobre os recursos abaixo e experimente a demonstração para ver como o CarolCRM pode ajudar você a ter sucesso.
+**CarolCRM** possui muitos recursos projetados para se adequar a diversas aplicações. Leia mais sobre os recursos abaixo e experimente a demonstração para ver como **CarolCRM** pode ajudar você a ter sucesso.
 
-## Requirements
-
-- PHP 8.4 or higher.
-
-## Installation
-
-The package could be installed with [Composer](https://getcomposer.org):
-
-```shell
-composer require yiisoft/_____
-```
-
-## General usage
-
-## Documentation
-
-- [Internals](docs/internals.md)
-
-If you need help or have a question, the [Yii Forum](https://forum.yiiframework.com/c/yii-3-0/63) is a good place
-for that. You may also check out other [Yii Community Resources](https://www.yiiframework.com/community).
-
-## License
-
-The Yii _____ is free software. It is released under the terms of the BSD License.
-Please see [`LICENSE`](./LICENSE.md) for more information.
-
-Maintained by [Yii Software](https://www.yiiframework.com/).
-
-## Support the project
-
-[![Open Collective](https://img.shields.io/badge/Open%20Collective-sponsor-7eadf1?logo=open%20collective&logoColor=7eadf1&labelColor=555555)](https://opencollective.com/yiisoft)
-
-## Follow updates
-
-[![Official website](https://img.shields.io/badge/Powered_by-Yii_Framework-green.svg?style=flat)](https://www.yiiframework.com/)
-[![Twitter](https://img.shields.io/badge/twitter-follow-1DA1F2?logo=twitter&logoColor=1DA1F2&labelColor=555555?style=flat)](https://twitter.com/yiiframework)
-[![Telegram](https://img.shields.io/badge/telegram-join-1DA1F2?style=flat&logo=telegram)](https://t.me/yii3en)
-[![Facebook](https://img.shields.io/badge/facebook-join-1DA1F2?style=flat&logo=facebook&logoColor=ffffff)](https://www.facebook.com/groups/yiitalk)
-[![Slack](https://img.shields.io/badge/slack-join-1DA1F2?style=flat&logo=slack)](https://yiiframework.com/go/slack)
-
-
-## Requirements
+## Requisitos
 
 - PHP 8.4 ou superior.
 
-## Installation
+## Instalação
 
-The package could be installed with [Composer](https://getcomposer.org):
+Para configurar **CarolCRM** em sua máquina, siga os passos abaixo:
 
-```shell
-composer require yiisoft/_____
-```
+1.  **Obtenha o Código-Fonte:**
+    Você tem duas opções para obter o código do projeto:
 
-## General usage
+      * **Via Git (Recomendado):** Se você tem o Git instalado, abra seu terminal ou prompt de comando e clone o repositório:
+        ```shell
+        git clone https://github.com/luizcmarin/CarolCRM.git
+        ```
+      * **Via Download Direto:** Se preferir, você pode baixar o código-fonte compactado diretamente do GitHub:
+        1.  Acesse a página do repositório no GitHub: [https://github.com/luizcmarin/CarolCRM](https://github.com/luizcmarin/CarolCRM)
+        2.  Clique no botão verde **"Code"** (Código) e depois em **"Download ZIP"** (Baixar ZIP).
+        3.  Após o download, descompacte o arquivo `.zip` em um diretório de sua escolha (ex: `C:\CarolCRM`).
 
-## Documentation
+2.  **Acesse o Diretório do Projeto:**
+    Não importa como você obteve o código, entre na pasta principal do **CarolCRM** (o diretório que contém arquivos como `composer.json` e a pasta `app`).
 
-- [Internals](docs/internals.md)
+    ```shell
+    cd CarolCRM
+    ```
 
-If you need help or have a question, the [Yii Forum](https://forum.yiiframework.com/c/yii-3-0/63) is a good place
-for that. You may also check out other [Yii Community Resources](https://www.yiiframework.com/community).
+3.  **Instale as Dependências do Composer:**
+    **CarolCRM** utiliza o [Composer](https://getcomposer.org) para gerenciar suas bibliotecas e dependências. Se você ainda não tem o Composer instalado, siga as instruções em [getcomposer.org/download](https://getcomposer.org/download/).
 
-## License
+    No diretório do projeto (`CarolCRM`), execute o comando para instalar todas as dependências:
 
-The Yii _____ is free software. It is released under the terms of the BSD License.
-Please see [`LICENSE`](./LICENSE.md) for more information.
+    ```shell
+    composer install
+    ```
 
-Maintained by [Yii Software](https://www.yiiframework.com/).
+Após esses passos, **CarolCRM** estará pronto para as configurações iniciais.
 
-## Support the project
+## Configuração Inicial
 
-[![Open Collective](https://img.shields.io/badge/Open%20Collective-sponsor-7eadf1?logo=open%20collective&logoColor=7eadf1&labelColor=555555)](https://opencollective.com/yiisoft)
+Depois de obter o código-fonte e instalar as dependências do Composer, **CarolCRM** precisa de alguns ajustes e da execução do seu instalador. Siga estes passos com calma:
 
-## Follow updates
+### 1. Ative o Spark (Servidor de Desenvolvimento CodeIgniter)
 
-[![Official website](https://img.shields.io/badge/Powered_by-Yii_Framework-green.svg?style=flat)](https://www.yiiframework.com/)
-[![Twitter](https://img.shields.io/badge/twitter-follow-1DA1F2?logo=twitter&logoColor=1DA1F2&labelColor=555555?style=flat)](https://twitter.com/yiiframework)
-[![Telegram](https://img.shields.io/badge/telegram-join-1DA1F2?style=flat&logo=telegram)](https://t.me/yii3en)
-[![Facebook](https://img.shields.io/badge/facebook-join-1DA1F2?style=flat&logo=facebook&logoColor=ffffff)](https://www.facebook.com/groups/yiitalk)
-[![Slack](https://img.shields.io/badge/slack-join-1DA1F2?style=flat&logo=slack)](https://yiiframework.com/go/slack)
+Para facilitar o desenvolvimento e a execução do instalador no seu computador, você pode usar o servidor de desenvolvimento embutido do CodeIgniter, chamado **Spark**.
+
+  * **Abra seu Terminal ou Prompt de Comando:** Navegue até a pasta principal do seu projeto **CarolCRM** (o mesmo diretório onde você executou `composer install` e onde está o arquivo `spark`).
+
+    ```shell
+    cd CarolCRM
+    ```
+
+  * **Inicie o Servidor:** Execute o seguinte comando:
+
+    ```shell
+    php spark serve
+    ```
+
+    Você verá uma mensagem no terminal indicando que o servidor foi iniciado, algo como: `CodeIgniter development server started on http://localhost:8080` (o número da porta pode variar).
+
+    **Mantenha este terminal aberto** enquanto estiver usando **CarolCRM** localmente, pois ele mantém o servidor funcionando.
+
+    **Importante:** Se você for hospedar **CarolCRM** em um servidor de internet (como um provedor de hospedagem), **não precisará usar o comando `php spark serve`**. O servidor web (Apache, Nginx, etc.) do seu provedor já fará esse trabalho de exibir o site. Nesse caso, você pularia este passo e iria direto para o próximo.
+
+### 2. Execute o Instalador do CarolCRM
+
+Agora é a hora de finalizar a instalação! **CarolCRM** tem um instalador que configurará as informações básicas no seu arquivo `.env` e criará as tabelas do banco de dados para você.
+
+  * Abra seu navegador (Chrome, Firefox, Edge, etc.).
+
+  * **Se você estiver usando o Spark (no seu computador):**
+    Na barra de endereço, digite o endereço que o comando `php spark serve` mostrou, adicionando `/install` ao final.
+
+    **Exemplo (usando a porta padrão 8080):**
+    `http://localhost:8080/install`
+
+  * **Se você estiver em um servidor de internet (hospedagem):**
+    Use o endereço do seu domínio, adicionando `/install` ao final.
+
+    **Exemplo:**
+    `https://seusite.com.br/install`
+
+  * Pressione `Enter`. Siga as instruções na tela. O instalador fará automaticamente a configuração e criará o banco de dados com todas as tabelas necessárias. Se tudo estiver correto, você verá uma mensagem informando que a instalação foi concluída com sucesso!
+
+### 3. Acessar o Sistema
+
+Depois que o instalador terminar, você pode clicar no botão "Acessar o Sistema" ou simplesmente navegar para a URL principal do seu site no seu navegador.
+
+  * **Exemplo (com Spark):** Se o seu Spark está rodando em `http://localhost:8080`, você acessará o sistema em `http://localhost:8080`.
+  * **Exemplo (em hospedagem):** Se seu site está em `https://seusite.com.br/`, você acessará o sistema em `https://seusite.com.br/`.
+ 
+Pronto! Agora **CarolCRM** deve estar funcionando. Se tiver qualquer dúvida ou encontrar algum erro, veja a documentação.
+
+## Documentação
+
+Se você precisar de ajuda ou tiver alguma pergunta, visitar o [forum de discussões](https://github.com/luizcmarin/CarolCRM/discussions) é um bom lugar para isso. Você também pode checar nossa [wiki](https://github.com/luizcmarin/CarolCRM/wiki).
+
+## Apoie o Projeto
+
+**CarolCRM** é um software livre e de código aberto, desenvolvido com paixão e mantido pela comunidade. Seu apoio é fundamental para garantir a continuidade e evolução do projeto. Veja como você pode contribuir:
+
+* **Contribuindo com Código:** Sua experiência é valiosa! Envie pull requests para corrigir bugs, implementar novos recursos ou otimizar o código existente. Consulte nossas [diretrizes de contribuição](https://github.com/luizcmarin/CONTRIBUTING.md) para mais detalhes.
+* **Melhorando a Documentação:** Ajude-nos a tornar **CarolCRM** mais acessível. Você pode aprimorar este `README.md`, criar tutoriais, exemplos de uso ou melhorar a documentação técnica.
+* **Reportando Bugs e Sugerindo Funcionalidades:** Se encontrar algum problema ou tiver uma ideia para um novo recurso, abra uma [issue em nosso repositório do GitHub](https://github.com/luizcmarin/CarolCRM/issues). Seu feedback é crucial!
+* **Divulgando o Projeto:** Compartilhe **CarolCRM** com seus colegas, amigos ou em suas redes sociais. Quanto mais pessoas conhecerem e usarem o projeto, mais forte nossa comunidade se tornará.
+
+### Apoie ainda mais o Projeto
+
+Manter um projeto de código aberto exige tempo e recursos. Se **CarolCRM** for útil para você ou sua empresa, considere apoiar financeiramente o desenvolvimento. Sua contribuição nos ajudará a cobrir custos de infraestrutura e dedicar mais tempo às melhorias.
+
+Você pode contribuir via:
+
+**PIX: 10761120998** (Chave PIX válida para transferências no Brasil.)
+
+Se você reside fora do Brasil ou prefere outras formas de doação, por favor, entre em contato através do meu perfil do GitHub ou abra uma Issue no repositório para que possamos explorar alternativas.
+
+**Agradecemos sinceramente a qualquer forma de apoio!**
+
+## Fique atualizado
+
+Consulte regularmente o site [CarolCRM](https://github.com/luizcmarin/CarolCRM) para **verificar as últimas atualizações, correções de bugs e novas funcionalidades**.
+
+## Licença
+
+**CarolCRM** é um software livre. Ele é distribuído sob os termos da GNU General Public License v3.0.
+Por favor, veja [`LICENSE`](https://github.com/luizcmarin/CarolCRM/blob/main/LICENSE) para mais informações.

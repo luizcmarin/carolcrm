@@ -1,9 +1,11 @@
+<?php
+?>
 <form action="<?= url_to('Install::index'); ?>" method="post" accept-charset="utf-8">
   <?= csrf_field(); ?>
   <input type="hidden" name="step" value="1">
   <div class="row">
     <div class="col-md-12">
-      <h4 class="fw-bold mb-0">Server Requirements</h4>
+      <h4 class="fw-bold mb-0">Requerimentos da Aplicação</h4>
       <p class="text-muted">
         Please make sure that all requirements are passed on your server.
         <br />

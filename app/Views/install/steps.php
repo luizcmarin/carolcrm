@@ -1,3 +1,5 @@
+<?php
+?>
 <nav aria-label="Progress">
   <ol role="list"
     class="d-flex flex-column flex-md-row w-100 divide-y divide-gray-200 rounded-3 border border-gray-200 mb-4 bg-white">

@@ -1,3 +1,5 @@
+<?php
+?>
 <div class="row">
   <div class="col-md-12">
     <h4 class="fw-bold mb-0">Installation Complete!</h4>

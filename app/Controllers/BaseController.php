@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Libraries\Carol;
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
@@ -21,20 +22,8 @@ use Psr\Log\LoggerInterface;
  */
 abstract class BaseController extends Controller
 {
-    /**
-     * Instance of the main Request object.
-     *
-     * @var CLIRequest|IncomingRequest
-     */
+    protected $carol;
     protected $request;
-
-    /**
-     * An array of helpers to be loaded automatically upon
-     * class instantiation. These helpers will be available
-     * to all other controllers that extend BaseController.
-     *
-     * @var list<string>
-     */
     protected $helpers = [];
 
     /**
@@ -43,13 +32,15 @@ abstract class BaseController extends Controller
      */
     // protected $session;
 
-    /**
-     * @return void
-     */
+
+
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        // Do Not Edit This Line
+        // Não edite esta linha
         parent::initController($request, $response, $logger);
+
+
+        $this->carol = service('carol');
 
         // Preload any models, libraries, etc, here.
 

@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use CodeIgniter\Controller;
 use Psr\Log\LoggerInterface;
 use App\Libraries\SqlScriptParser;
 use CodeIgniter\HTTP\RequestInterface;
@@ -320,11 +321,11 @@ class Install extends BaseController
       }
 
       // 2. Verificar se é gravável e tentar corrigir permissões (se for Unix/Linux)
-      if ($statusOk && !$this->carol->eh_gravavel($fullPath)) {
+      if ($statusOk && !$this->is_really_writable($fullPath)) {
         // Tenta aplicar as permissões. fileperms() retorna int, então 0xxx precisa ser octal.
         if (@chmod($fullPath, octdec($permissionMode))) {
           // Re-verifica se realmente se tornou gravável após o chmod
-          if (!$this->carol->eh_gravavel($fullPath)) {
+          if (!$this->is_really_writable($fullPath)) {
             $statusOk = false;
             $message = "Sem permissão de escrita após chmod " . $permissionMode . ": " . $relativePath . " - Permissões " . $permissionMode;
           }
@@ -335,7 +336,7 @@ class Install extends BaseController
       }
 
       // 3. Status final (após criação e tentativa de chmod)
-      if ($statusOk && $this->carol->eh_gravavel($fullPath)) { // Verifica uma última vez se está realmente gravável
+      if ($statusOk && $this->is_really_writable($fullPath)) { // Verifica uma última vez se está realmente gravável
         $result[$varName] = "<span class='badge bg-success'>Ok</span>";
       } else {
         $error = true;
@@ -478,8 +479,8 @@ class Install extends BaseController
       $db->query($insertSql);
 
       // 6. Atualizar o arquivo .env (base_url e timezone)
-      $this->updateDotEnv('app.baseURL', $base_url);
-      $this->updateDotEnv('app.appTimezone', $timezone);
+      $this->carol->updateDotEnv('app.baseURL', $base_url);
+      $this->carol->updateDotEnv('app.appTimezone', $timezone);
 
       // 7. Criar/Atualizar .htaccess na pasta public
       $htaccessContent = 'RewriteEngine On' . PHP_EOL .
@@ -489,7 +490,7 @@ class Install extends BaseController
         'AddDefaultCharset utf-8';
 
       $publicHtaccessPath = FCPATH . '.htaccess';
-      if ($this->carol->eh_gravavel(FCPATH)) { // Verifica se a pasta public é gravável
+      if ($this->is_really_writable(FCPATH)) { // Verifica se a pasta public é gravável
         if (!file_exists($publicHtaccessPath) || is_writable($publicHtaccessPath)) {
           file_put_contents($publicHtaccessPath, $htaccessContent);
         } else {
@@ -507,41 +508,5 @@ class Install extends BaseController
         $db->close();
       }
     }
-  }
-
-  /**
-   * Função para atualizar uma chave no arquivo .env
-   * @param string $key A chave a ser atualizada (ex: 'app.baseURL')
-   * @param string $value O novo valor
-   * @return bool True se atualizado, false caso contrário
-   */
-  protected function updateDotEnv(string $key, string $value): bool
-  {
-    $envPath = ROOTPATH . '.env'; // Assume que .env está na raiz do projeto
-    if (!file_exists($envPath) || !is_writable($envPath)) {
-      log_message('error', 'Arquivo .env não encontrado ou não gravável: ' . $envPath);
-      return false;
-    }
-
-    $contents = file_get_contents($envPath);
-    $keyParts = explode('.', $key);
-    $envKey = strtoupper(implode('.', $keyParts)); // Converte para maiúsculas e pontos
-
-    $newLine = $envKey . ' = ' . $value;
-
-    // Tenta substituir uma linha existente
-    $pattern = '/^' . preg_quote($envKey, '/') . ' = .*$/m';
-    if (preg_match($pattern, $contents)) {
-      $contents = preg_replace($pattern, $newLine, $contents);
-    } else {
-      // Adiciona a linha se não existir
-      $contents .= PHP_EOL . $newLine;
-    }
-
-    if (file_put_contents($envPath, $contents) === false) {
-      log_message('error', 'Falha ao escrever no arquivo .env: ' . $envPath);
-      return false;
-    }
-    return true;
   }
 }

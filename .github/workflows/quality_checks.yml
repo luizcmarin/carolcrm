@@ -1,0 +1,36 @@
+# .github/workflows/quality_checks.yml
+name: Análise de Qualidade de Código
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  static_analysis_and_deps_check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout do Código
+      uses: actions/checkout@v4
+
+    - name: Configurar PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.4'
+        extensions: mbstring, pdo_sqlite, intl, openssl # Adicione outras extensões PHP que seu projeto precise
+        coverage: none # Não precisamos de cobertura de código aqui
+
+    - name: Instalar Dependências do Composer
+      run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+    - name: Executar Análise Estática com Psalm
+      run: ./vendor/bin/psalm
+
+    - name: Verificar Dependências com ComposerRequireChecker
+      run: ./vendor/bin/composer-require-checker

@@ -1,3 +1,5 @@
+<?php
+?>
 <form action="<?= url_to('Install::index'); ?>" method="post" accept-charset="utf-8">
   <?= csrf_field(); ?>
   <input type="hidden" name="step" value="3">
