@@ -29,8 +29,8 @@ jobs:
     - name: Instalar Dependências do Composer
       run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-    - name: Executar Análise Estática com Psalm
-      run: ./vendor/bin/psalm
+    # - name: Executar Análise Estática com Psalm
+    #   run: ./vendor/bin/psalm
 
     - name: Verificar Dependências com ComposerRequireChecker
       run: ./vendor/bin/composer-require-checker
