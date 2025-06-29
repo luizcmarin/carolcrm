@@ -3,12 +3,12 @@
   <input type="hidden" name="step" value="4">
   <?php
   if (isset($db_credentials)) {
-    echo '<input type="hidden" name="hostname" value="' . esc($db_credentials['hostname']) . '">';
-    echo '<input type="hidden" name="username" value="' . esc($db_credentials['username']) . '">';
-    echo '<input type="hidden" name="password" value="' . esc($db_credentials['password']) . '">';
-    echo '<input type="hidden" name="database" value="' . esc($db_credentials['database']) . '">';
+      echo '<input type="hidden" name="hostname" value="' . esc($db_credentials['hostname']) . '">';
+      echo '<input type="hidden" name="username" value="' . esc($db_credentials['username']) . '">';
+      echo '<input type="hidden" name="password" value="' . esc($db_credentials['password']) . '">';
+      echo '<input type="hidden" name="database" value="' . esc($db_credentials['database']) . '">';
   }
-  ?>
+?>
   <div class="row">
     <div class="col-md-12">
       <h4 class="fw-bold mb-0">Login e Configurações do Administrador</h4>
@@ -18,7 +18,7 @@
       <hr />
       <?php if (isset($admin_error) && $admin_error === true) { ?>
         <div class="alert alert-danger" role="alert">
-          <?= isset($admin_error_msg) ? $admin_error_msg : 'Ocorreu um erro. Por favor, verifique o formulário e tente novamente.'; ?>
+          <?= $admin_error_msg ?? 'Ocorreu um erro. Por favor, verifique o formulário e tente novamente.'; ?>
         </div>
       <?php } ?>
       <div class="mb-3">
@@ -30,11 +30,12 @@
         <label for="timezone" class="form-label">Fuso Horário Padrão</label>
         <select name="timezone" id="timezone" class="form-control">
           <?php
-          $timezones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
-          foreach ($timezones as $tz) {
-            echo '<option value="' . esc($tz) . '"' . (set_select('timezone', $tz, (isset($timezone) && $timezone === $tz))) . '>' . esc($tz) . '</option>';
-          }
-          ?>
+        $timezones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
+
+foreach ($timezones as $tz) {
+    echo '<option value="' . esc($tz) . '"' . (set_select('timezone', $tz, (isset($timezone) && $timezone === $tz))) . '>' . esc($tz) . '</option>';
+}
+?>
         </select>
       </div>
       <div class="mb-3">

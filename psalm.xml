@@ -1,103 +1,21 @@
 <?xml version="1.0"?>
 <psalm
-    errorLevel="8"
+    errorLevel="7"
     resolveFromConfigFile="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="https://psalm.dev/schema/config"
-    xsi:schemaLocation="https://psalm.dev/schema/config https://psalm.dev/schema/config.xsd"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    autoloader="psalm_autoload.php"
+    cacheDirectory="build/psalm/"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="false"
 >
     <projectFiles>
-        <directory name="app" />
+        <directory name="app/" />
+        <directory name="tests/" />
         <ignoreFiles>
-            <directory name="docs" />
-            <directory name="public" />
-            <directory name="tests" />
             <directory name="vendor" />
-            <directory name="writable" />
+            <directory name="app/Views" />
         </ignoreFiles>
     </projectFiles>
-
-    <globals>
-        <namedConstant name="APPPATH" />
-        <namedConstant name="WRITEPATH" />
-        <namedConstant name="ROOTPATH" />
-        <namedConstant name="FCPATH" />
-        <namedConstant name="SYSTEMPATH" />
-        <namedConstant name="ENVIRONMENT" />
-        <namedConstant name="CI_DEBUG" />
-        <namedConstant name="CAROL_DB" /> </globals>
-
-    <stubs>
-        <file name="vendor/codeigniter4/framework/system/Common.php" />
-        <file name="vendor/codeigniter4/framework/system/Debug/Toolbar/Collectors/Routes.php" />
-        </stubs>
-
-    <issueHandlers>
-        <UnusedClass>
-            <errorLevel>info</errorLevel>
-            <file name="app/Config/App.php" />
-            <file name="app/Config/Autoload.php" />
-            <file name="app/Config/CURLRequest.php" />
-            <file name="app/Config/Cache.php" />
-            <file name="app/Config/ContentSecurityPolicy.php" />
-            <file name="app/Config/Cookie.php" />
-            <file name="app/Config/Cors.php" />
-            <file name="app/Config/Database.php" />
-            <file name="app/Config/DocTypes.php" />
-            <file name="app/Config/Email.php" />
-            <file name="app/Config/Encryption.php" />
-            <file name="app/Config/Exceptions.php" />
-            <file name="app/Config/Feature.php" />
-            <file name="app/Config/Filters.php" />
-            <file name="app/Config/ForeignCharacters.php" />
-            <file name="app/Config/Format.php" />
-            <file name="app/Config/Generators.php" />
-            <file name="app/Config/Honeypot.php" />
-            <file name="app/Config/Images.php" />
-            <file name="app/Config/Kint.php" />
-            <file name="app/Config/Logger.php" />
-            <file name="app/Config/Migrations.php" />
-            <file name="app/Config/Mimes.php" />
-            <file name="app/Config/Modules.php" />
-            <file name="app/Config/Optimize.php" />
-            <file name="app/Config/Pager.php" />
-            <file name="app/Config/Paths.php" />
-            <file name="app/Config/Publisher.php" />
-            <file name="app/Config/Routes.php" />
-            <file name="app/Config/Routing.php" />
-            <file name="app/Config/Security.php" />
-            <file name="app/Config/Services.php" />
-            <file name="app/Config/Session.php" />
-            <file name="app/Config/Toolbar.php" />
-            <file name="app/Config/UserAgents.php" />
-            <file name="app/Config/Validation.php" />
-            <file name="app/Config/View.php" />
-            <file name="app/Controllers/BaseController.php" />
-            <file name="app/Controllers/Home.php" />
-            <file name="app/Controllers/Install.php" />
-        </UnusedClass>
-        <PossiblyUnusedProperty>
-            <errorLevel>info</errorLevel>
-            <file name="app/Config/Database.php" />
-            <file name="app/Config/Encryption.php" />
-            <file name="app/Config/Modules.php" />
-        </PossiblyUnusedProperty>
-        <PossiblyUnusedMethod>
-             <errorLevel>info</errorLevel>
-             <file name="app/Config/Database.php" />
-             <file name="app/Libraries/Carol.php" />
-        </PossiblyUnusedMethod>
-        <UndefinedDocblockClass>
-             <errorLevel>info</errorLevel>
-             <file name="app/Config/Kint.php" />
-             <file name="app/Config/View.php" />
-        </UndefinedDocblockClass>
-        <UndefinedGlobalVariable>
-            <errorLevel>info</errorLevel>
-            <directory name="app/Views/errors" />
-        </UndefinedGlobalVariable>
-        <MissingOverrideAttribute>
-            <errorLevel>info</errorLevel>
-        </MissingOverrideAttribute>
-        </issueHandlers>
-    </psalm>
+</psalm>
