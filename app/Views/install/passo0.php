@@ -28,10 +28,10 @@
             <?= $this->include('install/passos'); ?>
           <?php } ?>
           <?php
-          if (isset($page) && !empty($page)) {
-            echo $this->include('install/' . $page);
+          if (isset($page) && ! empty($page)) {
+              echo $this->include('install/' . $page);
           }
-          ?>
+  ?>
         </div>
       </div>
     </div>

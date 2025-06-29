@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use App\Libraries\Carol;
 use CodeIgniter\Config\BaseService;
 
 /**
@@ -25,6 +26,6 @@ class Services extends BaseService
             return static::getSharedInstance('carol');
         }
 
-        return new \App\Libraries\Carol();
+        return new Carol();
     }
 }

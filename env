@@ -1,0 +1,44 @@
+#--------------------------------------------------------------------
+# **Arquivo de Configuração de Ambiente**
+#--------------------------------------------------------------------
+#  Instrui o PHP CS Fixer a ignorar as verificações de versão do PHP.
+PHP_CS_FIXER_IGNORE_ENV = 1
+
+#--------------------------------------------------------------------
+# ENVIRONMENT
+#--------------------------------------------------------------------
+CI_ENVIRONMENT = development
+
+#--------------------------------------------------------------------
+# APP
+#--------------------------------------------------------------------
+app.baseURL = 'http://localhost:8080/'
+# app.forceGlobalSecureRequests = false
+# app.CSPEnabled = false
+
+#--------------------------------------------------------------------
+# DATABASE
+#--------------------------------------------------------------------
+# Para SQLite:
+database.default.hostname =
+database.default.database = WRITEPATH . 'database/carolcrm.db'
+database.default.username =
+database.default.password =
+database.default.DBDriver = SQLite3
+database.default.foreignKeys = true
+
+#--------------------------------------------------------------------
+# ENCRYPTION
+#--------------------------------------------------------------------
+encryption.key = hex2bin:a43922e019ace85e27f938a89366a02b41530d0789fab942e53013a72acf0605
+
+#--------------------------------------------------------------------
+# SESSION
+#--------------------------------------------------------------------
+# session.driver = 'CodeIgniter\Session\Handlers\FileHandler'
+# session.savePath = null
+
+#--------------------------------------------------------------------
+# LOGGER
+#--------------------------------------------------------------------
+# logger.threshold = 4

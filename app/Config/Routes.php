@@ -10,29 +10,29 @@ use CodeIgniter\Router\RouteCollection;
 // Se não existir, significa que a aplicação AINDA NÃO ESTÁ instalada,
 // então permitimos o acesso à rota de instalação e bloqueamos o resto.
 if (! file_exists(CAROL_DB)) {
-  // Redireciona todas as requisições (exceto assets) para o instalador
-  $routes->get('/', 'Install::index'); // Sua rota principal do instalador
-  $routes->get('install', 'Install::index');
-  $routes->post('/install', 'Install::index'); // Para lidar com submissões de formulário
+    // Redireciona todas as requisições (exceto assets) para o instalador
+    $routes->get('/', 'Install::index'); // Sua rota principal do instalador
+    $routes->get('install', 'Install::index');
+    $routes->post('/install', 'Install::index'); // Para lidar com submissões de formulário
 
-  // Bloqueia todas as outras rotas da aplicação para evitar acesso antes da instalação
-  $routes->addPlaceholder('segment', '([a-zA-Z0-9_-]+)'); // Adiciona placeholder para reuso
+    // Bloqueia todas as outras rotas da aplicação para evitar acesso antes da instalação
+    $routes->addPlaceholder('segment', '([a-zA-Z0-9_-]+)'); // Adiciona placeholder para reuso
 
-  $routes->group('/', function ($routes) {
-    $routes->setDefaultController('Install'); // Garante que qualquer rota não definida vá para o instalador
-    $routes->addRedirect('/', 'Install::index'); // Redireciona a raiz
-    $routes->addRedirect('{segment}', 'Install::index'); // Redireciona qualquer segmento
-    $routes->addRedirect('{segment}/{segment}', 'Install::index'); // Redireciona múltiplos segmentos
-  });
+    $routes->group('/', static function ($routes) {
+        $routes->setDefaultController('Install'); // Garante que qualquer rota não definida vá para o instalador
+        $routes->addRedirect('/', 'Install::index'); // Redireciona a raiz
+        $routes->addRedirect('{segment}', 'Install::index'); // Redireciona qualquer segmento
+        $routes->addRedirect('{segment}/{segment}', 'Install::index'); // Redireciona múltiplos segmentos
+    });
 } else {
-  // Se o banco de dados EXISTE, a aplicação está instalada.
-  // Define as rotas normais da aplicação e bloqueia as rotas de instalação.
+    // Se o banco de dados EXISTE, a aplicação está instalada.
+    // Define as rotas normais da aplicação e bloqueia as rotas de instalação.
 
-  // Isso garante que a rota '/install' seja anulada ou redirecionada
-  $routes->get('install', function () {
-    return redirect()->to(base_url()); // Redireciona para a raiz do site
-  });
+    // Isso garante que a rota '/install' seja anulada ou redirecionada
+    $routes->get('install', static function () {
+        return redirect()->to(base_url()); // Redireciona para a raiz do site
+    });
 
-  // ... Defina suas rotas normais aqui ...
-  $routes->get('/', 'Home::index');
+    // ... Defina suas rotas normais aqui ...
+    $routes->get('/', 'Home::index');
 }

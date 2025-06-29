@@ -23,10 +23,7 @@ class Autoload extends AutoloadConfig
     public $psr4 = [
         APP_NAMESPACE => APPPATH,
     ];
-
     public $classmap = [];
-
-    public $files = [];
-
-    public $helpers = [];
+    public $files    = [];
+    public $helpers  = [];
 }
