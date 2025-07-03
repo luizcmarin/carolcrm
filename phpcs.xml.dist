@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<ruleset name="CarolCRM_Standards">
+    <description>Padrões de codificação para o projeto CarolCRM.</description>
+
+    <rule ref="PSR12"/>
+
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <exclude-pattern>writable/*</exclude-pattern>
+    <exclude-pattern>public/*</exclude-pattern>
+    <exclude-pattern>tests/_support/*</exclude-pattern>
+    <exclude-pattern>docs/*</exclude-pattern>
+    <exclude-pattern>uploads/*</exclude-pattern>
+
+    <file>app</file>
+    <file>tests</file>
+
+</ruleset>

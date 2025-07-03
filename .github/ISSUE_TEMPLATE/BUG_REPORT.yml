@@ -1,0 +1,84 @@
+name: 🐞 Reportar um problema
+description: Informe-nos sobre um problema na estrutura
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > 🚨 Se você encontrou um **PROBLEMA RELACIONADO À SEGURANÇA** com o CarolCRM, use o [email](mailto:luizcmarin@gmail.com) para nos reportar quaisquer problemas de segurança que você tenha encontrado. ***AVISO!*** NÃO utilize o rastreador de problemas ou discuta em fóruns públicos, pois isso causará mais dano do que ajuda.
+  - type: textarea
+    id: id-expected
+    attributes:
+      label: Qual é o resultado esperado?
+      placeholder: |
+        Descreva o que você esperava que acontecesse.
+        Por favor, inclua também motivação e contexto relevantes.
+    validations:
+      required: true
+  - type: textarea
+    id: id-actual
+    attributes:
+      label: Qual é o resultado real?
+      placeholder: |
+        Descreva o resultado real que você obteve.
+        Escreva em detalhes tudo o que nos dê mais contexto sobre o problema que você está enfrentando!
+    validations:
+      required: true
+  - type: textarea
+    id: id-steps
+    attributes:
+      label: "Passos para reprodução"
+      description: |
+        Por favor, insira os passos explícitos para reproduzir o problema.
+        O caso deve ser mínimo e focado no problema específico que você está enfrentando. Esta é a melhor maneira de garantir que este problema seja triado rapidamente.
+      value: |
+        1. Vá para '...'
+        2. Clique em '....'
+        3. Role para baixo até '....'
+        4. Veja o erro
+    validations:
+      required: false
+  - type: textarea
+    id: id-screenshot-logs
+    attributes:
+      label: "Capturas de tela / Logs"
+      description: |
+        Se aplicável, você pode anexar imagens ou arquivos de log clicando nesta área para destacá-la e, em seguida, arrastando os arquivos,
+        ou copiar e colar qualquer saída de log relevante.
+        :warning: _Lembre-se de ocultar ou remover qualquer informação sensível!_
+    validations:
+      required: false
+  - type: input
+    id: phpversion
+    attributes:
+      label: Versão do PHP
+      description: Qual versão do PHP você está usando?
+      placeholder: Digite a versão do PHP que você está usando
+    validations:
+      required: false
+  - type: dropdown
+    id: osversion
+    attributes:
+      label: "Sistema Operacional"
+      description: Qual sistema operacional você está usando?
+      multiple: true
+      options:
+        - Windows
+        - Linux
+        - Mac
+      default: 1
+    validations:
+      required: false
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: "Navegadores"
+      description: Em quais navegadores você está vendo o problema?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - - Safari
+        - Microsoft Edge
+        - Opera
+    validations:
+      required: false
