@@ -37,30 +37,16 @@ if (! file_exists(CAROL_DB)) {
   $routes->get('/', 'Dashboard::index');
   $routes->get('/dashboard', 'Dashboard::index');
 
-  // Rotas para Grupos de Usuários (sem o prefixo 'admin' no grupo de rotas e sem namespace específico)
-  $routes->get('gruposusuarios', 'GruposUsuarios::index');
-  $routes->get('gruposusuarios/incluir', 'GruposUsuarios::incluir');
-  $routes->post('gruposusuarios/criar', 'GruposUsuarios::criar'); // Nova rota para POST de criação
-  $routes->get('gruposusuarios/ver/(:num)', 'GruposUsuarios::ver/$1'); // Nova rota para visualizar
-  $routes->get('gruposusuarios/editar/(:num)', 'GruposUsuarios::editar/$1');
-  $routes->post('gruposusuarios/atualizar/(:num)', 'GruposUsuarios::atualizar/$1'); // Nova rota para POST de atualização
-  $routes->post('gruposusuarios/excluir/(:num)', 'GruposUsuarios::excluir/$1');
 
 
-  // Rotas para Usuários
   $routes->group('usuarios', function ($routes) {
-    $routes->get('/', 'Usuarios::index'); // Lista (index.php)
-    $routes->get('new', 'Usuarios::new'); // Formulário de inclusão (incluir.php)
-    $routes->post('create', 'Usuarios::create'); // Salva novo
-    $routes->get('edit/(:num)', 'Usuarios::edit/$1'); // Formulário de edição (editar.php)
-    $routes->put('update/(:num)', 'Usuarios::update/$1'); // Atualiza existente
-    $routes->get('show/(:num)', 'Usuarios::show/$1'); // Detalhes (ver.php) - Nova rota
-    $routes->delete('delete/(:num)', 'Usuarios::delete/$1'); // Exclui
-    $routes->post('excluirGrupoAjax/(:num)', 'Usuarios::excluirGrupoAjax/$1'); // Nova rota para exclusão
-
-    // Rotas para os Modais de Grupo (AJAX) - Sem alterações
-    $routes->get('buscarGrupoModal', 'Usuarios::buscarGrupoModal');
-    $routes->post('salvarNovoGrupoAjax', 'Usuarios::salvarNovoGrupoAjax');
+    $routes->get('/', 'Usuarios::index');
+    $routes->get('new', 'Usuarios::new');
+    $routes->post('create', 'Usuarios::create');
+    $routes->get('edit/(:num)', 'Usuarios::edit/$1');
+    $routes->put('update/(:num)', 'Usuarios::update/$1');
+    $routes->get('show/(:num)', 'Usuarios::show/$1');
+    $routes->delete('delete/(:num)', 'Usuarios::delete/$1');
   });
 } 
 

@@ -27,7 +27,7 @@ class Database extends Config
     public array $default = [
         'database'    => WRITEPATH . 'database/carolcrm.db',
         'DBDriver'    => 'SQLite3',
-        'DBPrefix'    => 'tbl_',
+        'DBPrefix'    => '',
         'DBDebug'     => true,
         'swapPre'     => '',
         'failover'    => [],

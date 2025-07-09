@@ -22,7 +22,7 @@
               </form>
             </div>
             <div class="col-md-auto">
-                <a href="<?= base_url('usuarios/new') ?>" class="btn btn-primary shadow-sm">
+                <a href="<?= base_url('permissaousuarios/new') ?>" class="btn btn-primary shadow-sm">
                     <i class="bi bi-plus-lg text-white-50"></i> Novo
                 </a>
             </div>
@@ -51,41 +51,29 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Grupo Usuario Id</th>
-                                    <th>Nome</th>
-                                    <th>Status</th>
-                                    <th>Mensagem Status</th>
-                                    <th>Ativo</th>
-                                    <th>Ultimo Acesso</th>
+                            <th>Usuario Id</th>
+                                    <th>Permissao</th>
                                     <th>Criado Em</th>
                                     <th>Atualizado Em</th>
                                     <th>Deletado Em</th>
-                                    <th>Expira Em</th>
-                                    <th>Senha</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody class="table-group-divider">
-                        <?php if (!empty($usuarios)): ?>
-                            <?php foreach ($usuarios as $usuarios): ?>
+                        <?php if (!empty($permissaousuarios)): ?>
+                            <?php foreach ($permissaousuarios as $permissaousuarios): ?>
                                 <tr>
-                                    <td><?= $usuarios->grupo_usuario_id ?></td>
-                                    <td><?= $usuarios->nome ?></td>
-                                    <td><?= $usuarios->status ?></td>
-                                    <td><?= $usuarios->mensagem_status ?></td>
-                                    <td><?= $usuarios->ativo ?></td>
-                                    <td><?= $usuarios->ultimo_acesso ?></td>
-                                    <td><?= $usuarios->criado_em ?></td>
-                                    <td><?= $usuarios->atualizado_em ?></td>
-                                    <td><?= $usuarios->deletado_em ?></td>
-                                    <td><?= $usuarios->expira_em ?></td>
-                                    <td><?= $usuarios->senha ?></td>
+                                    <td><?= $permissaousuarios->usuario_id ?></td>
+                                    <td><?= $permissaousuarios->permissao ?></td>
+                                    <td><?= $permissaousuarios->criado_em ?></td>
+                                    <td><?= $permissaousuarios->atualizado_em ?></td>
+                                    <td><?= $permissaousuarios->deletado_em ?></td>
                                     <td>
-                                        <a href="<?= base_url('usuarios/show/' . $usuarios->id) ?>" class="btn btn-info btn-sm" title="Detalhes">
+                                        <a href="<?= base_url('permissaousuarios/show/' . $permissaousuarios->id) ?>" class="btn btn-info btn-sm" title="Detalhes">
                                             <i class="bi bi-eye"></i> </a>
-                                        <a href="<?= base_url('usuarios/edit/' . $usuarios->id) ?>" class="btn btn-warning btn-sm" title="Editar">
+                                        <a href="<?= base_url('permissaousuarios/edit/' . $permissaousuarios->id) ?>" class="btn btn-warning btn-sm" title="Editar">
                                             <i class="bi bi-pencil"></i> </a>
-                                        <form action="<?= base_url('usuarios/delete/' . $usuarios->id) ?>" method="POST" class="d-inline form-delete">
+                                        <form action="<?= base_url('permissaousuarios/delete/' . $permissaousuarios->id) ?>" method="POST" class="d-inline form-delete">
                                             <?= csrf_field() ?>
                                             <input type="hidden" name="_method" value="DELETE">
                                             <button type="submit" class="btn btn-danger btn-sm" title="Excluir">

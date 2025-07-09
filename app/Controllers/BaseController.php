@@ -2,12 +2,13 @@
 
 namespace App\Controllers;
 
+use Config\Services;
 use CodeIgniter\Controller;
+use Psr\Log\LoggerInterface;
 use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class BaseController
@@ -21,10 +22,9 @@ use Psr\Log\LoggerInterface;
  */
 abstract class BaseController extends Controller
 {
+    protected $Carol;
     protected $request;
-    protected $helpers = [];
-    protected $carol;
-
+    protected $helpers = ['form', 'url', 'html', 'pager'];
     /**
      * Be sure to declare properties for any property fetch you initialized.
      * The creation of dynamic property is deprecated in PHP 8.2.
@@ -39,7 +39,7 @@ abstract class BaseController extends Controller
         // Do Not Edit This Line
         parent::initController($request, $response, $logger);
 
-        $this->carol = service('carol');
+        $this->Carol = Services::Carol();
 
         // Preload any models, libraries, etc, here.
 

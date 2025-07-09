@@ -282,3 +282,35 @@ body.sidebar-collapsed {
     z-index: 1050;
   }
 }
+
+.choices[data-type*=select-one] .choices__inner {
+  padding-bottom: 13px !important;
+}
+
+.choices__inner {
+  padding: 22px 7.5px 3.75px !important;
+}
+
+.choices__list--dropdown,
+.choices__list[aria-expanded] {
+  z-index: 999 !important;
+}
+
+.choices-label {
+  transform: scale(.85) translateY(-.5rem) translateX(.15rem);
+}
+
+.form-floating .copy-button-textarea {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 2;
+  padding: .25rem .5rem;
+  border-radius: .2rem;
+  opacity: 0.7;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.form-floating .copy-button-textarea:hover {
+  opacity: 1;
+}
