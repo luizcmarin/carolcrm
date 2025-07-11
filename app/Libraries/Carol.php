@@ -80,22 +80,6 @@ class Carol
     }
 
     /**
-     * Preenche os campos de auditoria.
-     */
-    public function preencheCamposAuditoria($id_usuario, $attributes)
-    {
-        if ($id_usuario === null) {
-            // Se criado_em não está definido, é um novo registro
-            if (!isset($this->attributes['criado_em']) || $attributes['criado_em'] === null) {
-                $attributes['criado_em'] = $this->gerarStringAuditoria();
-            }
-        } else {
-            // Atualizado_em sempre é preenchido ao salvar (ou no construtor para nova entidade)
-            $attributes['atualizado_em'] = $this->gerarStringAuditoria();
-        }
-    }
-
-    /**
      * Formata um valor numérico para o padrão monetário brasileiro (R$ X.XXX,XX).
      *
      * @param float|int|string|null $value O valor numérico a ser formatado.
@@ -190,5 +174,175 @@ class Carol
         // Ou se o ID dele está em uma lista de super-admins
         // return $this->usuarioModel->find($userId)->role === 'admin';
         return false; // Por padrão, nenhum super admin, implemente sua lógica
+    }
+
+
+
+
+
+    /**
+     * Verifica a validade de um número de CPF.
+     *
+     * @param string $cpf O número de CPF a ser verificado.
+     * @return bool True se o CPF for válido, False caso contrário.
+     */
+    public function verificarCpf(string $cpf): bool
+    {
+        // Remove caracteres não numéricos
+        $cpf = preg_replace('/[^0-9]/', '', $cpf);
+
+        // Verifica se o CPF tem 11 dígitos
+        if (strlen($cpf) != 11) {
+            return false;
+        }
+
+        // Verifica se todos os dígitos são iguais (ex: 111.111.111-11 é inválido)
+        if (preg_match('/(\d)\1{10}/', $cpf)) {
+            return false;
+        }
+
+        // Cálculo do primeiro dígito verificador
+        $soma = 0;
+        for ($i = 0; $i < 9; $i++) {
+            $soma += (int)$cpf[$i] * (10 - $i);
+        }
+        $digito1 = 11 - ($soma % 11);
+        if ($digito1 > 9) {
+            $digito1 = 0;
+        }
+
+        // Verifica o primeiro dígito
+        if ((int)$cpf[9] !== $digito1) {
+            return false;
+        }
+
+        // Cálculo do segundo dígito verificador
+        $soma = 0;
+        for ($i = 0; $i < 10; $i++) {
+            $soma += (int)$cpf[$i] * (11 - $i);
+        }
+        $digito2 = 11 - ($soma % 11);
+        if ($digito2 > 9) {
+            $digito2 = 0;
+        }
+
+        // Verifica o segundo dígito
+        if ((int)$cpf[10] !== $digito2) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Verifica a validade de um número de CNPJ.
+     *
+     * @param string $cnpj O número de CNPJ a ser verificado.
+     * @return bool True se o CNPJ for válido, False caso contrário.
+     */
+    public function verificarCnpj(string $cnpj): bool
+    {
+        // Remove caracteres não numéricos
+        $cnpj = preg_replace('/[^0-9]/', '', $cnpj);
+
+        // Verifica se o CNPJ tem 14 dígitos
+        if (strlen($cnpj) != 14) {
+            return false;
+        }
+
+        // Verifica se todos os dígitos são iguais (ex: 11.111.111/0001-11 é inválido)
+        if (preg_match('/(\d)\1{13}/', $cnpj)) {
+            return false;
+        }
+
+        // Pesos para o cálculo dos dígitos verificadores
+        $pesos1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+        $pesos2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+
+        // Cálculo do primeiro dígito verificador
+        $soma = 0;
+        for ($i = 0; $i < 12; $i++) {
+            $soma += (int)$cnpj[$i] * $pesos1[$i];
+        }
+        $digito1 = 11 - ($soma % 11);
+        if ($digito1 > 9) {
+            $digito1 = 0;
+        }
+
+        // Verifica o primeiro dígito
+        if ((int)$cnpj[12] !== $digito1) {
+            return false;
+        }
+
+        // Cálculo do segundo dígito verificador
+        $soma = 0;
+        for ($i = 0; $i < 13; $i++) {
+            $soma += (int)$cnpj[$i] * $pesos2[$i];
+        }
+        $digito2 = 11 - ($soma % 11);
+        if ($digito2 > 9) {
+            $digito2 = 0;
+        }
+
+        // Verifica o segundo dígito
+        if ((int)$cnpj[13] !== $digito2) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Verifica a validade de um número de CNH (Carteira Nacional de Habilitação).
+     *
+     * @param string $cnh O número de CNH a ser verificado.
+     * @return bool True se a CNH for válida, False caso contrário.
+     */
+    public function verificarCnh(string $cnh): bool
+    {
+        // Remove caracteres não numéricos
+        $cnh = preg_replace('/[^0-9]/', '', $cnh);
+
+        // Uma CNH válida no Brasil geralmente tem 11 dígitos.
+        if (strlen($cnh) != 11) {
+            return false;
+        }
+
+        // Implementação simplificada: A validação completa da CNH envolve
+        // um algoritmo mais complexo de dígitos verificadores e pode variar
+        // entre os estados. Esta é uma verificação básica de formato.
+        // Para uma validação robusta, seria necessário consultar as regras
+        // específicas do DENATRAN ou órgãos de trânsito.
+
+        return true;
+    }
+
+    /**
+     * Verifica a validade de um número de CIN (Carteira de Identidade Nacional).
+     *
+     * @param string $cin O número de CIN a ser verificado.
+     * @return bool True se a CIN for válida, False caso contrário.
+     */
+    public function verificarCin(string $cin): bool
+    {
+        // A CIN utiliza o número do CPF como base.
+        // Portanto, a validação da CIN pode envolver a validação do CPF
+        // e outras verificações específicas do formato da CIN (se houver).
+
+        // Remove caracteres não numéricos
+        $cin = preg_replace('/[^0-9]/', '', $cin);
+
+        // A CIN atualmente usa o CPF como número de identificação único.
+        // Portanto, uma validação inicial pode ser a validação do CPF.
+        if (!$this->verificarCpf($cin)) {
+            return false;
+        }
+
+        // Em uma implementação real, poderiam ser adicionadas verificações
+        // de formato específico da CIN (se houver dígitos verificadores adicionais
+        // ou outras regras de formação).
+        // Por enquanto, a validação do CPF é o principal critério.
+
+        return true;
     }
 }
