@@ -14,6 +14,216 @@ const IGNORED_TABLES = ['migrations', 'sqlite_sequence'];
 
 // --- FUNÇÕES DE UTILIDADE GERAIS ---
 
+
+/**
+ * Pluraliza uma palavra em português (simplificado, sem acentuação).
+ * Esta função tenta cobrir as regras mais comuns de pluralização em português,
+ * adaptadas para palavras sem acentuação.
+ *
+ * IMPORTANTE: Esta função PRESERVA underscores em nomes compostos (ex: 'usuario_grupo' -> 'usuarios_grupos').
+ *
+ * @param string $word A palavra a ser pluralizada (espera-se que esteja no singular e sem acentuação).
+ * @return string A palavra pluralizada (sem acentuação, com underscores preservados).
+ */
+function pluralize(string $word): string
+{
+  $word = strtolower($word); // Trabalha com a palavra em minúsculas
+
+  // Exceções e palavras invariáveis (sem acentuação)
+  // Underscores são preservados aqui também.
+  $invariaveis = [
+    'lapis',
+    'onibus',
+    'torax',
+    'virus',
+    'atlas',
+    'pires',
+    'cais',
+    'oculos',
+    // Adicione outras palavras invariáveis se necessário
+  ];
+  if (in_array($word, $invariaveis)) {
+    return $word;
+  }
+
+  // Regras de pluralização mais comuns para o português (sem acentuação)
+  // Underscores são automaticamente preservados por operações de substr e str_ends_with.
+
+  // 1. Termina em 'ao' -> 'oes' (ex: acao -> acoes, coracao -> coracoes)
+  if (str_ends_with($word, 'ao')) {
+    return substr($word, 0, -2) . 'oes';
+  }
+
+  // 2. Termina em 'al', 'el', 'ol', 'ul'
+  if (str_ends_with($word, 'al')) {
+    return substr($word, 0, -2) . 'ais';
+  } // animal -> animais
+  if (str_ends_with($word, 'el')) {
+    return substr($word, 0, -2) . 'eis';
+  } // papel -> papeis
+  if (str_ends_with($word, 'ol')) {
+    return substr($word, 0, -2) . 'ois';
+  } // farol -> farois
+  if (str_ends_with($word, 'ul')) {
+    return substr($word, 0, -2) . 'uis';
+  } // azul -> azuis
+
+  // 3. Termina em 'il'
+  if (str_ends_with($word, 'il')) {
+    // Simplificação: para evitar regras de oxítona/paroxítona, padronizamos.
+    // Priorizando 'is' aqui (ex: funil -> funis).
+    return substr($word, 0, -2) . 'is';
+  }
+
+  // 4. Termina em 'm' -> 'ns'
+  if (str_ends_with($word, 'm')) {
+    return substr($word, 0, -1) . 'ns'; // Ex: homem -> homens, album -> albuns
+  }
+
+  // 5. Termina em 'r' ou 'z' -> 'es'
+  if (str_ends_with($word, 'r') || str_ends_with($word, 'z')) {
+    return $word . 'es'; // Ex: flor -> flores, luz -> luzes
+  }
+
+  // 6. Termina em 's'
+  if (str_ends_with($word, 's')) {
+    // **CORREÇÃO APLICADA AQUI:**
+    // Verifica se a palavra já está em uma forma plural comum para evitar re-pluralização.
+    if (
+      str_ends_with($word, 'es') || str_ends_with($word, 'ais') || str_ends_with($word, 'eis') ||
+      str_ends_with($word, 'ois') || str_ends_with($word, 'uis') || str_ends_with($word, 'ns') ||
+      str_ends_with($word, 'oes') || str_ends_with($word, 'aos') || str_ends_with($word, 'aes')
+    ) {
+      return $word; // Já plural, retorna como está.
+    }
+    // Lida com casos singulares específicos que terminam em 's' e precisam de pluralização.
+    if ($word === 'pais') { // Caso singular específico
+      return 'paises';
+    }
+    // Para outras palavras que terminam em 's' e não se encaixam nas regras acima,
+    // assume que são invariáveis ou já plurais.
+    return $word;
+  }
+
+  // 7. Termina em Vogal: Adiciona 's'
+  $last_char = substr($word, -1);
+  if (in_array($last_char, ['a', 'e', 'i', 'o', 'u'])) {
+    return $word . 's'; // Ex: casa -> casas, carro -> carros
+  }
+
+  // Caso padrão para outras consoantes, adiciona 's' (mais comum para nomes de tabelas sem acentuação)
+  return $word . 's';
+}
+
+/**
+ * Singulariza uma palavra em português (simplificado, sem acentuação).
+ * Esta função tenta cobrir as regras mais comuns de singularização em português,
+ * adaptadas para palavras sem acentuação.
+ *
+ * IMPORTANTE: Esta função PRESERVA underscores em nomes compostos (ex: 'usuarios_grupos' -> 'usuario_grupo').
+ *
+ * @param string $word A palavra a ser singularizada (espera-se que esteja no plural e sem acentuação).
+ * @return string A palavra singularizada (sem acentuação, com underscores preservados).
+ */
+function singularize(string $word): string
+{
+  $word = strtolower($word); // Trabalha com a palavra em minúsculas
+
+  // EXCEÇÃO ESPECÍFICA PARA 'PAISES' - Prioridade máxima
+  // Esta regra garante que 'paises' sempre será singularizado para 'pais'.
+  if ($word === 'paises') {
+    return 'pais';
+  }
+
+  // Exceções e palavras invariáveis (sem acentuação)
+  // Underscores são preservados aqui também.
+  $invariaveis_plural = [
+    'lapis',
+    'onibus',
+    'torax',
+    'virus',
+    'atlas',
+    'pires',
+    'cais',
+    'oculos',
+    // Adicione outras palavras invariáveis se necessário
+  ];
+  if (in_array($word, $invariaveis_plural)) {
+    return $word;
+  }
+
+  // Regras de singularização (inversas do plural, sem acentuação)
+  // Underscores são automaticamente preservados por operações de substr e str_ends_with.
+
+  // 1. Termina em 'oes' -> 'ao' (inclui 'acoes' -> 'acao', 'coracoes' -> 'coracao')
+  if (str_ends_with($word, 'oes')) {
+    return substr($word, 0, -3) . 'ao';
+  }
+  // 2. Termina em 'aes' -> 'ao' (ex: caes -> cao)
+  if (str_ends_with($word, 'aes')) {
+    return substr($word, 0, -3) . 'ao';
+  }
+  // 3. Termina em 'aos' -> 'ao' (ex: maos -> mao)
+  if (str_ends_with($word, 'aos')) {
+    return substr($word, 0, -3) . 'ao';
+  }
+
+  // 4. Termina em 'ais', 'eis', 'ois', 'uis' -> remove 'is' e adiciona 'l'
+  if (str_ends_with($word, 'ais')) {
+    return substr($word, 0, -3) . 'al';
+  } // animais -> animal
+  if (str_ends_with($word, 'eis')) {
+    return substr($word, 0, -3) . 'el';
+  } // papeis -> papel
+  if (str_ends_with($word, 'ois')) {
+    return substr($word, 0, -3) . 'ol';
+  } // farois -> farol
+  if (str_ends_with($word, 'uis')) {
+    return substr($word, 0, -3) . 'ul';
+  } // azuis -> azul
+
+  // 5. Termina em 'ises' (para casos como "paises" -> "pais")
+  // Esta regra original deveria funcionar, mas a exceção acima garante.
+  if (str_ends_with($word, 'ises')) {
+    return substr($word, 0, -3) . 'is';
+  }
+
+  // 6. Termina em 'is' (de 'il' oxítona, ou invariável)
+  if (str_ends_with($word, 'is')) {
+    // Se não for um dos casos 'ais', 'eis', 'ois', 'uis', 'ises' já tratados,
+    // e se o penúltimo caractere não for uma vogal (para evitar "onibus", "lapis" que são invariáveis),
+    // assume que veio de 'il' (oxítona).
+    if (strlen($word) > 2 && !in_array(substr($word, -2, 1), ['a', 'e', 'i', 'o', 'u'])) {
+      return substr($word, 0, -2) . 'il'; // Ex: funis -> funil
+    }
+    return $word; // Invariável (ex: lapis, onibus)
+  }
+
+  // 7. Termina em 'ns' -> 'm'
+  if (str_ends_with($word, 'ns')) {
+    return substr($word, 0, -2) . 'm'; // Ex: homens -> homem
+  }
+
+  // 8. Termina em 'es' (de 'r' ou 'z', ou outras consoantes)
+  if (str_ends_with($word, 'es')) {
+    $stem = substr($word, 0, -2);
+    // Verifica se a palavra antes de 'es' terminava em 'r' ou 'z'
+    if (str_ends_with($stem, 'r') || str_ends_with($stem, 'z')) {
+      return $stem; // Ex: flores -> flor, luzes -> luz
+    }
+    // Para outros casos que terminam em 'es' (ex: cidades -> cidade, paredes -> parede)
+    return substr($word, 0, -1); // Remove apenas o 's'
+  }
+
+  // 9. Termina em 's' (e a singular terminava em vogal)
+  if (str_ends_with($word, 's')) {
+    return substr($word, 0, -1); // Ex: carros -> carro, casas -> casa
+  }
+
+  return $word; // Retorna a palavra original se nenhuma regra se aplicar
+}
+
+
 /**
  * Converte uma string de snake_case para PascalCase.
  * Ex: 'nome_do_campo' -> 'NomeDoCampo'
@@ -32,168 +242,6 @@ function pascal_to_snake_case(string $pascal_case_string): string
   return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $pascal_case_string));
 }
 
-/**
- * Pluraliza uma palavra em português (simplificado).
- * Esta função tenta cobrir as regras mais comuns de pluralização em português.
- * Para uma pluralização 100% precisa, considere usar uma biblioteca de processamento de linguagem natural.
- *
- * @param string $word A palavra a ser pluralizada (espera-se que esteja no singular).
- * @return string A palavra pluralizada.
- */
-function pluralize(string $word): string
-{
-  return $word;   // tabelas já estão no plural.
-
-
-  $word = strtolower($word); // Trabalha com a palavra em minúsculas
-  $last_char = substr($word, -1);
-  $second_last_char = substr($word, -2, 1);
-
-  // Regras mais comuns para o português
-  // 1. Termina em Vogal: Adiciona 's'
-  if (in_array($last_char, ['a', 'e', 'i', 'o', 'u'])) {
-    return $word . 's';
-  }
-
-  // 2. Termina em 'r' ou 'z': Adiciona 'es'
-  if (in_array($last_char, ['r', 'z'])) {
-    return $word . 'es';
-  }
-
-  // 3. Termina em 's' (e não é oxítona): Mantém
-  // Ex: ônibus, lápis. (Mas se for 'país', vira 'países' - complexo!)
-  // Para simplificar, se já termina em 's', assume-se que é invariável ou já plural.
-  if ($last_char === 's' && !in_array(substr($word, -2), ['ês', 'is', 'os', 'us'])) { // Evita palavras como "país" ou "flor"
-    // Se a palavra já termina em 's' e não é uma exceção de 's' para 'ses', mantém como está.
-    // Ex: "lápis", "ônibus".
-    return $word;
-  }
-  // Caso de 's' no final que precisa de 'es' (ex: país -> países)
-  if (str_ends_with($word, 'ês') || str_ends_with($word, 'is') || str_ends_with($word, 'us')) {
-    // Assume que estas são singulares e precisam de 'es'
-    // Ex: país -> países, lápis -> lápises (apesar de lápis ser invariável), ônibus -> ônibus (já invariável)
-    // Isso é uma simplificação.
-  }
-
-
-  // 4. Termina em 'ão':
-  // - 'ão' -> 'ões' (ex: ação -> ações)
-  // - 'ão' -> 'ãos' (ex: mão -> mãos) - Menos comum para nomes de entidades.
-  // - 'ão' -> 'ães' (ex: pão -> pães)
-  // Para simplificar, priorizamos 'ões' para nomes de entidades.
-  if (str_ends_with($word, 'ão')) {
-    return substr($word, 0, -2) . 'ões';
-  }
-
-  // 5. Termina em 'l':
-  // - 'al', 'el', 'ol', 'ul' -> 'is' (ex: animal -> animais)
-  // - 'il'
-  //   - Oxítonas: 'il' -> 'is' (ex: funil -> funis)
-  //   - Paroxítonas: 'il' -> 'eis' (ex: fóssil -> fósseis)
-  // Para simplificar, assumimos o caso mais comum 'is' para a maioria.
-  if (str_ends_with($word, 'al') || str_ends_with($word, 'el') || str_ends_with($word, 'ol') || str_ends_with($word, 'ul')) {
-    return substr($word, 0, -1) . 'is';
-  }
-  if (str_ends_with($word, 'il')) {
-    // Simplificado: para evitar regras de oxítona/paroxítona, podemos padronizar.
-    // Se a maioria de seus nomes de tabela com 'il' forem oxítonas, 'is' é bom.
-    // Se forem paroxítonas, 'eis' é melhor.
-    return substr($word, 0, -2) . 'is'; // Ex: funil -> funis. Pode não ser ideal para fóssil -> fósseis
-  }
-
-  // 6. Termina em 'm': 'm' -> 'ns' (ex: homem -> homens)
-  if ($last_char === 'm') {
-    return substr($word, 0, -1) . 'ns';
-  }
-
-  // 7. Termina em 'x': Invariável (ex: tórax, ônix)
-  if ($last_char === 'x') {
-    return $word;
-  }
-
-  // Caso padrão para outras consoantes, adiciona 'es'
-  return $word . 'es';
-}
-
-/**
- * Singulariza uma palavra em português (simplificado).
- * Esta função tenta cobrir as regras mais comuns de singularização em português.
- * É o inverso de pluralize, mas também com limitações para casos complexos.
- *
- * @param string $word A palavra a ser singularizada (espera-se que esteja no plural).
- * @return string A palavra singularizada.
- */
-function singularize(string $word): string
-{
-  $word = strtolower($word); // Trabalha com a palavra em minúsculas
-
-  // Regras de singularização (inversas do plural)
-  // 1. Termina em 'ões': 'ões' -> 'ão'
-  if (str_ends_with($word, 'ões')) {
-    return substr($word, 0, -3) . 'ão';
-  }
-  // 2. Termina em 'ães': 'ães' -> 'ão'
-  if (str_ends_with($word, 'ães')) {
-    return substr($word, 0, -3) . 'ão';
-  }
-  // 3. Termina em 'is' (quando a singular termina em 'al', 'el', 'ol', 'ul', 'il' oxítona)
-  if (str_ends_with($word, 'ais')) {
-    return substr($word, 0, -3) . 'al';
-  }
-  if (str_ends_with($word, 'eis')) { // Pode ser de 'el' ou 'il' paroxítona
-    // Para 'eis' pode ser 'el' ou 'il'. Prioriza 'el'.
-    // Ex: papéis -> papel, fósseis -> fóssil
-    if (strlen($word) > 3 && in_array(substr($word, -4, 1), ['s', 'f', 'v'])) { // Tentativa de diferenciar fósseis/mísseis
-      return substr($word, 0, -3) . 'il'; // Mísseis -> míssil
-    }
-    return substr($word, 0, -3) . 'el'; // Papéis -> papel
-  }
-  if (str_ends_with($word, 'ois')) {
-    return substr($word, 0, -3) . 'ol';
-  }
-  if (str_ends_with($word, 'uis')) {
-    return substr($word, 0, -3) . 'ul';
-  }
-  if (str_ends_with($word, 'is') && !str_ends_with($word, 'ais') && !str_ends_with($word, 'eis') && !str_ends_with($word, 'ois') && !str_ends_with($word, 'uis')) {
-    // Se termina em 'is' mas não é de 'al/el/ol/ul', pode ser de 'il' ou já invariável
-    // Para simplificar, assume 'il' se não for um 'is' de vogal + 's'
-    if (substr($word, -3, 1) !== 's' && strlen($word) > 2) { // Evita pegar palavras como 'lápis' que são invariáveis
-      return substr($word, 0, -2) . 'il'; // Funis -> funil
-    }
-  }
-
-
-  // 4. Termina em 'ns': 'ns' -> 'm'
-  if (str_ends_with($word, 'ns')) {
-    return substr($word, 0, -2) . 'm';
-  }
-
-  // 5. Termina em 'es' (se a singular terminar em 'r' ou 'z')
-  if (str_ends_with($word, 'es')) {
-    $singular_attempt = substr($word, 0, -2);
-    // Tenta inferir se a singular era 'r' ou 'z'
-    if (str_ends_with($singular_attempt, 'r') || str_ends_with($singular_attempt, 'z')) {
-      return $singular_attempt;
-    }
-    // Casos como "paredes" -> "parede" (se não for "r" ou "z")
-    // Aqui está a complexidade, pois "aulas" -> "aula" (só remove 's')
-    // Vamos testar se o penúltimo é uma vogal para casos como "cidades" -> "cidade"
-    $second_last_plural = substr($word, -2, 1);
-    if ($second_last_plural === 'e' && in_array(substr($word, -3, 1), ['d', 't', 'p'])) { // Ex: cidades, paredes
-      return substr($word, 0, -1); // Remove só o 's'
-    }
-  }
-
-  // 6. Termina em 's' (e a singular terminava em vogal)
-  if (str_ends_with($word, 's')) {
-    // Considera que se terminou em vogal no singular, apenas remove o 's'
-    // Ex: 'carros' -> 'carro', 'casas' -> 'casa'
-    return substr($word, 0, -1);
-  }
-
-  // Se nenhuma regra se aplicar (palavra já era singular ou exceção)
-  return $word;
-}
 
 /**
  * Analisa os argumentos da linha de comando.
@@ -355,7 +403,7 @@ function generate_migration_content(string $entity_name_pascal, string $table_na
     $add_keys_string .= "        \$this->forge->addForeignKey('{$from_field}', '{$to_table}', '{$to_field}'{$on_delete}{$on_update});\n";
   }
 
-  // Adiciona created_at, updated_at e deleted_at
+  // Adiciona created_at, updated_at 
   $timestamps = "";
   if (!in_array('created_at', array_column($columns, 'name'))) {
     $timestamps .= "        \$this->forge->addField([
@@ -365,11 +413,6 @@ function generate_migration_content(string $entity_name_pascal, string $table_na
   if (!in_array('updated_at', array_column($columns, 'name'))) {
     $timestamps .= "        \$this->forge->addField([
             'updated_at' => ['type' => 'DATETIME', 'null' => true],
-        ]);\n";
-  }
-  if (!in_array('deleted_at', array_column($columns, 'name'))) {
-    $timestamps .= "        \$this->forge->addField([
-            'deleted_at' => ['type' => 'DATETIME', 'null' => true],
         ]);\n";
   }
 
@@ -422,10 +465,31 @@ function generate_model_content(string $entity_name_pascal, string $table_name, 
   $validationRules = [];
   $globalValidationMessagesContent = ''; // Conteúdo para o $validationMessages do Model
 
+  // Mensagens padrão para as regras de validação
+  $common_messages = [
+    'required'          => 'O campo {field} é obrigatório.',
+    'cpf'               => 'O campo {field} é inválido.',
+    'senha'             => 'O campo {field} é inválido.',
+    'integer'           => 'O campo {field} deve ser um número inteiro.',
+    'numeric'           => 'O campo {field} deve ser um valor numérico.',
+    'valid_date'        => 'O campo {field} deve conter uma data/hora válida.',
+    'max_length'        => 'O campo {field} deve ter no máximo {param} caracteres.',
+    'valid_email'       => 'O campo {field} deve conter um endereço de e-mail válido.',
+    'valid_url'         => 'O campo {field} deve conter uma URL válida.',
+    'min_length'        => 'O campo {field} deve ter no mínimo {param} caracteres.',
+    'is_unique'         => 'O valor informado para o campo {field} já está em uso.',
+    'in_list'           => 'O campo {field} deve ser um dos valores permitidos: {param}.',
+    'is_natural_no_zero' => 'O campo {field} deve ser um número natural maior que zero.',
+    'permit_empty'      => 'O campo {field} não é obrigatório.', // Mensagem para permit_empty (apenas para documentação)
+    'valid_date_format_date' => 'O campo {field} deve ser uma data válida no formato YYYY-MM-DD.',
+    'valid_date_format_time' => 'O campo {field} deve ser uma hora válida no formato HH:MM:SS.',
+    'valid_date_format_datetime' => 'O campo {field} deve ser uma data e hora válidas no formato YYYY-MM-DD HH:MM:SS.',
+  ];
+
   // --- 1. Popula allowedFields e define regras de validação para cada coluna ---
   foreach ($columns as $column) {
     // Ignora a chave primária e campos de timestamp automáticos
-    if ($column['name'] === $primaryKey || in_array(strtolower($column['name']), ['created_at', 'updated_at', 'deleted_at', 'criado_em', 'atualizado_em', 'deletado_em'])) {
+    if ($column['name'] === $primaryKey) {
       continue;
     }
 
@@ -433,6 +497,7 @@ function generate_model_content(string $entity_name_pascal, string $table_name, 
     $allowedFields[] = "'{$column['name']}'";
 
     $rules = []; // Array temporário para coletar as regras da coluna atual
+    $field_errors = [];
     $column_name_display = ucwords(str_replace('_', ' ', $column['name'])); // Prepara o label
     $column_type = strtolower($column['type']); // Converte para minúsculas
 
@@ -440,6 +505,7 @@ function generate_model_content(string $entity_name_pascal, string $table_name, 
     // Se a coluna é NOT NULL no DB e não tem valor padrão (obrigatória para inserção)
     if ((bool)$column['notnull'] === true && $column['default'] === null) {
       $rules[] = 'required';
+      $field_errors['required'] = $common_messages['required'];
     } else {
       // Se pode ser nulo OU tem um valor padrão no DB, permite que seja vazio no formulário.
       // Para campos que são strings e permit_empty, muitas vezes também queremos max_length
@@ -449,57 +515,68 @@ function generate_model_content(string $entity_name_pascal, string $table_name, 
     // --- Regras de Tipo de Dados e Formato ---
     if (str_contains($column_type, 'int')) {
       $rules[] = 'integer';
-      // Exemplo: 'is_natural_no_zero' para FKs, se aplicável e você puder detectar uma FK
-      // if (str_contains($column['name'], '_id')) { $rules[] = 'is_natural_no_zero'; }
+      $field_errors['integer'] = $common_messages['integer'];
     } elseif (str_contains($column_type, 'real') || str_contains($column_type, 'float') || str_contains($column_type, 'doub') || str_contains($column_type, 'decimal') || str_contains($column_type, 'numeric')) {
       $rules[] = 'numeric';
+      $field_errors['numeric'] = $common_messages['numeric'];
     } elseif (str_contains($column_type, 'date')) { // Apenas data (YYYY-MM-DD)
       $rules[] = 'valid_date[Y-m-d]';
+      $field_errors['valid_date'] = $common_messages['valid_date_format_date']; // Mensagem específica para data
     } elseif (str_contains($column_type, 'time')) { // Apenas hora (HH:MM:SS)
       $rules[] = 'valid_date[H:i:s]';
+      $field_errors['valid_date'] = $common_messages['valid_date_format_time']; // Mensagem específica para hora
     } elseif (str_contains($column_type, 'datetime') || str_contains($column_type, 'timestamp')) { // Data e hora
       $rules[] = 'valid_date[Y-m-d H:i:s]';
+      $field_errors['valid_date'] = $common_messages['valid_date_format_datetime']; // Mensagem específica para data e hora
     } elseif (str_contains($column_type, 'char') || str_contains($column_type, 'varchar')) {
       // Adiciona max_length para VARCHAR. Assume 255 se não detectado (comum em SQLite).
       if (isset($column['max_length']) && $column['max_length'] > 0) {
         $rules[] = 'max_length[' . $column['max_length'] . ']';
+        $field_errors['max_length'] = str_replace('{param}', $column['max_length'], $common_messages['max_length']);
       } else {
-        $rules[] = 'max_length[255]';
+        $defaultMaxLength = 255; // Define o valor padrão para a regra e para a mensagem
+        $rules[] = 'max_length[' . $defaultMaxLength . ']';
+        $field_errors['max_length'] = str_replace('{param}', $defaultMaxLength, $common_messages['max_length']);
       }
     } elseif (str_contains($column_type, 'text')) {
       // Para TEXT, considere adicionar um max_length se quiser um limite lógico no formulário.
       // $rules[] = 'max_length[5000]';
-    } elseif ($column['name'] === 'ativo' && !str_contains($column_type, 'int')) {
-      $rules[] = 'in_list[Sim,Não]';
+    } elseif (str_contains($column['name'], 'sn_')) {
+      $rules[] = 'in_list';
+      $field_errors['in_list'] = $common_messages['in_list'];
     }
 
     // --- Regras Específicas Baseadas no Nome da Coluna (heurísticas) ---
     if (str_contains($column['name'], 'email')) {
       $rules[] = 'valid_email';
-      // Exemplo de is_unique, ajuste o nome da tabela conforme necessário
-      // $rules[] = "is_unique[{$table_name}.{$column['name']}]";
+      $field_errors['valid_email'] = $common_messages['valid_email'];
     }
     if (str_contains($column['name'], 'url')) {
       $rules[] = 'valid_url';
+      $field_errors['valid_url'] = $common_messages['valid_url'];
     }
     if (str_contains($column['name'], 'cpf') || str_contains($column['name'], 'cnpj')) {
       // Placeholder para regras personalizadas de CPF/CNPJ
       // $rules[] = 'valida_cpf_cnpj';
+      $field_errors['cpf'] = $common_messages['cpf'];
     }
     if (str_contains($column['name'], 'senha') || str_contains($column['name'], 'password')) {
       $rules[] = 'min_length[8]'; // Mínimo para senhas
-      // $rules[] = 'regex_match[/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/]'; // Senha forte
+      // $rules[] = 'regex_match[/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/]';
+      $field_errors['senha'] = $common_messages['senha']; // Senha forte
     }
 
     // Constrói a string final de regras (ex: "required|integer|max_length[255]")
     $rule_string = implode('|', $rules);
+    $field_errorsss = implode('|', $field_errors);
 
     // Se houver regras, adiciona ao array de validação
     if (!empty($rule_string)) {
       $validationRules[] = <<<RULE
              '{$column['name']}' => [
                  'label' => '{$column_name_display}',
-                 'rules' => '{$rule_string}',
+                 'rules' => '{$rule_string}',    
+                 'errors' => '{$field_errorsss}',
              ],
  RULE;
     }
@@ -508,28 +585,6 @@ function generate_model_content(string $entity_name_pascal, string $table_name, 
   $allowedFieldsString = implode(', ', $allowedFields);
   $validationRulesString = implode("\n", $validationRules);
 
-  // --- 4. Prepara o conteúdo do $validationMessages (mensagens globais) ---
-  // Remove a mensagem de 'permit_empty' se for o caso, pois ela é contraintuitiva.
-  $common_messages = [
-    'required'        => 'O campo {field} é obrigatório.',
-    'integer'         => 'O campo {field} deve ser um número inteiro.',
-    'numeric'         => 'O campo {field} deve ser um valor numérico.',
-    'valid_date'      => 'O campo {field} deve conter uma data/hora válida.',
-    'max_length'      => 'O campo {field} deve ter no máximo {param} caracteres.',
-    'valid_email'     => 'O campo {field} deve conter um endereço de e-mail válido.',
-    'valid_url'       => 'O campo {field} deve conter uma URL válida.',
-    'min_length'      => 'O campo {field} deve ter no mínimo {param} caracteres.',
-    'is_unique'       => 'O valor informado para o campo {field} já está em uso.',
-    'in_list'         => 'O campo {field} deve ser um dos valores permitidos: {param}.',
-  ];
-
-  foreach ($common_messages as $rule => $message) {
-    $globalValidationMessagesContent .= <<<MSG
-         '{$rule}' => [
-             '{$rule}' => '{$message}',
-         ],\n
- MSG;
-  }
 
   $modelContent = <<<PHP
  <?php
@@ -537,39 +592,41 @@ function generate_model_content(string $entity_name_pascal, string $table_name, 
  namespace App\Models;
  
  use CodeIgniter\Model;
+ use App\Models\Traits\AuditoriaTrait;
  
  class {$entity_name_pascal}Model extends Model
  {
+     use AuditoriaTrait;
+
      protected \$table           = '{$table_name}';
      protected \$primaryKey      = '{$primaryKey}';
      protected \$useAutoIncrement = true;
      protected \$returnType      = 'App\\Entities\\{$entity_name_pascalx}';
-     protected \$useSoftDeletes  = true;
+     protected \$useSoftDeletes  = false;
      protected \$protectFields   = true;
      protected \$allowedFields   = [{$allowedFieldsString}];
  
      // Dates
      protected \$useTimestamps = true;
      protected \$dateFormat    = 'datetime';
-     protected \$createdField  = 'criado_em';
-     protected \$updatedField  = 'atualizado_em';
-     protected \$deletedField  = 'deletado_em'; 
+     protected \$createdField  = 'created_at'; 
+     protected \$updatedField  = 'updated_at';
+     protected \$deletedField  = ''; 
  
      // Validation
      protected \$validationRules = [
  {$validationRulesString}
      ];
      protected \$validationMessages  = [
- {$globalValidationMessagesContent}
      ];
      protected \$skipValidation      = false;
      protected \$cleanValidationRules = true;
  
      // Callbacks
      protected \$allowCallbacks = true;
-     protected \$beforeInsert   = [];
+     protected \$beforeInsert = ['setAuditoriaCriacao'];
      protected \$afterInsert    = [];
-     protected \$beforeUpdate   = [];
+     protected \$beforeUpdate = ['setAuditoriaEdicao'];
      protected \$afterUpdate    = [];
      protected \$beforeFind     = [];
      protected \$afterFind      = [];
@@ -577,18 +634,123 @@ function generate_model_content(string $entity_name_pascal, string $table_name, 
      protected \$afterDelete    = [];
 
      
-     // Retorna todos os registros
-     public function getTodos()
-     {
-       return \$this->select('{$table_name}.*');
-     }
+    /**
+     * Busca um único registro no banco de dados com base em condições.
+     *
+     * @param array \$conditions Um array associativo de condições (coluna => valor).
+     * Ex: ['id' => 1], ['email' => 'teste@email.com'], ['nome' => 'Marin', 'sn_ativo' => 'Sim']
+     * @return object|null Retorna o objeto da Entidade (se encontrado) ou null (se não encontrado).
+     */
+    public function getOne(array \$conditions = []): ?object
+    { 
+        if (empty(\$conditions)) {
+            return null;
+        }
 
-      // Busca um único registro
-     public function getUnico(\$id)
-     {
-       return \$this->select('{$table_name}.*')
-         ->find(\$id);
-     }
+        return \$this->where(\$conditions)->first();
+    }
+
+    /**
+     * Busca o valor de um campo específico de um único registro no banco de dados com base em condições.
+     *
+     * @param string \$fieldName O nome do campo cujo valor você deseja retornar.
+     * @param array \$conditions Um array associativo de condições (coluna => valor).
+     * Ex: ['id' => 1], ['email' => 'teste@email.com'], ['chave' => 'nome_da_configuracao']
+     * @return mixed|null Retorna o valor do campo (se encontrado) ou null (se não encontrado ou campo não existir).
+     */
+    public function getCampo(string \$fieldName, array \$conditions = [])
+    {
+        if (empty(\$conditions) || empty(\$fieldName)) {
+            return null;
+        }
+
+        // Seleciona apenas o campo desejado para otimizar a consulta
+        \$result = \$this->select(\$fieldName)
+                       ->where(\$conditions)
+                       ->first();
+
+        // Verifica se um resultado foi encontrado e se o campo existe nele
+        if (\$result && property_exists(\$result, \$fieldName)) {
+            return \$result->\$fieldName;
+        }
+
+        return null; // Retorna null se o registro não for encontrado ou o campo não existir
+    }
+
+    /**
+     * Busca múltiplos registros no banco de dados com base em condições, limite e offset.
+     *
+     * @param array \$conditions Um array associativo de condições (coluna => valor).
+     * @param int \$limit O número máximo de registros a retornar (0 para sem limite).
+     * @param int \$offset O offset inicial para a busca (útil para paginação).
+     * @return array Retorna um array de objetos de Entidade (se encontrados) ou um array vazio.
+     */
+    public function getMany(array \$conditions = [], int \$limit = 0, int \$offset = 0): array
+    {
+        \$query = \$this->where(\$conditions);
+
+        if (\$limit > 0) {
+            \$query->limit(\$limit,\$offset);
+        }
+
+        return \$query->findAll();
+    }
+
+    /**
+     * Conta o número de registros no banco de dados com base em condições.
+     *
+     * @param array \$conditions Um array associativo de condições (coluna => valor).
+     * @return int Retorna o número total de registros que correspondem às condições.
+     */
+    public function countRecords(array \$conditions = []): int
+    {
+        return \$this->where(\$conditions)->countAllResults();
+    }
+
+    /**
+     * Verifica se um ou mais registros existem com base em condições fornecidas.
+     *
+     * @param array \$conditions Um array associativo de condições (coluna => valor).
+     * @return bool Retorna true se pelo menos um registro for encontrado, false caso contrário.
+     */
+    public function exists(array \$conditions = []): bool
+    {
+        if (empty(\$conditions)) {
+            return false; // Não faz sentido verificar existência sem condições
+        }
+        // Usa select('1') para otimizar, pois só precisamos saber se há algum resultado, não os dados.
+        return \$this->where(\$conditions)->select('1')->limit(1)->countAllResults() > 0;
+    }
+
+    /**
+     * Retorna um array de opções para dropdowns (chave => valor) com base em campos e condições.
+     *
+     * @param string \$valueField O nome do campo que será o 'valor' (ex: 'id').
+     * @param string \$labelField O nome do campo que será o 'rótulo' visível (ex: 'nome').
+     * @param array \$conditions Um array associativo de condições para filtrar os resultados.
+     * @param string \$orderBy O campo para ordenar os resultados.
+     * @param string \$orderDirection A direção da ordenação ('ASC' ou 'DESC').
+     * @return array Um array associativo (valueField => labelField) para uso em dropdowns.
+     */
+    public function getDropdown(string \$valueField, string \$labelField, array \$conditions = [], string \$orderBy = '', string \$orderDirection = 'ASC'): array
+    {
+        \$query = \$this->select("{\$valueField}, {\$labelField}")
+                       ->where(\$conditions);
+
+        if (!empty(\$orderBy)) {
+            \$query->orderBy(\$orderBy, \$orderDirection);
+        } else {
+            // Ordena pelo labelField por padrão se nenhum orderBy for fornecido
+            \$query->orderBy(\$labelField, \$orderDirection);
+        }
+
+        \$results = \$query->findAll();
+        \$options = [];
+        foreach (\$results as \$row) {
+            \$options[\$row->\$valueField] = \$row->\$labelField;
+        }
+        return \$options;
+    }
   }
  PHP;
 
@@ -606,6 +768,7 @@ function generate_controller_content(string $entity_name_pascal, string $table_n
 {
   $entity_name_singular_lower = strtolower($entity_name_pascal);
   $entity_name_plural_lower = strtolower(pluralize($entity_name_pascal));
+  $entity_name_plural_upper = strtoupper(pluralize($entity_name_pascal));
 
   $entity_name_pascalx = snake_to_pascal_case(singularize($table_name));
 
@@ -615,29 +778,54 @@ function generate_controller_content(string $entity_name_pascal, string $table_n
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\LogAtividadesModel;
 use App\Models\\{$entity_name_pascal}Model;
 use App\Entities\\{$entity_name_pascalx};
+use CodeIgniter\HTTP\ResponseInterface;
 
 class {$entity_name_pascal} extends BaseController
 {
-    protected \${$entity_name_singular_lower}Model;
+    protected \$titulo; 
+    protected \$logAtividadesModel;
+    protected \$model;   
+    protected \$searchableFields = [
+        'nome',
+    ];
 
     public function __construct()
     {
-        \$this->{$entity_name_singular_lower}Model = new {$entity_name_pascal}Model();
+        \$this->titulo = 'Tabela->{$entity_name_pascal}';
+        \$this->model = new {$entity_name_pascal}Model();
+        \$this->logAtividadesModel = new LogAtividadesModel();
     }
 
     /**
-     * Exibe a lista de todos os {$entity_name_plural_lower}.
+     * Exibe a lista de todos os registros.
      *
-     * @return string
+     * @return string|ResponseInterface
      */
-    public function index(): string
+    public function index(): string|ResponseInterface
     { 
-      \$perPage = 10; // Número de itens por página
+      if (!\$this->Carol->pode('{$entity_name_plural_upper}.INDEX')) {
+        return redirect()->to(site_url())->with('error', 'Acesso negado.');
+      }
 
-      \${$entity_name_plural_lower} = \$this->{$entity_name_plural_lower}Model->paginate(\$perPage);
-      \$pager = \$this->{$entity_name_plural_lower}Model->pager;
+        \$search = \$this->request->getVar('search');
+
+        \$query = \$this->model;
+
+        if (!empty(\$search)) {
+            \$query->groupStart();
+            foreach (\$this->searchableFields as \$field) {
+                \$query->orLike(\$field, \$search);
+            }
+            \$query->groupEnd();
+        }
+
+      \$perPage = 10;
+
+      \$registros = \$query->paginate(\$perPage);
+      \$pager = \$this->model->pager;
 
       \$currentPage = \$pager->getCurrentPage();
       \$totalRecords = \$pager->getTotal();
@@ -646,9 +834,10 @@ class {$entity_name_pascal} extends BaseController
       \$lastItem = min(\$currentPage * \$perPage, \$totalRecords);
 
       \$data = [
-          'titulo' => 'Lista de {$entity_name_plural_lower}',
-          '{$entity_name_plural_lower}' => \${$entity_name_plural_lower},
-          'pager'  => \$pager,
+          'titulo'       => \$this->titulo,
+          'registros'    => \$registros,
+          'search'       => \$search,
+          'pager'        => \$pager,
           'firstItem'    => \$firstItem,
           'lastItem'     => \$lastItem,
           'totalRecords' => \$totalRecords,
@@ -658,221 +847,238 @@ class {$entity_name_pascal} extends BaseController
     }
 
     /**
-     * Exibe o formulário para criar um novo {$entity_name_singular_lower}.
+     * Exibe o formulário para criação.
      *
-     * @return string
+     * @return string|ResponseInterface
      */
-    public function new(): string
+    public function new(): string|ResponseInterface
     {
+      if (!\$this->Carol->pode('{$entity_name_plural_upper}.NOVO')) {
+        return redirect()->to(site_url())->with('error', 'Acesso negado.');
+      }
+
         \$data = [
-            'titulo' => 'Novo',
+            'titulo' => 'Tabela->{$entity_name_pascal}',
         ];
+
+        // carrega dados relacionados
+        // \$data['tabela_options'] = \$this->tabelaModel->getDropdown('id', 'nome', [], 'nome', 'ASC');
+
         return view('{$entity_name_plural_lower}/new', \$data);
     }
 
     /**
-     * Salva um novo {$entity_name_singular_lower} no banco de dados.
+     * Salva um novo registro.
      *
-     * @return \CodeIgniter\HTTP\RedirectResponse
+     * @return string|ResponseInterface
      */
-    public function create(): \CodeIgniter\HTTP\RedirectResponse
+    public function create(): string|ResponseInterface
     {
+      if (!\$this->Carol->pode('{$entity_name_plural_upper}.NOVO')) {
+        return redirect()->to(site_url())->with('error', 'Acesso negado.');
+      }
+
         \$postData = \$this->request->getPost();
 
-        \${$entity_name_singular_lower} = new {$entity_name_pascalx}();
-        \${$entity_name_singular_lower}->fill(\$postData);
+        \$registro = new {$entity_name_pascalx}();
+        \$registro->fill(\$postData);
 
-        if (\$this->{$entity_name_singular_lower}Model->save(\${$entity_name_singular_lower})) {
+        if (\$this->model->save(\$registro)) {
+            \$this->logAtividadesModel->addLog('{$entity_name_pascal}: novo registro [' . \$registro->id . ' - ' . \$registro->nome . ']');
             return redirect()->to('/{$entity_name_plural_lower}')->with('success', 'Registro criado com sucesso!');
         } else {
-            return redirect()->back()->withInput()->with('errors', \$this->{$entity_name_singular_lower}Model->errors());
+            return redirect()->back()->withInput()->with('errors', \$this->model->errors());
         }
     }
 
     /**
-     * Exibe os detalhes de um {$entity_name_singular_lower} específico.
+     * Exibe o formulário para edição.
      *
-     * @param int \$id O ID do {$entity_name_singular_lower}.
-     * @return string|\CodeIgniter\HTTP\RedirectResponse
+     * @param int \$id O ID do registro.
+     * @return string|ResponseInterface
      */
-    public function show(int \$id)
+    public function edit(int \$id): string|ResponseInterface
     {
-        \${$entity_name_singular_lower} = \$this->{$entity_name_singular_lower}Model->find(\$id); // Usar find para consistência
+      if (!\$this->Carol->pode('{$entity_name_plural_upper}.EDITAR')) {
+        return redirect()->to(site_url())->with('error', 'Acesso negado.');
+      }
 
-        if (!\${$entity_name_singular_lower}) {
-            return redirect()->to('/{$entity_name_plural_lower}')->with('error', '{$entity_name_singular_lower} não encontrado.');
+        \$registros = \$this->model->find(\$id);
+
+        if (!\$registros) {
+            return redirect()->to('/{$entity_name_plural_lower}')->with('error', 'Registro não encontrado.');
+        }
+
+        \$data = [
+            'titulo' => \$this->titulo,
+            'registros' => \$registros,
+        ];
+        
+        // carrega dados relacionados
+        // \$data['tabela_options'] = \$this->tabelaModel->getDropdown('id', 'nome', [], 'nome', 'ASC');
+
+        return view('{$entity_name_plural_lower}/edit', \$data);
+    }
+
+    /**
+     * Atualiza um registro existente no banco de dados.
+     *
+     * @param int \$id O ID do registro.
+     * @return string|ResponseInterface
+     */
+    public function update(int \$id): string|ResponseInterface
+    {
+      if (!\$this->Carol->pode('{$entity_name_plural_upper}.EDITAR')) {
+        return redirect()->to(site_url())->with('error', 'Acesso negado.');
+      }
+
+        \$registros = \$this->model->find(\$id);
+        if (!\$registros) {
+            return redirect()->to('/{$entity_name_plural_lower}')->with('error', 'Registro não encontrado.');
+        }
+
+        \$postData = \$this->request->getPost();
+
+        // Lógica para campos 'sn_'
+        if (!isset(\$postData['sn_ativo'])) {
+          \$postData['sn_ativo'] = 'Não';
+        }
+
+        \$registros->fill(\$postData);
+
+        if (\$this->model->save(\$registros)) {
+            \$this->logAtividadesModel->addLog('{$entity_name_pascal}: registro atualizado [' . \$id . '-' . \$registro->nome . ']');
+            return redirect()->to('/{$entity_name_plural_lower}')->with('success', 'Registro atualizado com sucesso!');
+        } else {
+            return redirect()->back()->withInput()->with('errors', \$this->model->errors());
+        }
+    }
+
+    /**
+     * Exibe os detalhes de um registro específico.
+     *
+     * @param int \$id O ID do registro.
+     * @return string|ResponseInterface
+     */
+    public function show(int \$id): string|ResponseInterface
+    {
+      if (!\$this->Carol->pode('{$entity_name_plural_upper}.VER')) {
+        return redirect()->to(site_url())->with('error', 'Acesso negado.');
+      }
+
+        \$registros = \$this->model->find(\$id);
+
+        if (!\$registros) {
+            return redirect()->to('/{$entity_name_plural_lower}')->with('error', 'Registro não encontrado.');
         }
     
         \$data = [
-            'titulo' => 'Detalhes',
-            '{$entity_name_singular_lower}' => \${$entity_name_singular_lower},
+            'titulo' => \$this->titulo,
+            'registros' => \$registros,
         ];
         return view('{$entity_name_plural_lower}/show', \$data);
     }
 
     /**
-     * Exibe o formulário para editar um {$entity_name_singular_lower} existente.
+     * Exclui um registro do banco de dados.
      *
-     * @param int \$id O ID do {$entity_name_singular_lower}.
-     * @return string|\CodeIgniter\HTTP\RedirectResponse
+     * @param int \$id O ID do registro.
+     * @return string|ResponseInterface
      */
-    public function edit(int \$id)
+    public function delete(int \$id): string|ResponseInterface
     {
-        \${$entity_name_singular_lower} = \$this->{$entity_name_singular_lower}Model->find(\$id); // Usar find para consistência
+      if (!\$this->Carol->pode('{$entity_name_plural_upper}.EXCLUIR')) {
+        return redirect()->to(site_url())->with('error', 'Acesso negado.');
+      }
 
-        if (!\${$entity_name_singular_lower}) {
-            return redirect()->to('/{$entity_name_plural_lower}')->with('error', 'Registro não encontrado.');
-        }
+      \$nome = \$this->model->getCampo('nome', ['id' => \$id]);
 
-        \$data = [
-            'titulo' => 'Editar',
-            '{$entity_name_singular_lower}' => \${$entity_name_singular_lower},
-        ];
-        return view('{$entity_name_plural_lower}/edit', \$data);
-    }
-
-    /**
-     * Atualiza um {$entity_name_singular_lower} existente no banco de dados.
-     *
-     * @param int \$id O ID do {$entity_name_singular_lower}.
-     * @return \CodeIgniter\HTTP\RedirectResponse
-     */
-    public function update(int \$id): \CodeIgniter\HTTP\RedirectResponse
-    {
-        \${$entity_name_singular_lower} = \$this->{$entity_name_singular_lower}Model->find(\$id);
-        if (!\${$entity_name_singular_lower}) {
-            return redirect()->to('/{$entity_name_plural_lower}')->with('error', 'Registro não encontrado para atualização.');
-        }
-
-        \$postData = \$this->request->getPost();
-
-        // Lógica para campos booleanos (ex: 'ativo')
-        // if (!isset(\$postData['ativo'])) {
-        //   \$postData['ativo'] = 'Não';
-        // }
-
-        \${$entity_name_singular_lower}->fill(\$postData);
-
-        if (\$this->{$entity_name_singular_lower}Model->save(\${$entity_name_singular_lower})) {
-            return redirect()->to('/{$entity_name_plural_lower}')->with('success', 'Registro atualizado com sucesso!');
-        } else {
-            return redirect()->back()->withInput()->with('errors', \$this->{$entity_name_singular_lower}Model->errors());
-        }
-    }
-
-    /**
-     * Exclui um {$entity_name_singular_lower} do banco de dados.
-     *
-     * @param int \$id O ID do {$entity_name_singular_lower}.
-     * @return \CodeIgniter\HTTP\RedirectResponse
-     */
-    public function delete(int \$id): \CodeIgniter\HTTP\RedirectResponse
-    {
-        if (\$this->{$entity_name_singular_lower}Model->delete(\$id)) {
+        if (\$this->model->delete(\$id)) {
+            \$this->logAtividadesModel->addLog('{$entity_name_pascal}: registro excluído [' . \$id . '-' . \$nome . ']');
             return redirect()->to('/{$entity_name_plural_lower}')->with('success', 'Registro excluído com sucesso!');
         } else {
-            // Em caso de soft delete, errors() pode não retornar nada.
-            // Considere uma mensagem padrão de erro de exclusão.
-            \$errors = \$this->{$entity_name_singular_lower}Model->errors();
+            \$errors = \$this->model->errors();
             \$message = !empty(\$errors) ? implode('<br>', \$errors) : 'Erro ao excluir o registro. Verifique os logs.';
             return redirect()->back()->with('error', \$message);
         }
     }
-    
-    // Métodos para Modais (AJAX) - Adaptar e descomentar conforme necessidade
-    /**
-     * Busca registros para o modal de seleção (ex: para FKs)
-     */
-    public function buscarEntidadesModal()
-    {
-      if (!\$this->request->isAJAX()) {
-        return \$this->response->setStatusCode(403)->setBody('Acesso negado.');
-      }
-
-      \$search = \$this->request->getGet('search');
-      \$modelName = \$this->request->getGet('{\$modelName}Model');
-
-      // Valide o modelName para evitar injeção
-      \$validModels = ['{\$modelName}Model',];
-      if (!in_array(\$modelName, \$validModels)) {
-          return \$this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'Model inválido.']);
-      }
-
-      \$relatedModelClass = "\App\Models\\{\$modelName}Model";
-      \$relatedModel = new \$relatedModelClass();
-
-      \$query = \$relatedModel->orderBy('nome', 'ASC');
-
-      if (!empty(\$search)) {
-        \$query->like('nome', \$search);
-      }
-
-      \$records = \$query->where('deleted_at IS NULL')->findAll();
-
-      \$data = [
-        'records' => \$records,
-        'search'  => \$search,
-        'modelName' => \$modelName,
-      ];
-
-      return view('{$entity_name_plural_lower}/_{$entity_name_plural_lower}_modal_content', \$data);
-    }
-
-    public function salvarNovaEntidadeAjax()
-    {
-      if (!\$this->request->isAJAX()) {
-        return \$this->response->setStatusCode(403)->setJSON(['status' => 'error', 'message' => 'Acesso negado.']);
-      }
-    
-      \$modelName = \$this->request->getPost('{\$modelName}Model');
-      // Valide \$modelName
-      \$validModels = ['{\$modelName}Model',];
-      if (!in_array(\$modelName, \$validModels)) {
-          return \$this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'Model inválido.']);
-      }
-    
-      \$relatedModelClass = "\App\Models\\{\$modelName}Model";
-      \$relatedModel = new \$relatedModelClass();
-      \$relatedEntityClass = "\App\Entities\\{\$modelName}";
-    
-      \$entity = new \$relatedEntityClass();
-      \$entity->fill(\$this->request->getPost());
-    
-      if (\$relatedModel->save(\$entity)) {
-        return \$this->response->setJSON(['status' => 'success', 'message' => 'Registro criado com sucesso!', 'id' => \$entity->id, 'nome' => \$entity->nome]);
-      } else {
-        return \$this->response->setStatusCode(400)->setJSON(['status' => 'error', 'errors' => \$relatedModel->errors()]);
-      }
-    }
-
-    /**
-     * Exclui um registro via AJAX (para uso em listagens ou modais).
-     */
-    public function excluirEntidadeAjax(\$id = null)
-    {
-      if (!\$this->request->isAJAX()) {
-        return \$this->response->setStatusCode(403)->setJSON(['status' => 'error', 'message' => 'Acesso negado.']);
-      }
-
-      if (\$id === null) {
-        return \$this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => 'ID não fornecido.']);
-      }
-
-      // TODO: Adicionar lógica para verificar associações antes de excluir (igual ao delete normal)
-      // Ex: \$this->{$entity_name_singular_lower}Model->hasRelatedRecords(\$id);
-
-      if (\$this->{$entity_name_singular_lower}Model->delete(\$id)) {
-        return \$this->response->setJSON(['status' => 'success', 'message' => 'Registro excluído com sucesso!']);
-      } else {
-        \$errors = \$this->{$entity_name_singular_lower}Model->errors();
-        \$message = !empty(\$errors) ? implode('<br>', \$errors) : 'Erro ao excluir o registro.';
-        return \$this->response->setStatusCode(500)->setJSON(['status' => 'error', 'message' => \$message]);
-      }
-    }
-}
+  }
 PHP;
   return $controllerContent;
 }
+
+if (!function_exists('map_sqlite_type_to_ci4_forge_type')) {
+  function map_sqlite_type_to_ci4_forge_type(string $sqlite_type): string
+  {
+    $sqlite_type = strtoupper($sqlite_type);
+    switch ($sqlite_type) {
+      case 'INTEGER':
+      case 'TINYINT':
+      case 'SMALLINT':
+      case 'MEDIUMINT':
+      case 'BIGINT':
+        return 'INT';
+      case 'REAL':
+      case 'DOUBLE':
+      case 'FLOAT':
+        return 'DOUBLE';
+      case 'NUMERIC':
+      case 'DECIMAL':
+        return 'DECIMAL';
+      case 'BOOLEAN':
+        return 'BOOLEAN';
+      case 'DATE':
+        return 'DATE';
+      case 'DATETIME':
+        return 'DATETIME';
+      case 'CLOB':
+      case 'TEXT':
+        return 'TEXT';
+      case 'BLOB':
+        return 'BLOB';
+      default:
+        // Default to VARCHAR if no specific mapping
+        return 'VARCHAR';
+    }
+  }
+}
+
+// Esta função write_file é um placeholder. No seu ambiente real,
+// você usaria a função 'write_file' do CodeIgniter ou uma função de arquivo PHP.
+if (!function_exists('write_file')) {
+  function write_file(string $path, string $data, bool $overwrite = false): bool
+  {
+    $dir = dirname($path);
+    if (!is_dir($dir)) {
+      mkdir($dir, 0777, true); // Cria diretórios recursivamente
+    }
+    if (!$overwrite && file_exists($path)) {
+      // Log ou aviso que o arquivo não foi sobrescrito
+      // echo "Aviso: O arquivo {$path} já existe e não foi sobrescrito.\n";
+      return false;
+    }
+    // return file_put_contents($path, $data) !== false; // Para uso real
+    return true; // Simula sucesso para demonstração
+  }
+}
+
+// Defina CI4_BASE_PATH se ainda não estiver definida
+if (!defined('CI4_BASE_PATH')) {
+  define('CI4_BASE_PATH', __DIR__ . '/..'); // Ajuste conforme a estrutura real do seu projeto CI4
+}
+
+// Adicione esta função auxiliar em seu script fazer.php
+if (!function_exists('ensure_directory_exists')) {
+  function ensure_directory_exists(string $path): void
+  {
+    if (!is_dir($path)) {
+      if (!mkdir($path, 0777, true)) {
+        die("Erro: Não foi possível criar o diretório: {$path}");
+      }
+    }
+  }
+}
+
 
 /**
  * Gera o conteúdo HTML para as Views do CodeIgniter 4 (index, new, edit, show).
@@ -886,6 +1092,7 @@ function generate_view_contents(string $entity_name_pascal, string $table_name, 
 {
   $entity_name_singular_lower = strtolower($entity_name_pascal);
   $entity_name_plural_lower = strtolower(pluralize($entity_name_pascal));
+  $entity_name_plural_upper = strtoupper(pluralize($entity_name_pascal));
   $primaryKey = 'id';
   $displayFields = []; // Campos a serem exibidos na tabela e nos detalhes/formulários
   $fkFields = []; // Campos que são chaves estrangeiras
@@ -895,7 +1102,7 @@ function generate_view_contents(string $entity_name_pascal, string $table_name, 
       $primaryKey = $column['name'];
     }
     // Adiciona todos os campos exceto timestamps e soft delete para exibição
-    if (!in_array($column['name'], ['id', 'criado_em', 'created_at', 'atualizado_em', 'updated_at', 'deletado_em', 'deleted_at'])) {
+    if (!in_array($column['name'], ['id', 'created_at', 'updated_at'])) {
       $displayFields[] = $column['name'];
     }
     // Verifica se é uma chave estrangeira pela convenção tabela_id
@@ -913,10 +1120,8 @@ function generate_view_contents(string $entity_name_pascal, string $table_name, 
   }
 
   // --- View: index.php (Lista) ---
-  // $headers = array_map(fn($field) => '<th>' . ucwords(str_replace('_', ' ', $field)) . '</th>', $displayFields);
-  $rows = array_map(fn($field) => '<td><?= $' . $entity_name_singular_lower . '->' . $field . ' ?></td>', $displayFields);
-  $headers = implode("\n                                ", array_map(fn($field) => '<th>' . ucwords(str_replace('_', ' ', $field)) . '</th>', $displayFields));
-  $rows = implode("\n                                ", $rows);
+  $headers = implode("\n                                    ", array_map(fn($field) => '<th>' . ucwords(str_replace('_', ' ', $field)) . '</th>', $displayFields));
+  $rows = implode("\n                                    ", array_map(fn($field) => '<td><?= $registro->' . $field . ' ?></td>', $displayFields));
 
   $indexViewContent = <<<HTML
 <?= \$this->extend('layout/principal') ?>
@@ -924,9 +1129,32 @@ function generate_view_contents(string $entity_name_pascal, string $table_name, 
 
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800"><?= \$titulo ?></h1>
-        <a href="<?= base_url('{$entity_name_plural_lower}/new') ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-            <i class="bi bi-plus-lg text-white-50"></i> Novo</a>
+        <h5 class="mb-0 text-primary-emphasis"><?= \$titulo ?></h5>
+        
+        <div class="d-sm-flex align-items-center">
+            <div class="col-md-auto me-3"> 
+              <form action="<?= current_url() ?>" method="GET" class="d-flex">
+                  <div class="input-group">
+                      <input type="search" class="form-control" placeholder="Pesquisar..." aria-label="Pesquisar" name="search" value="<?= esc(\$search ?? '') ?>">
+                      <button class="btn btn-secondary" type="submit" title="Pesquisar">
+                          <i class="bi bi-search"></i>
+                      </button>
+                      <?php if (!empty(\$search)) : ?>
+                          <a href="<?= current_url() ?>" class="btn btn-danger" title="Limpar pesquisa">
+                              <i class="bi bi-x-lg"></i>
+                          </a>
+                      <?php endif; ?>
+                  </div>
+              </form>
+            </div>
+            <div class="col-md-auto">
+                <?php if (service('Carol')->pode('{$entity_name_plural_upper}.NOVO')) : ?>
+                <a href="<?= base_url('{$entity_name_plural_lower}/new') ?>" class="btn btn-primary shadow-sm">
+                    <i class="bi bi-plus-lg text-white-50"></i> Novo
+                </a>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
 
     <?php if (session()->has('success')) : ?>
@@ -944,11 +1172,11 @@ function generate_view_contents(string $entity_name_pascal, string $table_name, 
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Lista</h6>
+            <h6 class="m-0 text-primary-emphasis">Lista</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             {$headers}
@@ -956,33 +1184,48 @@ function generate_view_contents(string $entity_name_pascal, string $table_name, 
                         </tr>
                     </thead>
                     <tbody class="table-group-divider">
-                        <?php if (!empty(\${$entity_name_plural_lower})): ?>
-                            <?php foreach (\${$entity_name_plural_lower} as \${$entity_name_singular_lower}): ?>
+                        <?php if (!empty(\$registros)): ?>
+                            <?php foreach (\$registros as \$registro): ?>
                                 <tr>
                                     {$rows}
                                     <td>
-                                        <a href="<?= base_url('{$entity_name_plural_lower}/show/' . \${$entity_name_singular_lower}->id) ?>" class="btn btn-info btn-sm" title="Detalhes">
-                                            <i class="bi bi-eye"></i> </a>
-                                        <a href="<?= base_url('{$entity_name_plural_lower}/edit/' . \${$entity_name_singular_lower}->id) ?>" class="btn btn-warning btn-sm" title="Editar">
-                                            <i class="bi bi-pencil"></i> </a>
-                                        <form action="<?= base_url('{$entity_name_plural_lower}/delete/' . \${$entity_name_singular_lower}->id) ?>" method="POST" class="d-inline form-delete">
-                                            <?= csrf_field() ?>
-                                            <input type="hidden" name="_method" value="DELETE">
-                                            <button type="submit" class="btn btn-danger btn-sm" title="Excluir">
-                                                <i class="bi bi-trash"></i> </button>
-                                        </form>
+                                      <?php if (service('Carol')->pode('{$entity_name_plural_upper}.VER')) : ?>
+                                        <a href="<?= base_url('{$entity_name_plural_lower}/' . \$registro->id) . '/show' ?>" class="btn btn-info btn-sm" title="Detalhes">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                      <?php endif; ?>
+
+                                      <?php if (service('Carol')->pode('{$entity_name_plural_upper}.EDITAR')) : ?>
+                                      <a href="<?= base_url('{$entity_name_plural_lower}/' . \$registro->id . '/edit') ?>" class="btn btn-warning btn-sm" title="Editar">
+                                          <i class="bi bi-pencil"></i>
+                                      </a>
+                                      <?php endif; ?>
+
+                                      <?php if (service('Carol')->pode('{$entity_name_plural_upper}.EXCLUIR')) : ?>
+                                      <form action="<?= base_url('{$entity_name_plural_lower}/' . \$registro->id) ?>" method="POST" class="d-inline form-delete">
+                                        <?= csrf_field() ?>
+                                          <input type="hidden" name="_method" value="DELETE">
+                                          <button type="submit" class="btn btn-danger btn-sm" title="Excluir">
+                                              <i class="bi bi-trash"></i>
+                                          </button>
+                                      </form>
+                                      <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="<?= count(\$displayFields) + 1 ?>" class="text-center">Nenhum registro encontrado.</td>
+                                <td></td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
+                    <tfoot>
+                    </tfoot>
                 </table>
             </div>
             <?= \$this->include('partes/paginacao') ?>
+        </div>
+        <div class="card-footer text-body-secondary texto-pequeno">
         </div>
     </div>
 </div>
@@ -1001,130 +1244,266 @@ HTML;
     $label = ucwords(str_replace('_', ' ', $field));
     $type = 'text'; // Default
     $inputName = $field;
+    // Adiciona 'required' se a coluna for NOT NULL e não tiver valor padrão, e não for a PK.
+    $required_attr = (bool)$column['notnull'] && $column['dflt_value'] === null && $column['name'] !== $primaryKey ? 'required' : '';
 
     if (isset($fkFields[$field])) { // É um campo de chave estrangeira
       $fkInfo = $fkFields[$field];
+      $optionsVarName = $fkInfo['related_table_singular_snake'] . '_options';
       $formFieldsNew .= <<<HTML
-        <div class="form-floating mb-3">
-            <input type="hidden" name="{$inputName}" id="{$inputName}_input" value="<?= old('{$inputName}', \${$entity_name_singular_lower}->{$inputName} ?? '') ?>" required>
-
-            <div class="input-group">
-                <input type="text" class="form-control" id="{$inputName}_name_display"
-                    value="<?= old('{$inputName}_name_display', \${$entity_name_singular_lower}->nome ?? '') ?>" readonly
-                    placeholder="{$label}">
-
-                <label for="{$inputName}_name_display"></label>
-
-                <button class="btn btn-outline-secondary" type="button" id="btnBuscar{$fkInfo['related_pascal']}" data-bs-toggle="tooltip" title="Buscar {$fkInfo['related_pascal']}">
-                    <i class="bi bi-search"></i>
-                </button>
-
-                <button class="btn btn-outline-success" type="button" id="btnNovo{$fkInfo['related_pascal']}" data-bs-toggle="tooltip" title="Novo {$fkInfo['related_pascal']}">
-                    <i class="bi bi-plus-lg"></i>
-                </button>
+      <div class="form-floating mb-3">
+        <select class="form-select choices-select" id="{$inputName}" name="{$inputName}" {$required_attr}>
+            <option value="" disabled selected><?= esc("Selecione um {$label}") ?></option>
+            <?php
+            \$selectedValue = old('{$inputName}', \${$entity_name_singular_lower}->{$inputName} ?? '');
+            if (isset(\${$optionsVarName}) && is_array(\${$optionsVarName})) {
+                foreach (\${$optionsVarName} as \$optionValue => \$optionLabel) {
+                    \$selected = (\$optionValue == \$selectedValue) ? 'selected' : '';
+                    echo "<option value=\"{\$optionValue}\" {\$selected}>" . esc(\$optionLabel) . "</option>";
+                }
+            }
+            ?>
+        </select>
+        <label for="{$inputName}" class="form-label choices-label"><?= esc('$label') ?></label>
+        <?php if (session('errors.{$inputName}')) : ?>
+            <div class="invalid-feedback d-block">
+                <?= session('errors.{$inputName}') ?>
             </div>
+        <?php endif ?>
+    </div>
+HTML;
+    } else { // Não é uma chave estrangeira
+      // Tenta mapear tipos para inputs HTML
+      $ci4Type = map_sqlite_type_to_ci4_forge_type($column['type']);
+      if ($ci4Type === 'INT' || $ci4Type === 'DOUBLE' || $ci4Type === 'DECIMAL') {
+        $type = 'number';
+        $formFieldsNew .= <<<HTML
+                <div class="form-floating mb-3 number-spinner-input-group">
+                    <div class="input-group input-with-copy">
+                        <input type="number" class="form-control text-center" id="{$inputName}" name="{$inputName}" 
+                              placeholder="{$label}" value="" 
+                              min="0" step="1" {$required_attr}> <label for="{$inputName}">{$label}</label>
+                        <button class="btn btn-secondary spinner-minus" type="button" title="Diminuir">
+                            <i class="bi bi-dash"></i> </button>
+                        <button class="btn btn-secondary spinner-plus" type="button" title="Aumentar">
+                            <i class="bi bi-plus"></i> </button>
+                    </div>
+                    <?php if (session('errors.{$inputName}')) : ?>
+                        <div class="invalid-feedback d-block">
+                            <?= session('errors.{$inputName}') ?>
+                        </div>
+                    <?php endif ?>
+                </div>
+HTML;
+      } elseif (str_contains($inputName, 'sn_')) {
+        $type = 'text';
+        $formFieldsNew .= <<<HTML
+        <div class="mb-3 form-check form-switch">
+            <input type="hidden" name="{$inputName}" value="Não"> 
+            
+            <input class="form-check-input" type="checkbox" role="switch" 
+                   id="{$inputName}" 
+                   name="{$inputName}" 
+                   value="Não" 
+                   {$required_attr}>
+            <label class="form-check-label" for="{$inputName}">{$label}</label>
+            
             <?php if (session('errors.{$inputName}')) : ?>
                 <div class="invalid-feedback d-block">
                     <?= session('errors.{$inputName}') ?>
                 </div>
             <?php endif ?>
         </div>
-        HTML;
-    } else { // Não é uma chave estrangeira
-      // Tenta mapear tipos para inputs HTML
-      $ci4Type = map_sqlite_type_to_ci4_forge_type($column['type']);
-      if ($ci4Type === 'INT' || $ci4Type === 'DOUBLE' || $ci4Type === 'DECIMAL') {
-        $type = 'number'; // type="number" para números
-        $formFieldsNew .= <<<HTML
-                <div class="form-floating mb-3">
-                    <input type="{$type}" class="form-control" id="{$inputName}" name="{$inputName}" placeholder="{$label}" value="<?= old('{$inputName}') ?>">
-                    <label for="{$inputName}">{$label}</label>
-                </div>
-                HTML;
-      } elseif ($ci4Type === 'DATE') {
+HTML;
+      } elseif (str_starts_with($inputName, 'data_')) {
         $type = 'date';
         $formFieldsNew .= <<<HTML
-                <div class="form-floating mb-3">
-                    <input type="{$type}" class="form-control" id="{$inputName}" name="{$inputName}" placeholder="{$label}" value="<?= old('{$inputName}') ?>">
-                    <label for="{$inputName}">{$label}</label>
-                </div>
-                HTML;
-      } elseif ($ci4Type === 'DATETIME') {
-        $type = 'datetime-local'; // Ajustado para datetime-local
+                    <div class="form-floating mb-3 input-with-copy">
+                        <input type="{$type}" class="form-control datepicker-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
+                            value="<?= old('{$inputName}', \$value ?? '') ?>" 
+                            {$required_attr}>
+                        <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
+                        <?php if (session('errors.{$inputName}')) : ?>
+                            <div class="invalid-feedback d-block">
+                                <?= session('errors.{$inputName}') ?>
+                            </div>
+                        <?php endif ?>
+                    </div>
+    HTML;
+      } elseif (str_starts_with($inputName, 'datahora_')) {
+        $type = 'date';
         $formFieldsNew .= <<<HTML
-                <div class="form-floating mb-3">
-                    <input type="{$type}" class="form-control" id="{$inputName}" name="{$inputName}" placeholder="{$label}" value="<?= old('{$inputName}') ?>">
-                    <label for="{$inputName}">{$label}</label>
-                </div>
-                HTML;
-      } elseif (strpos(strtoupper($column['type']), 'TEXT') !== false || ($ci4Type === 'VARCHAR' && $column['max_length'] > 255)) { // 'TEXT' ou VARCHARs muito longos
+                    <div class="form-floating mb-3 input-with-copy">
+                        <input type="{$type}" class="form-control datetimepicker-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
+                            value="<?= old('{$inputName}', \$value ?? '') ?>" 
+                            {$required_attr}>
+                        <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
+                        <?php if (session('errors.{$inputName}')) : ?>
+                            <div class="invalid-feedback d-block">
+                                <?= session('errors.{$inputName}') ?>
+                            </div>
+                        <?php endif ?>
+                    </div>
+    HTML;
+      } elseif (str_starts_with($inputName, 'hora_')) {
+        $type = 'time';
         $formFieldsNew .= <<<HTML
-                <div class="form-floating mb-3">
-                    <textarea class="form-control" id="{$inputName}" name="{$inputName}" placeholder="{$label}" style="height: 100px"><?= old('{$inputName}') ?></textarea>
-                    <label for="{$inputName}">{$label}</label>
-                </div>
-                HTML;
-      } elseif (strpos(strtoupper($column['type']), 'VARCHAR') !== false) { // Varchar comum, se não for muito longo
-        $type = 'text'; // type="text" para varchar
+                    <div class="form-floating mb-3 input-with-copy">
+                        <input type="{$type}" class="form-control timepicker-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
+                            value="<?= old('{$inputName}', \$value ?? '') ?>" 
+                            {$required_attr}>
+                        <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
+                        <?php if (session('errors.{$inputName}')) : ?>
+                            <div class="invalid-feedback d-block">
+                                <?= session('errors.{$inputName}') ?>
+                            </div>
+                        <?php endif ?>
+                    </div>
+    HTML;
+      } elseif (str_ends_with($inputName, '_at')) {
+        $type = 'datetime-local'; // Ou 'text' se preferir, o datepicker vai gerenciar
         $formFieldsNew .= <<<HTML
-                <div class="form-floating mb-3">
-                    <input type="{$type}" class="form-control" id="{$inputName}" name="{$inputName}" placeholder="{$label}" value="<?= old('{$inputName}') ?>">
-                    <label for="{$inputName}">{$label}</label>
+                    <div class="form-floating mb-3 input-with-copy">
+                        <input type="{$type}" class="form-control datepicker-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
+                            value="<?= old('{$inputName}', \$value ?? '') ?>" 
+                            {$required_attr}>
+                        <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
+                        <?php if (session('errors.{$inputName}')) : ?>
+                            <div class="invalid-feedback d-block">
+                                <?= session('errors.{$inputName}') ?>
+                            </div>
+                        <?php endif ?>
+                    </div>
+    HTML;
+      } elseif (str_starts_with($inputName, 'valor_')) { // Detecta campos que começam com 'valor_'
+        $type = 'text';
+        $formFieldsNew .= <<<HTML
+                    <div class="form-floating mb-3 input-with-copy">
+                        <input type="{$type}" class="form-control monetary-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
+                            value="<?= old('{$inputName}', (isset(\$value) && \$value !== null) ? number_format(\$value / 100, 2, ',', '.') : '') ?>" 
+                            {$required_attr}>
+                        <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
+                        <?php if (session('errors.{$inputName}')) : ?>
+                            <div class="invalid-feedback d-block">
+                                <?= session('errors.{$inputName}') ?>
+                            </div>
+                        <?php endif ?>
+                    </div>
+    HTML;
+      } elseif (strpos(strtoupper($column['type']), 'TEXT') !== false || ($ci4Type === 'VARCHAR' && ($column['max_length'] ?? 0) > 255)) {
+        $formFieldsNew .= <<<HTML
+                  <div class="form-floating mb-3 position-relative input-with-copy"> 
+                  <input type="{$type}" class="form-control" id="{$inputName}" name="{$inputName}" placeholder="{$label}" value="<?= old('{$inputName}') ?>" {$required_attr}>
+                  <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
+                    <?php if (session('errors.{$inputName}')) : ?>
+                        <div class="invalid-feedback d-block">
+                            <?= session('errors.{$inputName}') ?>
+                        </div>
+                    <?php endif ?>
                 </div>
-                HTML;
+HTML;
       }
     }
   }
 
+  // **CONTEÚDO BASE da new.php - APENAS HTML/PHP Estrutural e Placeholders**
   $newViewContent = <<<HTML
-    <?= \$this->extend('layout/principal') ?>
-    <?= \$this->section('content') ?>
+<?= \$this->extend('layout/principal') ?>
+<?= \$this->section('content') ?>
 
-    <div class="container-fluid">
-      <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800"><?= \$titulo ?></h1>
-      </div>
+<div class="container-fluid">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h5 class="mb-0 text-primary-emphasis"><?= \$titulo ?></h5>
+  </div>
 
-      <?php if (session()->has('errors')) : ?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <ul class="mb-0">
-            <?php foreach (session('errors') as \$error) : ?>
-              <li><?= \$error ?></li>
-            <?php endforeach; ?>
-          </ul>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      <?php endif; ?>
-      <?php if (session()->has('error')) : ?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <?= session('error') ?>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      <?php endif; ?>
-
-      <div class="card shadow mb-4">
-        <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary"><?= \$titulo ?></h6>
-        </div>
-        <div class="card-body">
-          <form action="/{$entity_name_plural_lower}/create" method="post">
-              <?= csrf_field() ?>
-              {$formFieldsNew}
-              <button type="submit" class="btn btn-success">Salvar</button>
-              <a href="/{$entity_name_plural_lower}" class="btn btn-secondary">Cancelar</a>
-          </form>
-        </div>
-      </div>
+  <?php if (session()->has('errors')) : ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <ul class="mb-0">
+        <?php foreach (session('errors') as \$error) : ?>
+          <li><?= \$error ?></li>
+        <?php endforeach; ?>
+      </ul>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+  <?php endif; ?>
+  <?php if (session()->has('error')) : ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <?= session('error') ?>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <?php endif; ?>
 
-    <?= \$this->include('{$entity_name_plural_lower}/_{$entity_name_plural_lower}_selecao_modal') ?>
-    <?= \$this->include('{$entity_name_plural_lower}/_novo_{$entity_name_plural_lower}_modal') ?>
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 text-primary-emphasis">Novo</h6>
+    </div>
+    <div class="card-body">
+      <form action="<?= base_url('{$entity_name_plural_lower}') ?>" method="post">
+          <?= csrf_field() ?>
+          {$formFieldsNew}
+          <div class="d-flex justify-content-start mt-3">
+              <?php if (service('Carol')->pode('{$entity_name_plural_upper}.NOVO')) : ?>
+              <button type="submit" class="btn btn-primary ms-1">
+                  <span class="icon text-white-50">
+                      <i class="bi bi-save"></i>
+                  </span>
+                  <span class="text">Salvar</span>
+              </button>
+              <?php endif; ?>
+              <a href="/{$entity_name_plural_lower}" class="btn btn-secondary ms-1">
+                  <span class="icon text-white-50">
+                      <i class="bi bi-arrow-left"></i>
+                  </span>
+                  <span class="text">Voltar</span>
+              </a>
+          </div>
+      </form>
+    </div>
+    <div class="card-footer text-body-secondary texto-pequeno">
+    </div>
+  </div>
+</div>
 
-    <?= \$this->endSection() ?>
+<?= \$this->endSection() ?>
 
-    <?= \$this->section('scripts') ?>
-    <script src="<?= base_url('js/{$entity_name_plural_lower}.js') ?>"></script>
-    <?= \$this->endSection() ?>
+<?= \$this->section('scripts') ?>
+<?= \$this->endSection() ?>
 HTML;
 
   // --- View: edit.php (Formulário de Edição) ---
@@ -1133,489 +1512,363 @@ HTML;
     $label = ucwords(str_replace('_', ' ', $field));
     $type = 'text'; // Default
     $inputName = $field;
-    $value = "<?= old('{$inputName}', \${$entity_name_singular_lower}->{$field}) ?>";
+    $value = "<?= old('{$inputName}', esc(\${$entity_name_singular_lower}->{$field} ?? '')) ?>";
+    // Adiciona 'required' se a coluna for NOT NULL e não tiver valor padrão, e não for a PK.
+    $column_data_for_required = array_values(array_filter($columns, fn($col) => $col['name'] === $field));
+    $required_attr = (count($column_data_for_required) > 0 && (bool)$column_data_for_required[0]['notnull'] && $column_data_for_required[0]['dflt_value'] === null && $column_data_for_required[0]['name'] !== $primaryKey) ? 'required' : '';
+
 
     if (isset($fkFields[$field])) { // É um campo de chave estrangeira
       $fkInfo = $fkFields[$field];
+      $optionsVarName = $fkInfo['related_table_singular_snake'] . '_options';
       $formFieldsEdit .= <<<HTML
-    <div class="form-group mb-3">
-        <label for="{$inputName}">{$label}</label>
-        <div class="input-group">
-            <input type="hidden" class="form-control" id="{$inputName}" name="{$inputName}" value="<?= old('{$inputName}', \${$entity_name_singular_lower}->{$field}) ?>">
-            <input type="text" class="form-control" id="{$inputName}_name" value="" disabled> <button type="button" class="btn btn-outline-secondary select-fk-btn"
-                    data-model="{$fkInfo['related_pascal']}"
-                    data-target-id="{$inputName}"
-                    data-target-name="{$inputName}_name"
-                    data-title="Selecionar {$fkInfo['related_pascal']}">
-                Selecionar
-            </button>
-        </div>
-    </div>
+                        <div class="form-floating mb-3">
+                          <select class="form-select choices-select" id="{$inputName}" name="{$inputName}" {$required_attr}>
+                              <option value="" disabled selected><?= esc("Selecione um {$label}") ?></option>
+                              <?php
+                              \$selectedValue = old('{$inputName}', \${$entity_name_singular_lower}->{$inputName} ?? '');
+                              if (isset(\${$optionsVarName}) && is_array(\${$optionsVarName})) {
+                                  foreach (\${$optionsVarName} as \$optionValue => \$optionLabel) {
+                                      \$selected = (\$optionValue == \$selectedValue) ? 'selected' : '';
+                                      echo "<option value=\"{\$optionValue}\" {\$selected}>" . esc(\$optionLabel) . "</option>";
+                                  }
+                              }
+                              ?>
+                          </select>
+                          <label for="{$inputName}" class="form-label choices-label"><?= esc('$label') ?></label>
+                          <?php if (session('errors.{$inputName}')) : ?>
+                              <div class="invalid-feedback d-block">
+                                  <?= session('errors.{$inputName}') ?>
+                              </div>
+                          <?php endif ?>
+                      </div>
 HTML;
     } else { // Não é uma chave estrangeira
-      // Tenta mapear tipos para inputs HTML
-      foreach ($columns as $col) {
-        if ($col['name'] === $field) {
-          $ci4Type = map_sqlite_type_to_ci4_forge_type($col['type']);
-          if ($ci4Type === 'INT' || $ci4Type === 'DOUBLE' || $ci4Type === 'DECIMAL') {
-            $type = 'number';
-          } elseif ($ci4Type === 'DATETIME') {
-            $type = 'datetime-local';
-            // Formata a data para o input datetime-local
-            $value = "<?= old('{$inputName}', \${$entity_name_singular_lower}->{$field} ? date('Y-m-d\TH:i', strtotime(\${$entity_name_singular_lower}->{$field})) : '') ?>";
-          } elseif (strpos(strtoupper($col['type']), 'TEXT') !== false) {
-            $formFieldsEdit .= <<<HTML
-    <div class="form-group mb-3">
-        <label for="{$inputName}">{$label}</label>
-        <textarea class="form-control" id="{$inputName}" name="{$inputName}">{$value}</textarea>
-    </div>
-HTML;
-            continue 2;
-          }
+      // Encontra a coluna para pegar o tipo e max_length
+      $column_data = null;
+      foreach ($columns as $col_info) {
+        if ($col_info['name'] === $field) {
+          $column_data = $col_info;
           break;
         }
       }
-      $formFieldsEdit .= <<<HTML
-    <div class="form-group mb-3">
-        <label for="{$inputName}">{$label}</label>
-        <input type="{$type}" class="form-control" id="{$inputName}" name="{$inputName}" value="{$value}">
-    </div>
+
+      $ci4Type = map_sqlite_type_to_ci4_forge_type($column_data['type']);
+      if ($ci4Type === 'INT' || $ci4Type === 'DOUBLE' || $ci4Type === 'DECIMAL') {
+        $type = 'number';
+        $formFieldsEdit .= <<<HTML
+                 <div class="form-floating mb-3 number-spinner-input-group input-with-copy">
+                    <div class="input-group">
+                      <input type="number" class="form-control text-center" id="{$inputName}" name="{$inputName}"
+                              placeholder="{$label}" value="<?= old('{$inputName}', esc(\$registros->{$inputName} ?? '')) ?>"
+                              min="0" step="1" {$required_attr}>
+                        <label for="{$inputName}">{$label}</label>
+                        <button class="btn btn-secondary spinner-minus" type="button" title="Diminuir">
+                            <i class="bi bi-dash"></i> </button>
+                        <button class="btn btn-secondary spinner-plus" type="button" title="Aumentar">
+                            <i class="bi bi-plus"></i> </button>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
+                    </div>
+                    <?php if (session('errors.{$inputName}')) : ?>
+                        <div class="invalid-feedback d-block">
+                            <?= session('errors.{$inputName}') ?>
+                        </div>
+                    <?php endif ?>
+                </div>
 HTML;
+      } elseif (str_contains($inputName, 'sn_')) {
+        $type = 'text';
+        $formFieldsEdit .= <<<HTML
+       <div class="mb-3 form-check form-switch">
+                    <input type="hidden" name="{$inputName}" value="Não"> 
+                    
+                    <input class="form-check-input" type="checkbox" role="switch" 
+                           id="{$inputName}" 
+                           name="{$inputName}" 
+                           value="Sim" 
+                           <?php 
+                               \$currentValue = old('{$inputName}', esc(\$registros->{$inputName} ?? ''));
+                               if (\$currentValue === 'Sim') {
+                                   echo 'checked';
+                               }
+                           ?> {$required_attr}>
+                    <label class="form-check-label" for="{$inputName}">{$label}</label>
+                    
+                    <?php if (session('errors.{$inputName}')) : ?>
+                        <div class="invalid-feedback d-block">
+                            <?= session('errors.{$inputName}') ?>
+                        </div>
+                    <?php endif ?>
+                </div>
+                <?php if (session('errors.{$inputName}')) : ?>
+                <div class="invalid-feedback d-block">
+                    <?= session('errors.{$inputName}') ?>
+                </div>
+            <?php endif ?>
+        </div>
+HTML;
+      } elseif (str_starts_with($inputName, 'data_')) {
+        $type = 'date';
+        $formFieldsEdit .= <<<HTML
+                    <div class="form-floating mb-3 input-with-copy">
+                        <input type="{$type}" class="form-control datepicker-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
+                            value="<?= old('{$inputName}', esc(\$registros->{$inputName} ?? '')) ?>" 
+                            {$required_attr}>
+                        <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
+                        <?php if (session('errors.{$inputName}')) : ?>
+                            <div class="invalid-feedback d-block">
+                                <?= session('errors.{$inputName}') ?>
+                            </div>
+                        <?php endif ?>
+                    </div>
+    HTML;
+      } elseif (str_starts_with($inputName, 'datahora_')) {
+        $type = 'date';
+        $formFieldsEdit .= <<<HTML
+                    <div class="form-floating mb-3 input-with-copy">
+                        <input type="{$type}" class="form-control datetimepicker-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
+                            value="<?= old('{$inputName}', esc(\$registros->{$inputName} ?? '')) ?>" 
+                            {$required_attr}>
+                        <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
+                        <?php if (session('errors.{$inputName}')) : ?>
+                            <div class="invalid-feedback d-block">
+                                <?= session('errors.{$inputName}') ?>
+                            </div>
+                        <?php endif ?>
+                    </div>
+    HTML;
+      } elseif (str_starts_with($inputName, 'hora_')) {
+        $type = 'time';
+        $formFieldsEdit .= <<<HTML
+                    <div class="form-floating mb-3 input-with-copy">
+                        <input type="{$type}" class="form-control timepicker-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
+                            value="<?= old('{$inputName}', esc(\$registros->{$inputName} ?? '')) ?>" 
+                            {$required_attr}>
+                        <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
+                        <?php if (session('errors.{$inputName}')) : ?>
+                            <div class="invalid-feedback d-block">
+                                <?= session('errors.{$inputName}') ?>
+                            </div>
+                        <?php endif ?>
+                    </div>
+    HTML;
+      } elseif (str_ends_with($inputName, '_at')) {
+        $type = 'datetime-local';
+        $formFieldsEdit .= <<<HTML
+                    <div class="form-floating mb-3 input-with-copy">
+                        <input type="{$type}" class="form-control datepicker-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
+                            value="<?= old('{$inputName}', esc(\$registros->{$inputName} ?? '')) ?>" 
+                            {$required_attr}>
+                        <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
+                        <?php if (session('errors.{$inputName}')) : ?>
+                            <div class="invalid-feedback d-block">
+                                <?= session('errors.{$inputName}') ?>
+                            </div>
+                        <?php endif ?>
+                    </div>
+    HTML;
+      } elseif (str_starts_with($inputName, 'valor_')) { // Detecta campos que começam com 'valor_'
+        $type = 'text';
+        $formFieldsEdit .= <<<HTML
+                    <div class="form-floating mb-3 input-with-copy">
+                        <input type="{$type}" class="form-control monetary-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
+                            value="<?= old('{$inputName}', esc(number_format(\$registros->{$inputName} / 100, 2, ',', '.') ?? '')) ?>" 
+                            {$required_attr}>
+                        <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
+                        <?php if (session('errors.{$inputName}')) : ?>
+                            <div class="invalid-feedback d-block">
+                                <?= session('errors.{$inputName}') ?>
+                            </div>
+                        <?php endif ?>
+                    </div>
+    HTML;
+      } elseif (strpos(strtoupper($column['type']), 'TEXT') !== false || ($ci4Type === 'VARCHAR' && ($column['max_length'] ?? 0) > 255)) {
+        $formFieldsEdit .= <<<HTML
+                  <div class="form-floating mb-3 position-relative input-with-copy"> 
+                  <input type="{$type}" class="form-control" id="{$inputName}" name="{$inputName}" placeholder="{$label}" value="<?= old('{$inputName}', esc(\$registros->{$inputName} ?? '')) ?>" {$required_attr}>
+                  <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
+                    <?php if (session('errors.{$inputName}')) : ?>
+                        <div class="invalid-feedback d-block">
+                            <?= session('errors.{$inputName}') ?>
+                        </div>
+                    <?php endif ?>
+                </div>
+HTML;
+      }
     }
   }
 
   $editViewContent = <<<HTML
-    <?= \$this->extend('layout/principal') ?>
-    <?= \$this->section('content') ?>
+<?= \$this->extend('layout/principal') ?>
+<?= \$this->section('content') ?>
 
-    <div class="container-fluid">
-      <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800"><?= \$titulo ?></h1>
-      </div>
+<div class="container-fluid">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h5 class="mb-0 text-primary-emphasis"><?= \$titulo ?></h5>
+  </div>
 
-      <?php if (session()->has('errors')) : ?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <ul class="mb-0">
-            <?php foreach (session('errors') as \$error) : ?>
-              <li><?= \$error ?></li>
-            <?php endforeach; ?>
-          </ul>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      <?php endif; ?>
-      <?php if (session()->has('error')) : ?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <?= session('error') ?>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      <?php endif; ?>
-
-      <div class="card shadow mb-4">
-        <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary"><?= \$titulo ?></h6>
-        </div>
-        <div class="card-body">
-          <form action="/{$entity_name_plural_lower}/update/<?= \${$entity_name_singular_lower}->{$primaryKey} ?>" method="post">
-              <?= csrf_field() ?>
-              <input type="hidden" name="_method" value="PUT">
-              {$formFieldsEdit}
-              <button type="submit" class="btn btn-success">Atualizar</button>
-              <a href="/{$entity_name_plural_lower}" class="btn btn-secondary">Cancelar</a>
-            </form>
-        </div>
-      </div>
+  <?php if (session()->has('errors')) : ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <ul class="mb-0">
+        <?php foreach (session('errors') as \$error) : ?>
+          <li><?= \$error ?></li>
+        <?php endforeach; ?>
+      </ul>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+  <?php endif; ?>
+  <?php if (session()->has('error')) : ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <?= session('error') ?>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <?php endif; ?>
 
-    <?= \$this->include('{$entity_name_plural_lower}/_{$entity_name_plural_lower}_selecao_modal') ?>
-    <?= \$this->include('{$entity_name_plural_lower}/_novo_{$entity_name_plural_lower}_modal') ?>
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 text-primary-emphasis">Editar</h6>
+    </div>
+    <div class="card-body">
+      <form action="<?= base_url('{$entity_name_plural_lower}/' . \$registros->{$primaryKey}) ?>" method="post">
+          <?= csrf_field() ?>
+          <input type="hidden" name="_method" value="PUT">
+          {$formFieldsEdit}
+          <div class="d-flex justify-content-start mt-3">
+              <?php if (service('Carol')->pode('{$entity_name_plural_upper}.EDITAR')) : ?>
+              <button type="submit" class="btn btn-primary ms-1">
+                  <span class="icon text-white-50">
+                      <i class="bi bi-save"></i>
+                  </span>
+                  <span class="text">Atualizar</span>
+              </button>
+              <?php endif; ?>
+              <a href="/{$entity_name_plural_lower}" class="btn btn-secondary ms-1">
+                  <span class="icon text-white-50">
+                      <i class="bi bi-arrow-left"></i>
+                  </span>
+                  <span class="text">Voltar</span>
+              </a>
+          </div>
+      </form>
+    </div>
+    <div class="card-footer text-body-secondary texto-pequeno">
+      <p class="mb-0">Criado em: <?= \$registros->criado_em ?></p>
+      <p class="mb-0">Editado em: <?= \$registros->editado_em ?></p>
+    </div>
+  </div>
+</div>
 
-    <?= \$this->endSection() ?>
+<?= \$this->endSection() ?>
 
-    <?= \$this->section('scripts') ?>
-    <script src="<?= base_url('js/{$entity_name_plural_lower}.js') ?>"></script>
-    <?= \$this->endSection() ?>
+<?= \$this->section('scripts') ?>
+<?= \$this->endSection() ?>
 HTML;
 
   // --- View: show.php (Detalhes) ---
   $detailsList = '';
   foreach ($displayFields as $field) {
     $label = ucwords(str_replace('_', ' ', $field));
+    $value = "<?= \$registros->{$field} ?>";
+
+    // Se for um campo de chave estrangeira, exibe o nome da relação, não apenas o ID
+    if (isset($fkFields[$field])) {
+      $fkInfo = $fkFields[$field];
+      $value = "<?= \$registros->{$fkInfo['related_table_singular_snake']}_nome ?? 'N/A' ?>";
+    }
+
     $detailsList .= <<<HTML
-    <p><strong>{$label}:</strong> <?= \${$entity_name_singular_lower}->{$field} ?></p>
+    <p><strong>{$label}:</strong> {$value}</p>
 HTML;
   }
 
   $showViewContent = <<<HTML
-      <?= \$this->extend('layout/principal') ?>
-      <?= \$this->section('content') ?>
+    <?= \$this->extend('layout/principal') ?>
+    <?= \$this->section('content') ?>
 
-      <div class="container-fluid">
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-          <h1 class="h3 mb-0 text-gray-800"><?= \$titulo ?></h1>
-        </div>
-
-        <div class="card shadow mb-4">
-          <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary"><?= \$titulo ?></h6>
-          </div>
-          <div class="card-body">
-            {$detailsList}
-          </div>
-          <a href="/{$entity_name_plural_lower}/edit/<?= \${$entity_name_singular_lower}->{$primaryKey} ?>" class="btn btn-warning mb-3">Editar</a>
-          <a href="/{$entity_name_plural_lower}" class="btn btn-secondary mb-3">Voltar</a>
-        </div>
+    <div class="container-fluid">
+      <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h5 class="mb-0 text-primary-emphasis"><?= \$titulo ?></h5>
       </div>
 
-      <?= \$this->endSection() ?>
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 text-primary-emphasis">Detalhes</h6>
+        </div>
+        <div class="card-body">
+          {$detailsList}
+          <div class="d-flex justify-content-start mt-4">
+              <?php if (service('Carol')->pode('{$entity_name_plural_upper}.EDITAR')) : ?>
+              <a href="/{$entity_name_plural_lower}/<?= \$registros->id ?>/edit ?>" class="btn btn-warning ms-1">
+                  <span class="icon text-white-50">
+                      <i class="bi bi-pencil"></i>
+                  </span>
+                  <span class="text">Editar</span>
+              </a>
+              <?php endif; ?>
+              <a href="/{$entity_name_plural_lower}" class="btn btn-secondary ms-1">
+                  <span class="icon text-white-50">
+                      <i class="bi bi-arrow-left"></i>
+                  </span>
+                  <span class="text">Voltar</span>
+              </a>
+          </div>
+        </div>
+        <div class="card-footer text-body-secondary texto-pequeno">
+          <p class="mb-0">Criado em: <?= \$registros->criado_em ?></p>
+          <p class="mb-0">Editado em: <?= \$registros->editado_em ?></p>
+        </div>
+      </div>
+    </div>
+
+    <?= \$this->endSection() ?>
 HTML;
 
 
-  // --- Gera modais
-  $telaModal = '';
-  foreach ($fkFields as $field) {
-    $related_table_singular_snake = array_values(array_filter($columns, fn($col) => $col['name'] === $field))[0]; // Get the specific column data
-    $related_table_plural_snake = array_values(array_filter($columns, fn($col) => $col['name'] === $field))[0]; // Get the specific column data
-    $related_pascal = array_values(array_filter($columns, fn($col) => $col['name'] === $field))[0]; // Get the specific column data
-
-    $telaModal = <<<HTML
-      <div class="modal fade" id="modalNovo{$related_table_singular_snake}" tabindex="-1" aria-labelledby="modalNovo{$related_table_singular_snake}Label" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modalNovo{$related_table_singular_snake}Label">Novo</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <form id="formNovo{$related_table_singular_snake}">
-                <?= csrf_field() ?>
-                <div class="mb-3">
-                  <label for="novo_{$related_table_singular_snake}_nome" class="form-label">Nome</label>
-                  <input type="text" class="form-control" id="novo_{$related_table_singular_snake}_nome" name="nome" required>
-                  <div class="invalid-feedback" id="novo_{$related_table_singular_snake}_nome_error"></div>
-                </div>
-                <div class="alert alert-danger d-none" id="formNov{$related_table_singular_snake}Errors"></div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-primary" id="btnSalvarNovo{$related_table_singular_snake}">Salvar</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    HTML;
-
-    $file_namex = "_novo_{$entity_name_plural_lower}_modal.php";
-    $file_namex_path = CI4_BASE_PATH . "/app/Views/{$entity_name_plural_lower}/{$file_namex}";
-    write_file($file_namex_path, $telaModal, $options['overwrite'] ?? false);
-
-
-    $telaModal = <<<HTML
-      <div class="modal fade" id="modal{$related_table_singular_snake}Selecao" tabindex="-1" aria-labelledby="modal{$related_table_singular_snake}SelecaoLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modal{$related_table_singular_snake}SelecaoLabel">Selecionar</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <div class="input-group mb-3">
-                <input type="text" class="form-control" id="inputBuscar{$related_table_singular_snake}" placeholder="Buscar por nome...">
-                <button class="btn btn-outline-secondary" type="button" id="btnBuscar{$related_table_singular_snake}Selecao">
-                  <i class="bi bi-search"></i> Buscar
-                </button>
-              </div>
-
-              <div style="max-height: 350px; overflow-y: auto;">
-                <div id="modalGrupoContent">
-                </div>
-              </div>
-
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    HTML;
-
-    $file_namex = "_{$entity_name_pascal}_selecao_modal.php";
-    $file_namex_path = CI4_BASE_PATH . "/app/Views/{$entity_name_plural_lower}/{$file_namex}";
-    write_file($file_namex_path, $telaModal, $options['overwrite'] ?? false);
-
-
-
-    $telaModal = <<<HTML
-    <?php if (!empty({$related_table_plural_snake})) : ?>
-      <div class="table-responsive">
-        <table class="table table-bordered table-striped" id="tabela{$entity_name_pascal}Modal">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nome</th>
-              <th>Ação</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach (\${$related_table_plural_snake} as \${$related_table_singular_snake}) : ?>
-              <tr>
-                <td><?= esc(\${$related_table_singular_snake}->id) ?></td>
-                <td><?= esc(\${$related_table_singular_snake}->nome) ?></td>
-                <td>
-                  <button class="btn btn-primary btn-sm btn-selecionar-{$related_table_singular_snake}"
-                    data-id="<?= esc(\${$related_table_singular_snake}->id) ?>"
-                    data-nome="<?= esc(\${$related_table_singular_snake}->nome) ?>">
-                    <i class="bi bi-check-lg"></i> Selecionar
-                  </button>
-                  <button class="btn btn-danger btn-sm btn-excluir-{$related_table_singular_snake} ms-2"
-                    data-id="<?= esc(\${$related_table_singular_snake}->id) ?>"
-                    data-nome="<?= esc(\${$related_table_singular_snake}->nome) ?>">
-                    <i class="bi bi-trash"></i> Excluir
-                  </button>
-                </td>
-              </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-      </div>
-    
-      <div id="no{$related_table_singular_snake}Found" class="alert alert-info text-center mt-3 d-none">
-        Nenhum registro encontrado.
-      </div>
-    
-    <?php else : ?>
-      <div id="no{$related_table_singular_snake}Found" class="alert alert-info text-center mt-3">
-        Nenhum registro encontrado.
-      </div>
-    <?php endif; ?>
-    HTML;
-
-    $file_namex = "_{$entity_name_plural_lower}_selecao_modal_content.php";
-    $file_namex_path = CI4_BASE_PATH . "/app/Views/{$entity_name_plural_lower}/{$file_namex}";
-    write_file($file_namex_path, $telaModal, $options['overwrite'] ?? false);
-
-
-    $codigojs = <<<HTML
-    /**
-    * Função para carregar {$entity_name_pascal} no modal de seleção, com busca.
-    * @param {string} search Termo de busca.
-    */
-    window.carregar{$entity_name_pascal}NoModal = function (search = '') {
-      const modal{$entity_name_pascal}Content = document.getElementById('modal{$entity_name_pascal}Content');
-      if (!modal{$entity_name_pascal}Content) {
-        console.error("Elemento '#modal{$entity_name_pascal}Content' não encontrado. Não é possível carregar {$entity_name_pascal}.");
-        return;
-      }
-
-      const url = `\${BASE_URL}{$related_table_plural_snake}/buscar{$entity_name_pascal}Modal?search=\${encodeURIComponent(search)}`;
-
-      modal{$entity_name_pascal}Content.innerHTML = '<div class="text-center p-4"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Carregando...</span></div></div>';
-
-      fetch(url, {
-        method: 'GET',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest'
-        }
-      })
-        .then(response => {
-          if (!response.ok) {
-            if (response.status === 403) {
-              throw new Error('Acesso negado (403): O servidor não permitiu a requisição. Verifique o cabeçalho X-Requested-With.');
-            }
-            throw new Error('Erro na requisição: ' + response.statusText);
-          }
-          return response.text();
-        })
-        .then(html => {
-          modal{$entity_name_pascal}Content.innerHTML = html;
-        })
-        .catch(error => {
-          console.error('Erro ao carregar {$entity_name_pascal}:', error);
-          modal{$entity_name_pascal}Content.innerHTML = `<div class="alert alert-danger text-center mt-3">\${error . message || 'Erro ao carregar {$entity_name_pascal}. Tente novamente.'}</div>`;
-        });
-    };
-
-
-    // ============================================================================
-    // LISTENERS PRINCIPAIS - Executados uma vez quando o DOM é carregado
-    // ============================================================================
-    document.addEventListener('DOMContentLoaded', function () {
-      const btnBuscar{$entity_name_pascal} = document.getElementById('btnBuscar{$entity_name_pascal}');
-      const btnNovo{$entity_name_pascal} = document.getElementById('btnNovo{$entity_name_pascal}');
-      const modal{$entity_name_pascal}Selecao = new bootstrap.Modal(document.getElementById('btnBuscar{$entity_name_pascal}Selecao'));
-      const modalNovo{$entity_name_pascal} = new bootstrap.Modal(document.getElementById('btnNovo{$entity_name_pascal}'));
-
-      const {$entity_name_pascal}IdInput = document.getElementById('{$entity_name_pascal}_id_input');
-      const {$entity_name_pascal}NomeDisplay = document.getElementById('{$entity_name_pascal}_nome_display');
-
-      const inputBuscar{$entity_name_pascal}Modal = document.getElementById('inputBuscar{$entity_name_pascal}');
-      const btnPesquisar{$entity_name_pascal}sModal = document.getElementById('btnPesquisar{$entity_name_pascal}sModal');
-      const modal{$entity_name_pascal}Content = document.getElementById('modal{$entity_name_pascal}Content');
-
-      const formNovo{$entity_name_pascal} = document.getElementById('formNovo{$entity_name_pascal}');
-      const btnSalvarNovo{$entity_name_pascal} = document.getElementById('btnSalvarNovo{$entity_name_pascal}');
-      const novo{$entity_name_pascal}NomeInput = document.getElementById('novo_{$entity_name_pascal}_nome');
-      const novo{$entity_name_pascal}NomeErrorDiv = document.getElementById('novo_{$entity_name_pascal}_nome_error');
-      const formNovo{$entity_name_pascal}ErrorsDiv = document.getElementById('formNovo{$entity_name_pascal}Errors');
-
-      // Evento para abrir o modal de seleção
-      if (btnBuscar{$entity_name_pascal}) {
-        btnBuscar{$entity_name_pascal}.addEventListener('click', function () {
-          inputBuscar{$entity_name_pascal}Modal.value = '';
-          window.carregar{$entity_name_pascal}sNoModal();
-          modal{$entity_name_pascal}Selecao.show();
-        });
-      }
-
-      // Evento para pesquisar no modal
-      if (btnPesquisar{$entity_name_pascal}sModal) {
-        btnPesquisar{$entity_name_pascal}sModal.addEventListener('click', function () {
-          window.carregar{$entity_name_pascal}sNoModal(inputBuscar{$entity_name_pascal}Modal.value);
-        });
-        inputBuscar{$entity_name_pascal}Modal.addEventListener('keypress', function (e) {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-            window.carregar{$entity_name_pascal}sNoModal(inputBuscar{$entity_name_pascal}Modal.value);
-          }
-        });
-      }
-
-      // Evento para abrir o modal de novo
-      if (btnNovo{$entity_name_pascal}) {
-        btnNovo{$entity_name_pascal}.addEventListener('click', function () {
-          formNovo{$entity_name_pascal}.reset();
-          novo{$entity_name_pascal}NomeInput.classList.remove('is-invalid');
-          novo{$entity_name_pascal}NomeErrorDiv.innerHTML = '';
-          formNovo{$entity_name_pascal}ErrorsDiv.classList.add('d-none');
-          formNovo{$entity_name_pascal}ErrorsDiv.innerHTML = '';
-
-          modalNovo{$entity_name_pascal}.show();
-        });
-      }
-
-      // Evento para salvar novo via AJAX
-      if (btnSalvarNovo{$entity_name_pascal}) {
-        btnSalvarNovo{$entity_name_pascal}.addEventListener('click', function () {
-          const formData = new FormData(formNovo{$entity_name_pascal});
-          const csrfToken = formData.get('csrf_test_name');
-
-          formNovo{$entity_name_pascal}ErrorsDiv.classList.add('d-none');
-          formNovo{$entity_name_pascal}ErrorsDiv.innerHTML = '';
-          novo{$entity_name_pascal}NomeInput.classList.remove('is-invalid');
-          novo{$entity_name_pascal}NomeErrorDiv.innerHTML = '';
-
-          fetch(`\${BASE_URL}{$related_table_plural_snake}/salvarNovo{$entity_name_pascal}Ajax`, {
-            method: 'POST',
-            headers: {
-              'X-Requested-With': 'XMLHttpRequest',
-              'X-CSRF-TOKEN': csrfToken
-            },
-            body: formData
-          })
-            .then(response => response.json())
-            .then(data => {
-              if (data.status === 'success') {
-                Swal.fire('Sucesso!', data.message, 'success');
-                {$entity_name_pascal}IdInput.value = data.{$entity_name_pascal}.id;
-                {$entity_name_pascal}NomeDisplay.value = data.{$entity_name_pascal}.nome;
-                modalNovo{$entity_name_pascal}.hide();
-                window.carregar{$entity_name_pascal}sNoModal('');
-              } else {
-                if (data.errors) {
-                  for (const field in data.errors) {
-                    const errorElement = document.getElementById(`novo_{$entity_name_pascal}_\${field}`);
-                    const errorDiv = document.getElementById(`novo_{$entity_name_pascal}_\${field}_error`);
-                    if (errorElement && errorDiv) {
-                      errorElement.classList.add('is-invalid');
-                      errorDiv.innerHTML = data.errors[field];
-                    } else {
-                      formNovo{$entity_name_pascal}ErrorsDiv.classList.remove('d-none');
-                      formNovo{$entity_name_pascal}ErrorsDiv.innerHTML = `<li>\${data.errors[field]}</li>`;
-                    }
-                  }
-                } else {
-                  formNovo{$entity_name_pascal}ErrorsDiv.classList.remove('d-none');
-                  formNovo{$entity_name_pascal}ErrorsDiv.innerHTML = `<li>\${data.message || 'Ocorreu um erro desconhecido.'}</li>`;
-                }
-              }
-            })
-            .catch(error => {
-              console.error('Erro ao salvar novo {$entity_name_pascal}:', error);
-              formNovo{$entity_name_pascal}ErrorsDiv.classList.remove('d-none');
-              formNovo{$entity_name_pascal}ErrorsDiv.innerHTML = '<li>Erro de rede ou servidor. Tente novamente.</li>';
-            });
-        });
-      }
-
-      // ============================================================================
-      // DELEGAÇÃO DE EVENTOS PARA BOTÕES DENTRO DO MODAL SELEÇÃO
-      // ============================================================================
-      // Anexa um único listener ao elemento pai 'modal{$entity_name_pascal}Content'
-      if (modal{$entity_name_pascal}Content) {
-        modal{$entity_name_pascal}Content.addEventListener('click', function (event) {
-          const btnSelecionar = event.target.closest('.btn-selecionar-{$entity_name_pascal}');
-          if (btnSelecionar) {
-            const id = btnSelecionar.dataset.id;
-            const nome = btnSelecionar.dataset.nome;
-
-            {$entity_name_pascal}IdInput.value = id;
-            {$entity_name_pascal}NomeDisplay.value = nome;
-
-            modal{$entity_name_pascal}Selecao.hide();
-            return;
-          }
-
-          const btnExcluir = event.target.closest('.btn-excluir-{$entity_name_pascal}');
-          if (btnExcluir) {
-            const id = btnExcluir.dataset.id;
-            const nome = btnExcluir.dataset.nome;
-
-            Swal.fire({
-              title: 'Tem certeza?',
-              text: `Você realmente deseja excluir o registro "\${nome}"?`,
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#d33',
-              cancelButtonColor: '#3085d6',
-              confirmButtonText: 'Sim, excluir!',
-              cancelButtonText: 'Cancelar'
-            }).then((result) => {
-              if (result.isConfirmed) {
-                fetch(`\${BASE_URL}{$related_table_plural_snake}/excluir{$entity_name_pascal}Ajax/\${id}`, {
-                  method: 'POST',
-                  headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').content : ''
-                  }
-                })
-                  .then(response => response.json())
-                  .then(data => {
-                    if (data.status === 'success') {
-                      Swal.fire('Excluído!', data.message, 'success');
-                      window.carregar{$related_table_plural_snake}NoModal(inputBuscar{$entity_name_pascal}Modal.value);
-                    } else {
-                      Swal.fire('Erro!', data.message || 'Não foi possível excluir o registro.', 'error');
-                    }
-                  })
-                  .catch(error => {
-                    console.error('Erro ao excluir registro:', error);
-                    Swal.fire('Erro!', 'Ocorreu um erro ao tentar excluir o registro.', 'error');
-                  });
-              }
-            });
-          }
-        });
-      }
-    });
-    HTML;
-
-    $file_namex = "{$entity_name_plural_lower}.js";
-    $file_namex_path = CI4_BASE_PATH . "/js/{$entity_name_plural_lower}/{$file_namex}";
-    write_file($file_namex_path, $codigojs, $options['overwrite'] ?? false);
-  }
-
-
+  $newViewContent = $newViewContent;
+  $editViewContent = $editViewContent;
+  $newViewContent = $newViewContent;
+  $editViewContent = $editViewContent;
 
   return [
     'index.php' => $indexViewContent,
@@ -1913,7 +2166,7 @@ function generate_entity_file(string $entity_name_pascal, string $table_name, ar
     }
 
     // Adiciona ao protected $dates
-    if (in_array(strtolower($column_name), ['criado_em', 'created_at', 'atualizado_em', 'updated_at', 'deletado_em', 'deleted_at'])) {
+    if (in_array(strtolower($column_name), ['created_at', 'updated_at'])) {
       $dates_array[] = "'{$column_name}'";
     }
   }
@@ -1939,7 +2192,7 @@ function generate_entity_file(string $entity_name_pascal, string $table_name, ar
     {
       if ($this->' . $entity_name_pascalxLower . ' === null && $this->attributes[\'' . $col . '\'] !== null) {
         $' . $entity_name_pascalxLower . ' = new ' . $entity_name_pascalx . '();
-        $this->' . $entity_name_pascalxLower . ' = $this' . $entity_name_pascalxx . 'Model->find($this->attributes[\'' . $col . '\']);
+        $this->' . $entity_name_pascalxLower . ' = $this->' . $entity_name_pascalxx . 'Model->find($this->attributes[\'' . $col . '\']);
       }
       return $this->' . $entity_name_pascalxLower . ';
     }';
@@ -2042,8 +2295,7 @@ try {
   }
 
   // Função auxiliar para processar uma única tabela/entidade
-  $process_single_entity = function (string $entity_name_pascal, PDO $pdo, array $options, string $component_type = 'all') {
-    $table_name = pascal_to_snake_case(pluralize($entity_name_pascal));
+  $process_single_entity = function (string $entity_name_pascal, $table_name, PDO $pdo, array $options, string $component_type = 'all') {
     echo "--- Processando entidade: {$entity_name_pascal} (Tabela: {$table_name}) ---\n";
 
     $table_info = inspect_table($pdo, $table_name);
@@ -2081,14 +2333,15 @@ try {
           echo "Ignorando tabela: '{$table_name}'.\n";
           continue;
         }
-        $entity_name_pascal = snake_to_pascal_case(singularize($table_name));
-        $process_single_entity($entity_name_pascal, $pdo, $arguments['options'], 'all');
+        $entity_name_pascal = snake_to_pascal_case(pluralize($table_name));
+        // $process_single_entity($entity_name_pascal, $pdo, $arguments['options'], 'all');
+        $process_single_entity($entity_name_pascal, $table_name, $pdo, $arguments['options'], 'all');
       }
       break;
 
     case 'crud':
       echo "Gerando CRUD completo para a entidade: **{$arguments['entity_name']}**\n";
-      $process_single_entity($arguments['entity_name'], $pdo, $arguments['options'], 'all');
+      $process_single_entity($arguments['entity_name'], $table_name, $pdo, $arguments['options'], 'all');
       break;
 
     case 'migration':

@@ -33,21 +33,21 @@ declare(strict_types=1); ?>
   <ul class="nav flex-column py-3" id="side-menu">
     <li class="nav-item active">
       <a class="nav-link text-white" href="<?= base_url('dashboard') ?>">
-        <i class="fa-regular fa-object-group menu-icon me-2"></i>
+        <i class="bi bi-grid-1x2-fill menu-icon me-2"></i> <!-- Ícone de Dashboard -->
         <span class="menu-text">Dashboard</span>
       </a>
     </li>
     <li class="nav-item">
       <a class="nav-link text-white" href="<?= base_url('clientes') ?>">
-        <i class="fa-regular fa-user menu-icon me-2"></i>
+        <i class="bi bi-person-fill menu-icon me-2"></i> <!-- Ícone de Clientes -->
         <span class="menu-text">Clientes</span>
       </a>
     </li>
     <li class="nav-item">
       <a class="nav-link text-white" data-bs-toggle="collapse" href="#sales-submenu" role="button" aria-expanded="false" aria-controls="sales-submenu">
-        <i class="fa-solid fa-bolt menu-icon me-2"></i>
+        <i class="bi bi-lightning-fill menu-icon me-2"></i> <!-- Ícone de Vendas -->
         <span class="menu-text">Vendas</span>
-        <i class="fa fa-angle-down float-end menu-arrow"></i>
+        <i class="bi bi-chevron-down float-end menu-arrow"></i> <!-- Ícone de seta para baixo -->
       </a>
       <div class="collapse" id="sales-submenu" data-bs-parent="#side-menu">
         <ul class="nav flex-column ps-4 pt-1">
@@ -62,15 +62,42 @@ declare(strict_types=1); ?>
     </li>
     <li class="nav-item">
       <a class="nav-link text-white" href="<?= base_url('assinaturas') ?>">
-        <i class="fa fa-repeat menu-icon me-2"></i>
+        <i class="bi bi-arrow-repeat menu-icon me-2"></i> <!-- Ícone de Assinaturas -->
         <span class="menu-text">Assinaturas</span>
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link text-white" href="<?= base_url('configuracoes') ?>" id="setup-menu-item">
-        <i class="fa fa-cog menu-icon me-2"></i>
-        <span class="menu-text">Configurações</span>
+      <a class="nav-link text-white" data-bs-toggle="collapse" href="#cadastros-submenu" role="button" aria-expanded="false" aria-controls="sales-submenu">
+        <i class="bi bi-journal-text menu-icon me-2"></i> <!-- Ícone de Cadastros (alterado para algo mais genérico) -->
+        <span class="menu-text">Cadastros</span>
+        <i class="bi bi-chevron-down float-end menu-arrow"></i> <!-- Ícone de seta para baixo -->
       </a>
+      <div class="collapse" id="cadastros-submenu" data-bs-parent="#side-menu">
+        <ul class="nav flex-column ps-4 pt-1">
+          <li><a class="nav-link text-white-50" href="<?= base_url('bancos') ?>">Bancos</a></li>
+          <li><a class="nav-link text-white-50" href="<?= base_url('cargos') ?>">Cargos</a></li>
+          <li><a class="nav-link text-white-50" href="<?= base_url('cidades') ?>">Cidades</a></li>
+          <li><a class="nav-link text-white-50" href="<?= base_url('nacionalidades') ?>">Nacionalidades</a></li>
+          <li><a class="nav-link text-white-50" href="<?= base_url('paises') ?>">Países</a></li>
+          <li><a class="nav-link text-white-50" href="<?= base_url('profissoes') ?>">Profissões</a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-white" data-bs-toggle="collapse" href="#configuracoes-submenu" role="button" aria-expanded="false" aria-controls="sales-submenu">
+        <i class="bi bi-gear-fill menu-icon me-2"></i> <!-- Ícone de Administração/Configurações -->
+        <span class="menu-text">Administração</span>
+        <i class="bi bi-chevron-down float-end menu-arrow"></i> <!-- Ícone de seta para baixo -->
+      </a>
+      <div class="collapse" id="configuracoes-submenu" data-bs-parent="#side-menu">
+        <ul class="nav flex-column ps-4 pt-1">
+          <li><a class="nav-link text-white-50" href="<?= base_url('avisos') ?>">Avisos</a></li>
+          <li><a class="nav-link text-white-50" href="<?= base_url('configuracoes') ?>">Configurações</a></li>
+          <li><a class="nav-link text-white-50" href="<?= base_url('usuarios') ?>">Usuários</a></li>
+          <li><a class="nav-link text-white-50" href="<?= base_url('usuario_grupos') ?>">Grupos de Usuários</a></li>
+          <li><a class="nav-link text-white-50" href="<?= base_url('permissoes') ?>">Permissões</a></li>
+        </ul>
+      </div>
     </li>
   </ul>
 

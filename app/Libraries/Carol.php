@@ -4,17 +4,114 @@ namespace App\Libraries;
 
 use Config\Services;
 use CodeIgniter\I18n\Time;
+use App\Models\ConfiguracoesModel;
 
 /**
  * Esta classe contem funções globais aleatórias.
  */
 class Carol
 {
+    /**
+     * @var array Armazena as configurações carregadas do banco de dados (chave => valor).
+     */
+    protected $configurations = [];
+
+    /**
+     * @var ConfiguracoesModel Instância do modelo de configurações.
+     */
+    protected $configuracoesModel;
+
+
+    public function __construct()
+    {
+        $this->configuracoesModel = new ConfiguracoesModel();
+        $this->carregaConfig(); // Carrega as configurações automaticamente ao instanciar a classe Carol
+    }
+
+
+    /**
+     * Carrega todas as configurações do banco de dados para o array $configurations.
+     * Este método deve ser chamado uma única vez para popular as configurações.
+     */
+    public function carregaConfig()
+    {
+        // Evita recarregar se já estiverem carregadas (opcional, mas bom para performance)
+        if (!empty($this->configurations)) {
+            return;
+        }
+
+        $configs = $this->configuracoesModel->findAll();
+
+        foreach ($configs as $config) {
+            if (is_object($config)) {
+                if (method_exists($config, 'toArray')) {
+                    $config = $config->toArray();
+                } else {
+                    $config = (array) $config;
+                }
+            }
+
+            $this->configurations[$config['chave']] = $this->castValue($config['valor'], $config['tipo']);
+        }
+    }
+
+    /**
+     * Retorna o valor de uma configuração específica pela sua chave.
+     *
+     * Exemplo de uso: $this->Carol->config('nome_do_site');
+     *
+     * @param string $key A chave da configuração (ex: 'nome_do_site').
+     * @param mixed $default O valor padrão a ser retornado se a chave não for encontrada.
+     * @return mixed O valor da configuração ou o valor padrão.
+     */
+    public function config(string $key, $default = null)
+    {
+        return $this->configurations[$key] ?? $default;
+    }
+
+    /**
+     * Converte o valor da string do banco de dados para o tipo de dado pretendido.
+     * Isso é crucial para booleanos, inteiros, decimais, etc.
+     *
+     * @param mixed $value O valor lido do banco de dados (geralmente string).
+     * @param string $type O tipo de dado declarado para a configuração (ex: 'integer', 'boolean').
+     * @return mixed O valor convertido para o tipo correto.
+     */
+    protected function castValue($value, $type)
+    {
+        switch ($type) {
+            case 'integer':
+                return (int) $value;
+            case 'decimal':
+                return (float) $value;
+            case 'boolean':
+                // Converte 'Sim'/'Não' para true/false. Assumimos 'Sim' ou '1' como true.
+                // return strtolower($value) === 'sim' || $value === '1';
+            case 'enum':
+                // Se 'enum' for armazenado como JSON string, decodifica.
+                // Caso contrário, retorna como string.
+                $decoded = json_decode($value, true);
+                return (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) ? $decoded : $value;
+                // Para outros tipos (string, date, datetime, time, email, url, password, color, textarea),
+                // o valor já é uma string e pode ser retornado diretamente.
+            default:
+                return $value;
+        }
+    }
+
+    /**
+     * Retorna todas as configurações carregadas.
+     * Útil para depuração ou para passar todas as configurações para uma view.
+     *
+     * @return array Um array associativo com todas as configurações (chave => valor).
+     */
+    public function allConfigs(): array
+    {
+        return $this->configurations;
+    }
 
 
 
-    // $this->app['usuario_id'] = 1;
-    // $this->app['usuario_nome'] = 'luiz marin';
 
 
     /**
@@ -70,13 +167,12 @@ class Carol
         $session = Services::session();
 
         $ipAddress = $request->getIPAddress();
-        $userAgent = $request->getUserAgent()->getAgentString();
-        $time = self::formataData(Time::now(), true);
+        $time = $this->formataData(Time::now(), true);
 
         $loggedInUserId = $session->get('usuario_id') ?? 'N/A';
         $loggedInUserName = $session->get('usuario_nome') ?? 'Anônimo';
 
-        return "{$time} - Usuario: {$loggedInUserName} (ID: {$loggedInUserId}) - IP: {$ipAddress} - User Agent: {$userAgent}";
+        return "{$time} - Usuário: {$loggedInUserName} (ID: {$loggedInUserId}) - IP: {$ipAddress}";
     }
 
     /**

@@ -447,42 +447,93 @@
     });
   }
 
-  // --- Módulo 12: Inicialização do Clipboard.js
+  // --- Módulo 12: Inicialização do clipboard
   function initClipboardJS() {
-    // Inicializa o Clipboard.js para todos os elementos que têm os atributos 'data-clipboard-*'
-    const clipboard = new ClipboardJS('[data-clipboard-target], [data-clipboard-text]');
+    // Seleciona todos os botões com a classe 'copy-button-textarea'
+    const copyButtons = document.querySelectorAll('.copy-button-textarea');
 
-    clipboard.on('success', function (e) {
-      console.info('Ação:', e.action); // 'copy' ou 'cut'
-      console.info('Texto:', e.text);  // O texto que foi copiado
-      console.info('Gatilho:', e.trigger); // O elemento que acionou a cópia
+    function restoreIconButton(button) {
+      button.innerHTML = '';
+      const icon = document.createElement('i');
+      icon.classList.add('bi', 'bi-clipboard');
+      button.appendChild(icon);
+    }
 
-      // Opcional: Feedback visual para o usuário
-      const originalText = e.trigger.textContent;
-      e.trigger.textContent = 'Copiado!';
-      e.trigger.classList.add('btn-success');
+    function showCopyFeedback(button, message, type = 'info') {
+      const parentDiv = button.closest('.input-with-copy');
+      if (!parentDiv) {
+        return;
+      }
 
-      setTimeout(() => {
-        e.trigger.textContent = originalText;
-        e.trigger.classList.remove('btn-success');
-      }, 1500); // Volta ao texto original após 1.5 segundos
+      const feedbackSpan = parentDiv.querySelector('.copy-feedback-message-external');
+      if (!feedbackSpan) {
+        return;
+      }
 
-      e.clearSelection(); // Limpa a seleção de texto após a cópia
-    });
-
-    clipboard.on('error', function (e) {
-      console.error('Ação falhou:', e.action);
-      console.error('Gatilho:', e.trigger);
-
-      // Opcional: Feedback visual de erro
-      const originalText = e.trigger.textContent;
-      e.trigger.textContent = 'Erro ao Copiar!';
-      e.trigger.classList.add('btn-danger');
+      feedbackSpan.textContent = message;
+      feedbackSpan.style.backgroundColor = type === 'success' ? 'rgba(22, 163, 74, 0.9)' : 'rgba(220, 38, 38, 0.9)';
+      feedbackSpan.classList.add('show');
 
       setTimeout(() => {
-        e.trigger.textContent = originalText;
-        e.trigger.classList.remove('btn-danger');
-      }, 1500);
+        feedbackSpan.classList.remove('show');
+        restoreIconButton(button);
+      }, 2000);
+    }
+
+    function copyToClipboardLegacy(text) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+
+      try {
+        const successful = document.execCommand('copy');
+        document.body.removeChild(textarea);
+        return successful;
+      } catch (err) {
+        document.body.removeChild(textarea);
+        return false;
+      }
+    }
+
+    copyButtons.forEach(button => {
+      button.addEventListener('click', async () => {
+        const targetSelector = button.dataset.clipboardTarget;
+        if (!targetSelector) {
+          showCopyFeedback(button, 'Erro!', 'error');
+          return;
+        }
+
+        const targetElement = document.querySelector(targetSelector);
+        if (!targetElement || !targetElement.value) {
+          showCopyFeedback(button, 'Vazio!', 'error');
+          return;
+        }
+
+        const text = targetElement.value;
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          try {
+            await navigator.clipboard.writeText(text);
+            showCopyFeedback(button, 'Copiado!', 'success');
+          } catch (err) {
+            if (copyToClipboardLegacy(text)) {
+              showCopyFeedback(button, 'Copiado!', 'success');
+            } else {
+              showCopyFeedback(button, 'Falha!', 'error');
+            }
+          }
+        } else {
+          if (copyToClipboardLegacy(text)) {
+            showCopyFeedback(button, 'Copiado!', 'success');
+          } else {
+            showCopyFeedback(button, 'Falha!', 'error');
+          }
+        }
+      });
     });
   }
 

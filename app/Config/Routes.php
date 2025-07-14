@@ -38,16 +38,18 @@ if (! file_exists(CAROL_DB)) {
   $routes->get('/dashboard', 'Dashboard::index');
 
 
-
-  $routes->group('usuarios', function ($routes) {
-    $routes->get('/', 'Usuarios::index');
-    $routes->get('new', 'Usuarios::new');
-    $routes->post('create', 'Usuarios::create');
-    $routes->get('edit/(:num)', 'Usuarios::edit/$1');
-    $routes->put('update/(:num)', 'Usuarios::update/$1');
-    $routes->get('show/(:num)', 'Usuarios::show/$1');
-    $routes->delete('delete/(:num)', 'Usuarios::delete/$1');
-  });
+  $routes->resource('avisos');
+  $routes->resource('bancos');
+  $routes->resource('cargos');
+  $routes->resource('cidades');
+  $routes->resource('nacionalidades');
+  $routes->resource('configuracoes');
+  $routes->resource('paises');
+  $routes->resource('permissoes');
+  $routes->resource('profissoes');
+  $routes->resource('usuario_grupos');
+  $routes->resource('usuario_permissoes');
+  $routes->resource('usuarios');
 } 
 
 // TODO

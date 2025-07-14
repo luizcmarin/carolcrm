@@ -69,7 +69,6 @@ declare(strict_types=1); ?>
 
   <script src="<?= base_url('js/bootstrap.bundle.min.js'); ?>"></script>
   <script src="<?= base_url('js/sweetalert2.min.js') ?>"></script>
-  <script src="<?= base_url('js/clipboard.min.js') ?>"></script>
   <script src="<?= base_url('js/choices.js') ?>"></script>
   <script src="<?= base_url('js/air-datepicker.js'); ?>"></script>
   <script src="<?= base_url('js/locales/air-datepicker-pt-BR.js'); ?>"></script>

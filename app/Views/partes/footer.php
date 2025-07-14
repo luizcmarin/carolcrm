@@ -2,7 +2,7 @@
 
 declare(strict_types=1); ?>
 
-<footer class="main-footer bg-light border-top py-3 mt-auto">
+<footer class="main-footer bg-light border-top py-3 mt-auto texto-pequeno">
   <div class="container-fluid d-flex justify-content-between align-items-center">
     <div>
       &copy; <?= date('Y') ?> CarolCRM. Todos os direitos reservados.

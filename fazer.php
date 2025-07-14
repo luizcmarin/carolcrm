@@ -14,6 +14,216 @@ const IGNORED_TABLES = ['migrations', 'sqlite_sequence'];
 
 // --- FUNÇÕES DE UTILIDADE GERAIS ---
 
+
+/**
+ * Pluraliza uma palavra em português (simplificado, sem acentuação).
+ * Esta função tenta cobrir as regras mais comuns de pluralização em português,
+ * adaptadas para palavras sem acentuação.
+ *
+ * IMPORTANTE: Esta função PRESERVA underscores em nomes compostos (ex: 'usuario_grupo' -> 'usuarios_grupos').
+ *
+ * @param string $word A palavra a ser pluralizada (espera-se que esteja no singular e sem acentuação).
+ * @return string A palavra pluralizada (sem acentuação, com underscores preservados).
+ */
+function pluralize(string $word): string
+{
+  $word = strtolower($word); // Trabalha com a palavra em minúsculas
+
+  // Exceções e palavras invariáveis (sem acentuação)
+  // Underscores são preservados aqui também.
+  $invariaveis = [
+    'lapis',
+    'onibus',
+    'torax',
+    'virus',
+    'atlas',
+    'pires',
+    'cais',
+    'oculos',
+    // Adicione outras palavras invariáveis se necessário
+  ];
+  if (in_array($word, $invariaveis)) {
+    return $word;
+  }
+
+  // Regras de pluralização mais comuns para o português (sem acentuação)
+  // Underscores são automaticamente preservados por operações de substr e str_ends_with.
+
+  // 1. Termina em 'ao' -> 'oes' (ex: acao -> acoes, coracao -> coracoes)
+  if (str_ends_with($word, 'ao')) {
+    return substr($word, 0, -2) . 'oes';
+  }
+
+  // 2. Termina em 'al', 'el', 'ol', 'ul'
+  if (str_ends_with($word, 'al')) {
+    return substr($word, 0, -2) . 'ais';
+  } // animal -> animais
+  if (str_ends_with($word, 'el')) {
+    return substr($word, 0, -2) . 'eis';
+  } // papel -> papeis
+  if (str_ends_with($word, 'ol')) {
+    return substr($word, 0, -2) . 'ois';
+  } // farol -> farois
+  if (str_ends_with($word, 'ul')) {
+    return substr($word, 0, -2) . 'uis';
+  } // azul -> azuis
+
+  // 3. Termina em 'il'
+  if (str_ends_with($word, 'il')) {
+    // Simplificação: para evitar regras de oxítona/paroxítona, padronizamos.
+    // Priorizando 'is' aqui (ex: funil -> funis).
+    return substr($word, 0, -2) . 'is';
+  }
+
+  // 4. Termina em 'm' -> 'ns'
+  if (str_ends_with($word, 'm')) {
+    return substr($word, 0, -1) . 'ns'; // Ex: homem -> homens, album -> albuns
+  }
+
+  // 5. Termina em 'r' ou 'z' -> 'es'
+  if (str_ends_with($word, 'r') || str_ends_with($word, 'z')) {
+    return $word . 'es'; // Ex: flor -> flores, luz -> luzes
+  }
+
+  // 6. Termina em 's'
+  if (str_ends_with($word, 's')) {
+    // **CORREÇÃO APLICADA AQUI:**
+    // Verifica se a palavra já está em uma forma plural comum para evitar re-pluralização.
+    if (
+      str_ends_with($word, 'es') || str_ends_with($word, 'ais') || str_ends_with($word, 'eis') ||
+      str_ends_with($word, 'ois') || str_ends_with($word, 'uis') || str_ends_with($word, 'ns') ||
+      str_ends_with($word, 'oes') || str_ends_with($word, 'aos') || str_ends_with($word, 'aes')
+    ) {
+      return $word; // Já plural, retorna como está.
+    }
+    // Lida com casos singulares específicos que terminam em 's' e precisam de pluralização.
+    if ($word === 'pais') { // Caso singular específico
+      return 'paises';
+    }
+    // Para outras palavras que terminam em 's' e não se encaixam nas regras acima,
+    // assume que são invariáveis ou já plurais.
+    return $word;
+  }
+
+  // 7. Termina em Vogal: Adiciona 's'
+  $last_char = substr($word, -1);
+  if (in_array($last_char, ['a', 'e', 'i', 'o', 'u'])) {
+    return $word . 's'; // Ex: casa -> casas, carro -> carros
+  }
+
+  // Caso padrão para outras consoantes, adiciona 's' (mais comum para nomes de tabelas sem acentuação)
+  return $word . 's';
+}
+
+/**
+ * Singulariza uma palavra em português (simplificado, sem acentuação).
+ * Esta função tenta cobrir as regras mais comuns de singularização em português,
+ * adaptadas para palavras sem acentuação.
+ *
+ * IMPORTANTE: Esta função PRESERVA underscores em nomes compostos (ex: 'usuarios_grupos' -> 'usuario_grupo').
+ *
+ * @param string $word A palavra a ser singularizada (espera-se que esteja no plural e sem acentuação).
+ * @return string A palavra singularizada (sem acentuação, com underscores preservados).
+ */
+function singularize(string $word): string
+{
+  $word = strtolower($word); // Trabalha com a palavra em minúsculas
+
+  // EXCEÇÃO ESPECÍFICA PARA 'PAISES' - Prioridade máxima
+  // Esta regra garante que 'paises' sempre será singularizado para 'pais'.
+  if ($word === 'paises') {
+    return 'pais';
+  }
+
+  // Exceções e palavras invariáveis (sem acentuação)
+  // Underscores são preservados aqui também.
+  $invariaveis_plural = [
+    'lapis',
+    'onibus',
+    'torax',
+    'virus',
+    'atlas',
+    'pires',
+    'cais',
+    'oculos',
+    // Adicione outras palavras invariáveis se necessário
+  ];
+  if (in_array($word, $invariaveis_plural)) {
+    return $word;
+  }
+
+  // Regras de singularização (inversas do plural, sem acentuação)
+  // Underscores são automaticamente preservados por operações de substr e str_ends_with.
+
+  // 1. Termina em 'oes' -> 'ao' (inclui 'acoes' -> 'acao', 'coracoes' -> 'coracao')
+  if (str_ends_with($word, 'oes')) {
+    return substr($word, 0, -3) . 'ao';
+  }
+  // 2. Termina em 'aes' -> 'ao' (ex: caes -> cao)
+  if (str_ends_with($word, 'aes')) {
+    return substr($word, 0, -3) . 'ao';
+  }
+  // 3. Termina em 'aos' -> 'ao' (ex: maos -> mao)
+  if (str_ends_with($word, 'aos')) {
+    return substr($word, 0, -3) . 'ao';
+  }
+
+  // 4. Termina em 'ais', 'eis', 'ois', 'uis' -> remove 'is' e adiciona 'l'
+  if (str_ends_with($word, 'ais')) {
+    return substr($word, 0, -3) . 'al';
+  } // animais -> animal
+  if (str_ends_with($word, 'eis')) {
+    return substr($word, 0, -3) . 'el';
+  } // papeis -> papel
+  if (str_ends_with($word, 'ois')) {
+    return substr($word, 0, -3) . 'ol';
+  } // farois -> farol
+  if (str_ends_with($word, 'uis')) {
+    return substr($word, 0, -3) . 'ul';
+  } // azuis -> azul
+
+  // 5. Termina em 'ises' (para casos como "paises" -> "pais")
+  // Esta regra original deveria funcionar, mas a exceção acima garante.
+  if (str_ends_with($word, 'ises')) {
+    return substr($word, 0, -3) . 'is';
+  }
+
+  // 6. Termina em 'is' (de 'il' oxítona, ou invariável)
+  if (str_ends_with($word, 'is')) {
+    // Se não for um dos casos 'ais', 'eis', 'ois', 'uis', 'ises' já tratados,
+    // e se o penúltimo caractere não for uma vogal (para evitar "onibus", "lapis" que são invariáveis),
+    // assume que veio de 'il' (oxítona).
+    if (strlen($word) > 2 && !in_array(substr($word, -2, 1), ['a', 'e', 'i', 'o', 'u'])) {
+      return substr($word, 0, -2) . 'il'; // Ex: funis -> funil
+    }
+    return $word; // Invariável (ex: lapis, onibus)
+  }
+
+  // 7. Termina em 'ns' -> 'm'
+  if (str_ends_with($word, 'ns')) {
+    return substr($word, 0, -2) . 'm'; // Ex: homens -> homem
+  }
+
+  // 8. Termina em 'es' (de 'r' ou 'z', ou outras consoantes)
+  if (str_ends_with($word, 'es')) {
+    $stem = substr($word, 0, -2);
+    // Verifica se a palavra antes de 'es' terminava em 'r' ou 'z'
+    if (str_ends_with($stem, 'r') || str_ends_with($stem, 'z')) {
+      return $stem; // Ex: flores -> flor, luzes -> luz
+    }
+    // Para outros casos que terminam em 'es' (ex: cidades -> cidade, paredes -> parede)
+    return substr($word, 0, -1); // Remove apenas o 's'
+  }
+
+  // 9. Termina em 's' (e a singular terminava em vogal)
+  if (str_ends_with($word, 's')) {
+    return substr($word, 0, -1); // Ex: carros -> carro, casas -> casa
+  }
+
+  return $word; // Retorna a palavra original se nenhuma regra se aplicar
+}
+
+
 /**
  * Converte uma string de snake_case para PascalCase.
  * Ex: 'nome_do_campo' -> 'NomeDoCampo'
@@ -32,168 +242,6 @@ function pascal_to_snake_case(string $pascal_case_string): string
   return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $pascal_case_string));
 }
 
-/**
- * Pluraliza uma palavra em português (simplificado).
- * Esta função tenta cobrir as regras mais comuns de pluralização em português.
- * Para uma pluralização 100% precisa, considere usar uma biblioteca de processamento de linguagem natural.
- *
- * @param string $word A palavra a ser pluralizada (espera-se que esteja no singular).
- * @return string A palavra pluralizada.
- */
-function pluralize(string $word): string
-{
-  return $word;   // tabelas já estão no plural.
-
-
-  $word = strtolower($word); // Trabalha com a palavra em minúsculas
-  $last_char = substr($word, -1);
-  $second_last_char = substr($word, -2, 1);
-
-  // Regras mais comuns para o português
-  // 1. Termina em Vogal: Adiciona 's'
-  if (in_array($last_char, ['a', 'e', 'i', 'o', 'u'])) {
-    return $word . 's';
-  }
-
-  // 2. Termina em 'r' ou 'z': Adiciona 'es'
-  if (in_array($last_char, ['r', 'z'])) {
-    return $word . 'es';
-  }
-
-  // 3. Termina em 's' (e não é oxítona): Mantém
-  // Ex: ônibus, lápis. (Mas se for 'país', vira 'países' - complexo!)
-  // Para simplificar, se já termina em 's', assume-se que é invariável ou já plural.
-  if ($last_char === 's' && !in_array(substr($word, -2), ['ês', 'is', 'os', 'us'])) { // Evita palavras como "país" ou "flor"
-    // Se a palavra já termina em 's' e não é uma exceção de 's' para 'ses', mantém como está.
-    // Ex: "lápis", "ônibus".
-    return $word;
-  }
-  // Caso de 's' no final que precisa de 'es' (ex: país -> países)
-  if (str_ends_with($word, 'ês') || str_ends_with($word, 'is') || str_ends_with($word, 'us')) {
-    // Assume que estas são singulares e precisam de 'es'
-    // Ex: país -> países, lápis -> lápises (apesar de lápis ser invariável), ônibus -> ônibus (já invariável)
-    // Isso é uma simplificação.
-  }
-
-
-  // 4. Termina em 'ão':
-  // - 'ão' -> 'ões' (ex: ação -> ações)
-  // - 'ão' -> 'ãos' (ex: mão -> mãos) - Menos comum para nomes de entidades.
-  // - 'ão' -> 'ães' (ex: pão -> pães)
-  // Para simplificar, priorizamos 'ões' para nomes de entidades.
-  if (str_ends_with($word, 'ão')) {
-    return substr($word, 0, -2) . 'ões';
-  }
-
-  // 5. Termina em 'l':
-  // - 'al', 'el', 'ol', 'ul' -> 'is' (ex: animal -> animais)
-  // - 'il'
-  //   - Oxítonas: 'il' -> 'is' (ex: funil -> funis)
-  //   - Paroxítonas: 'il' -> 'eis' (ex: fóssil -> fósseis)
-  // Para simplificar, assumimos o caso mais comum 'is' para a maioria.
-  if (str_ends_with($word, 'al') || str_ends_with($word, 'el') || str_ends_with($word, 'ol') || str_ends_with($word, 'ul')) {
-    return substr($word, 0, -1) . 'is';
-  }
-  if (str_ends_with($word, 'il')) {
-    // Simplificado: para evitar regras de oxítona/paroxítona, podemos padronizar.
-    // Se a maioria de seus nomes de tabela com 'il' forem oxítonas, 'is' é bom.
-    // Se forem paroxítonas, 'eis' é melhor.
-    return substr($word, 0, -2) . 'is'; // Ex: funil -> funis. Pode não ser ideal para fóssil -> fósseis
-  }
-
-  // 6. Termina em 'm': 'm' -> 'ns' (ex: homem -> homens)
-  if ($last_char === 'm') {
-    return substr($word, 0, -1) . 'ns';
-  }
-
-  // 7. Termina em 'x': Invariável (ex: tórax, ônix)
-  if ($last_char === 'x') {
-    return $word;
-  }
-
-  // Caso padrão para outras consoantes, adiciona 'es'
-  return $word . 'es';
-}
-
-/**
- * Singulariza uma palavra em português (simplificado).
- * Esta função tenta cobrir as regras mais comuns de singularização em português.
- * É o inverso de pluralize, mas também com limitações para casos complexos.
- *
- * @param string $word A palavra a ser singularizada (espera-se que esteja no plural).
- * @return string A palavra singularizada.
- */
-function singularize(string $word): string
-{
-  $word = strtolower($word); // Trabalha com a palavra em minúsculas
-
-  // Regras de singularização (inversas do plural)
-  // 1. Termina em 'ões': 'ões' -> 'ão'
-  if (str_ends_with($word, 'ões')) {
-    return substr($word, 0, -3) . 'ão';
-  }
-  // 2. Termina em 'ães': 'ães' -> 'ão'
-  if (str_ends_with($word, 'ães')) {
-    return substr($word, 0, -3) . 'ão';
-  }
-  // 3. Termina em 'is' (quando a singular termina em 'al', 'el', 'ol', 'ul', 'il' oxítona)
-  if (str_ends_with($word, 'ais')) {
-    return substr($word, 0, -3) . 'al';
-  }
-  if (str_ends_with($word, 'eis')) { // Pode ser de 'el' ou 'il' paroxítona
-    // Para 'eis' pode ser 'el' ou 'il'. Prioriza 'el'.
-    // Ex: papéis -> papel, fósseis -> fóssil
-    if (strlen($word) > 3 && in_array(substr($word, -4, 1), ['s', 'f', 'v'])) { // Tentativa de diferenciar fósseis/mísseis
-      return substr($word, 0, -3) . 'il'; // Mísseis -> míssil
-    }
-    return substr($word, 0, -3) . 'el'; // Papéis -> papel
-  }
-  if (str_ends_with($word, 'ois')) {
-    return substr($word, 0, -3) . 'ol';
-  }
-  if (str_ends_with($word, 'uis')) {
-    return substr($word, 0, -3) . 'ul';
-  }
-  if (str_ends_with($word, 'is') && !str_ends_with($word, 'ais') && !str_ends_with($word, 'eis') && !str_ends_with($word, 'ois') && !str_ends_with($word, 'uis')) {
-    // Se termina em 'is' mas não é de 'al/el/ol/ul', pode ser de 'il' ou já invariável
-    // Para simplificar, assume 'il' se não for um 'is' de vogal + 's'
-    if (substr($word, -3, 1) !== 's' && strlen($word) > 2) { // Evita pegar palavras como 'lápis' que são invariáveis
-      return substr($word, 0, -2) . 'il'; // Funis -> funil
-    }
-  }
-
-
-  // 4. Termina em 'ns': 'ns' -> 'm'
-  if (str_ends_with($word, 'ns')) {
-    return substr($word, 0, -2) . 'm';
-  }
-
-  // 5. Termina em 'es' (se a singular terminar em 'r' ou 'z')
-  if (str_ends_with($word, 'es')) {
-    $singular_attempt = substr($word, 0, -2);
-    // Tenta inferir se a singular era 'r' ou 'z'
-    if (str_ends_with($singular_attempt, 'r') || str_ends_with($singular_attempt, 'z')) {
-      return $singular_attempt;
-    }
-    // Casos como "paredes" -> "parede" (se não for "r" ou "z")
-    // Aqui está a complexidade, pois "aulas" -> "aula" (só remove 's')
-    // Vamos testar se o penúltimo é uma vogal para casos como "cidades" -> "cidade"
-    $second_last_plural = substr($word, -2, 1);
-    if ($second_last_plural === 'e' && in_array(substr($word, -3, 1), ['d', 't', 'p'])) { // Ex: cidades, paredes
-      return substr($word, 0, -1); // Remove só o 's'
-    }
-  }
-
-  // 6. Termina em 's' (e a singular terminava em vogal)
-  if (str_ends_with($word, 's')) {
-    // Considera que se terminou em vogal no singular, apenas remove o 's'
-    // Ex: 'carros' -> 'carro', 'casas' -> 'casa'
-    return substr($word, 0, -1);
-  }
-
-  // Se nenhuma regra se aplicar (palavra já era singular ou exceção)
-  return $word;
-}
 
 /**
  * Analisa os argumentos da linha de comando.
@@ -355,7 +403,7 @@ function generate_migration_content(string $entity_name_pascal, string $table_na
     $add_keys_string .= "        \$this->forge->addForeignKey('{$from_field}', '{$to_table}', '{$to_field}'{$on_delete}{$on_update});\n";
   }
 
-  // Adiciona created_at, updated_at e deleted_at
+  // Adiciona created_at, updated_at 
   $timestamps = "";
   if (!in_array('created_at', array_column($columns, 'name'))) {
     $timestamps .= "        \$this->forge->addField([
@@ -365,11 +413,6 @@ function generate_migration_content(string $entity_name_pascal, string $table_na
   if (!in_array('updated_at', array_column($columns, 'name'))) {
     $timestamps .= "        \$this->forge->addField([
             'updated_at' => ['type' => 'DATETIME', 'null' => true],
-        ]);\n";
-  }
-  if (!in_array('deleted_at', array_column($columns, 'name'))) {
-    $timestamps .= "        \$this->forge->addField([
-            'deleted_at' => ['type' => 'DATETIME', 'null' => true],
         ]);\n";
   }
 
@@ -446,7 +489,7 @@ function generate_model_content(string $entity_name_pascal, string $table_name, 
   // --- 1. Popula allowedFields e define regras de validação para cada coluna ---
   foreach ($columns as $column) {
     // Ignora a chave primária e campos de timestamp automáticos
-    if ($column['name'] === $primaryKey || in_array(strtolower($column['name']), ['created_at', 'updated_at', 'deleted_at',])) {
+    if ($column['name'] === $primaryKey) {
       continue;
     }
 
@@ -559,7 +602,7 @@ function generate_model_content(string $entity_name_pascal, string $table_name, 
      protected \$primaryKey      = '{$primaryKey}';
      protected \$useAutoIncrement = true;
      protected \$returnType      = 'App\\Entities\\{$entity_name_pascalx}';
-     protected \$useSoftDeletes  = true;
+     protected \$useSoftDeletes  = false;
      protected \$protectFields   = true;
      protected \$allowedFields   = [{$allowedFieldsString}];
  
@@ -568,7 +611,7 @@ function generate_model_content(string $entity_name_pascal, string $table_name, 
      protected \$dateFormat    = 'datetime';
      protected \$createdField  = 'created_at'; 
      protected \$updatedField  = 'updated_at';
-     protected \$deletedField  = 'deleted_at'; 
+     protected \$deletedField  = ''; 
  
      // Validation
      protected \$validationRules = [
@@ -581,9 +624,9 @@ function generate_model_content(string $entity_name_pascal, string $table_name, 
  
      // Callbacks
      protected \$allowCallbacks = true;
-     protected \$beforeInsert   = [];
+     protected \$beforeInsert = ['setAuditoriaCriacao'];
      protected \$afterInsert    = [];
-     protected \$beforeUpdate   = [];
+     protected \$beforeUpdate = ['setAuditoriaEdicao'];
      protected \$afterUpdate    = [];
      protected \$beforeFind     = [];
      protected \$afterFind      = [];
@@ -605,6 +648,32 @@ function generate_model_content(string $entity_name_pascal, string $table_name, 
         }
 
         return \$this->where(\$conditions)->first();
+    }
+
+    /**
+     * Busca o valor de um campo específico de um único registro no banco de dados com base em condições.
+     *
+     * @param string \$fieldName O nome do campo cujo valor você deseja retornar.
+     * @param array \$conditions Um array associativo de condições (coluna => valor).
+     * Ex: ['id' => 1], ['email' => 'teste@email.com'], ['chave' => 'nome_da_configuracao']
+     * @return mixed|null Retorna o valor do campo (se encontrado) ou null (se não encontrado ou campo não existir).
+     */
+    public function getCampo(string \$fieldName, array \$conditions = [])
+    {
+        if (empty(\$conditions) || empty(\$fieldName)) {
+            return null;
+        }
+
+        // Seleciona apenas o campo desejado para otimizar a consulta
+        \$result = \$this->select(\$fieldName)
+                       ->where(\$conditions)
+                       ->first();
+
+        if (\$result) {
+            return \$result->\$fieldName;
+        }
+
+        return null;
     }
 
     /**
@@ -635,31 +704,6 @@ function generate_model_content(string $entity_name_pascal, string $table_name, 
     public function countRecords(array \$conditions = []): int
     {
         return \$this->where(\$conditions)->countAllResults();
-    }
-
-    /**
-     * Busca todos os registros que foram soft-deleted (marcados como deletados).
-     * Funciona apenas se \$useSoftDeletes estiver definido como true no Model.
-     *
-     * @return array Retorna um array de objetos de Entidade de registros deletados.
-     */
-    public function findDeleted(): array
-    {
-        if (\$this->useSoftDeletes) {
-            return \$this->onlyDeleted()->findAll();
-        }
-        return [];
-    }
-
-    /**
-     * Exclui permanentemente um registro do banco de dados, ignorando o soft delete.
-     *
-     * @param int \$id O ID da chave primária do registro a ser excluído permanentemente.
-     * @return bool Retorna true em caso de sucesso, false caso contrário.
-     */
-    public function forceDelete(int \$id): bool
-    {
-        return \$this->delete(\$id, true);
     }
 
     /**
@@ -733,11 +777,15 @@ function generate_controller_content(string $entity_name_pascal, string $table_n
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\LogAtividadesModel;
 use App\Models\\{$entity_name_pascal}Model;
 use App\Entities\\{$entity_name_pascalx};
+use CodeIgniter\HTTP\ResponseInterface;
 
 class {$entity_name_pascal} extends BaseController
 {
+    protected \$titulo; 
+    protected \$logAtividadesModel;
     protected \$model;   
     protected \$searchableFields = [
         'nome',
@@ -745,15 +793,17 @@ class {$entity_name_pascal} extends BaseController
 
     public function __construct()
     {
+        \$this->titulo = 'Tabela->{$entity_name_pascal}';
         \$this->model = new {$entity_name_pascal}Model();
+        \$this->logAtividadesModel = new LogAtividadesModel();
     }
 
     /**
      * Exibe a lista de todos os registros.
      *
-     * @return string
+     * @return string|ResponseInterface
      */
-    public function index(): string
+    public function index(): string|ResponseInterface
     { 
       if (!\$this->Carol->pode('{$entity_name_plural_upper}.INDEX')) {
         return redirect()->to(site_url())->with('error', 'Acesso negado.');
@@ -783,7 +833,7 @@ class {$entity_name_pascal} extends BaseController
       \$lastItem = min(\$currentPage * \$perPage, \$totalRecords);
 
       \$data = [
-          'titulo'       => 'Lista de consulta',
+          'titulo'       => \$this->titulo,
           'registros'    => \$registros,
           'search'       => \$search,
           'pager'        => \$pager,
@@ -798,16 +848,16 @@ class {$entity_name_pascal} extends BaseController
     /**
      * Exibe o formulário para criação.
      *
-     * @return string
+     * @return string|ResponseInterface
      */
-    public function new(): string
+    public function new(): string|ResponseInterface
     {
       if (!\$this->Carol->pode('{$entity_name_plural_upper}.NOVO')) {
         return redirect()->to(site_url())->with('error', 'Acesso negado.');
       }
 
         \$data = [
-            'titulo' => 'Novo',
+            'titulo' => 'Tabela->{$entity_name_pascal}',
         ];
 
         // carrega dados relacionados
@@ -819,9 +869,9 @@ class {$entity_name_pascal} extends BaseController
     /**
      * Salva um novo registro.
      *
-     * @return \CodeIgniter\HTTP\RedirectResponse
+     * @return string|ResponseInterface
      */
-    public function create(): \CodeIgniter\HTTP\RedirectResponse
+    public function create(): string|ResponseInterface
     {
       if (!\$this->Carol->pode('{$entity_name_plural_upper}.NOVO')) {
         return redirect()->to(site_url())->with('error', 'Acesso negado.');
@@ -833,6 +883,7 @@ class {$entity_name_pascal} extends BaseController
         \$registro->fill(\$postData);
 
         if (\$this->model->save(\$registro)) {
+            \$this->logAtividadesModel->addLog('{$entity_name_pascal}: novo registro [' . \$registro->id . ' - ' . \$registro->nome . ']');
             return redirect()->to('/{$entity_name_plural_lower}')->with('success', 'Registro criado com sucesso!');
         } else {
             return redirect()->back()->withInput()->with('errors', \$this->model->errors());
@@ -843,22 +894,22 @@ class {$entity_name_pascal} extends BaseController
      * Exibe o formulário para edição.
      *
      * @param int \$id O ID do registro.
-     * @return string|\CodeIgniter\HTTP\RedirectResponse
+     * @return string|ResponseInterface
      */
-    public function edit(int \$id)
+    public function edit(int \$id): string|ResponseInterface
     {
       if (!\$this->Carol->pode('{$entity_name_plural_upper}.EDITAR')) {
         return redirect()->to(site_url())->with('error', 'Acesso negado.');
       }
 
-        \$registros = \$this->model->find(\$id);m
+        \$registros = \$this->model->find(\$id);
 
         if (!\$registros) {
             return redirect()->to('/{$entity_name_plural_lower}')->with('error', 'Registro não encontrado.');
         }
 
         \$data = [
-            'titulo' => 'Editar',
+            'titulo' => \$this->titulo,
             'registros' => \$registros,
         ];
         
@@ -872,9 +923,9 @@ class {$entity_name_pascal} extends BaseController
      * Atualiza um registro existente no banco de dados.
      *
      * @param int \$id O ID do registro.
-     * @return \CodeIgniter\HTTP\RedirectResponse
+     * @return string|ResponseInterface
      */
-    public function update(int \$id): \CodeIgniter\HTTP\RedirectResponse
+    public function update(int \$id): string|ResponseInterface
     {
       if (!\$this->Carol->pode('{$entity_name_plural_upper}.EDITAR')) {
         return redirect()->to(site_url())->with('error', 'Acesso negado.');
@@ -895,6 +946,7 @@ class {$entity_name_pascal} extends BaseController
         \$registros->fill(\$postData);
 
         if (\$this->model->save(\$registros)) {
+            \$this->logAtividadesModel->addLog('{$entity_name_pascal}: registro atualizado [' . \$id . '-' . \$registro->nome . ']');
             return redirect()->to('/{$entity_name_plural_lower}')->with('success', 'Registro atualizado com sucesso!');
         } else {
             return redirect()->back()->withInput()->with('errors', \$this->model->errors());
@@ -905,9 +957,9 @@ class {$entity_name_pascal} extends BaseController
      * Exibe os detalhes de um registro específico.
      *
      * @param int \$id O ID do registro.
-     * @return string|\CodeIgniter\HTTP\RedirectResponse
+     * @return string|ResponseInterface
      */
-    public function show(int \$id)
+    public function show(int \$id): string|ResponseInterface
     {
       if (!\$this->Carol->pode('{$entity_name_plural_upper}.VER')) {
         return redirect()->to(site_url())->with('error', 'Acesso negado.');
@@ -920,8 +972,8 @@ class {$entity_name_pascal} extends BaseController
         }
     
         \$data = [
-            'titulo' => 'Detalhes',
-            'registros' => \registros,
+            'titulo' => \$this->titulo,
+            'registros' => \$registros,
         ];
         return view('{$entity_name_plural_lower}/show', \$data);
     }
@@ -930,15 +982,18 @@ class {$entity_name_pascal} extends BaseController
      * Exclui um registro do banco de dados.
      *
      * @param int \$id O ID do registro.
-     * @return \CodeIgniter\HTTP\RedirectResponse
+     * @return string|ResponseInterface
      */
-    public function delete(int \$id): \CodeIgniter\HTTP\RedirectResponse
+    public function delete(int \$id): string|ResponseInterface
     {
       if (!\$this->Carol->pode('{$entity_name_plural_upper}.EXCLUIR')) {
         return redirect()->to(site_url())->with('error', 'Acesso negado.');
       }
 
+      \$nome = \$this->model->getCampo('nome', ['id' => \$id]);
+
         if (\$this->model->delete(\$id)) {
+            \$this->logAtividadesModel->addLog('{$entity_name_pascal}: registro excluído [' . \$id . '-' . \$nome . ']');
             return redirect()->to('/{$entity_name_plural_lower}')->with('success', 'Registro excluído com sucesso!');
         } else {
             \$errors = \$this->model->errors();
@@ -1046,7 +1101,7 @@ function generate_view_contents(string $entity_name_pascal, string $table_name, 
       $primaryKey = $column['name'];
     }
     // Adiciona todos os campos exceto timestamps e soft delete para exibição
-    if (!in_array($column['name'], ['id', 'created_at', 'updated_at', 'deleted_at'])) {
+    if (!in_array($column['name'], ['id', 'created_at', 'updated_at'])) {
       $displayFields[] = $column['name'];
     }
     // Verifica se é uma chave estrangeira pela convenção tabela_id
@@ -1073,18 +1128,18 @@ function generate_view_contents(string $entity_name_pascal, string $table_name, 
 
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800"><?= \$titulo ?></h1>
+        <h5 class="mb-0 text-primary-emphasis"><?= \$titulo ?></h5>
         
         <div class="d-sm-flex align-items-center">
             <div class="col-md-auto me-3"> 
               <form action="<?= current_url() ?>" method="GET" class="d-flex">
                   <div class="input-group">
                       <input type="search" class="form-control" placeholder="Pesquisar..." aria-label="Pesquisar" name="search" value="<?= esc(\$search ?? '') ?>">
-                      <button class="btn btn-outline-secondary" type="submit" title="Pesquisar">
+                      <button class="btn btn-secondary" type="submit" title="Pesquisar">
                           <i class="bi bi-search"></i>
                       </button>
                       <?php if (!empty(\$search)) : ?>
-                          <a href="<?= current_url() ?>" class="btn btn-outline-danger" title="Limpar pesquisa">
+                          <a href="<?= current_url() ?>" class="btn btn-danger" title="Limpar pesquisa">
                               <i class="bi bi-x-lg"></i>
                           </a>
                       <?php endif; ?>
@@ -1116,11 +1171,11 @@ function generate_view_contents(string $entity_name_pascal, string $table_name, 
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Lista</h6>
+            <h6 class="m-0 text-primary-emphasis">Lista</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             {$headers}
@@ -1133,24 +1188,27 @@ function generate_view_contents(string $entity_name_pascal, string $table_name, 
                                 <tr>
                                     {$rows}
                                     <td>
-                                        <?php if (service('Carol')->pode('{$entity_name_plural_upper}.VER')) : ?>
-                                        <a href="<?= base_url('{$entity_name_plural_lower}/show/' . \$registro->id) ?>" class="btn btn-info btn-sm" title="Detalhes">
-                                            <i class="bi bi-eye"></i> 
+                                      <?php if (service('Carol')->pode('{$entity_name_plural_upper}.VER')) : ?>
+                                        <a href="<?= base_url('{$entity_name_plural_lower}/' . \$registro->id) . '/show' ?>" class="btn btn-info btn-sm" title="Detalhes">
+                                            <i class="bi bi-eye"></i>
                                         </a>
-                                        <?php endif; ?>
-                                        <?php if (service('Carol')->pode('{$entity_name_plural_upper}.EDITAR')) : ?>
-                                        <a href="<?= base_url('{$entity_name_plural_lower}/edit/' . \$registro->id) ?>" class="btn btn-warning btn-sm" title="Editar">
-                                            <i class="bi bi-pencil"></i> 
-                                        </a>
-                                        <?php endif; ?>
-                                        <?php if (service('Carol')->pode('{$entity_name_plural_upper}.EXCLUIR')) : ?>
-                                        <form action="<?= base_url('{$entity_name_plural_lower}/delete/' . \$registro->id) ?>" method="POST" class="d-inline form-delete">
-                                            <?= csrf_field() ?>
-                                            <input type="hidden" name="_method" value="DELETE">
-                                            <button type="submit" class="btn btn-danger btn-sm" title="Excluir">
-                                                <i class="bi bi-trash"></i> </button>
-                                        </form>
-                                        <?php endif; ?>
+                                      <?php endif; ?>
+
+                                      <?php if (service('Carol')->pode('{$entity_name_plural_upper}.EDITAR')) : ?>
+                                      <a href="<?= base_url('{$entity_name_plural_lower}/' . \$registro->id . '/edit') ?>" class="btn btn-warning btn-sm" title="Editar">
+                                          <i class="bi bi-pencil"></i>
+                                      </a>
+                                      <?php endif; ?>
+
+                                      <?php if (service('Carol')->pode('{$entity_name_plural_upper}.EXCLUIR')) : ?>
+                                      <form action="<?= base_url('{$entity_name_plural_lower}/' . \$registro->id) ?>" method="POST" class="d-inline form-delete">
+                                        <?= csrf_field() ?>
+                                          <input type="hidden" name="_method" value="DELETE">
+                                          <button type="submit" class="btn btn-danger btn-sm" title="Excluir">
+                                              <i class="bi bi-trash"></i>
+                                          </button>
+                                      </form>
+                                      <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -1166,7 +1224,7 @@ function generate_view_contents(string $entity_name_pascal, string $table_name, 
             </div>
             <?= \$this->include('partes/paginacao') ?>
         </div>
-        <div class="card-footer text-body-secondary">
+        <div class="card-footer text-body-secondary texto-pequeno">
         </div>
     </div>
 </div>
@@ -1220,13 +1278,13 @@ HTML;
         $type = 'number';
         $formFieldsNew .= <<<HTML
                 <div class="form-floating mb-3 number-spinner-input-group">
-                    <div class="input-group">
+                    <div class="input-group input-with-copy">
                         <input type="number" class="form-control text-center" id="{$inputName}" name="{$inputName}" 
                               placeholder="{$label}" value="" 
                               min="0" step="1" {$required_attr}> <label for="{$inputName}">{$label}</label>
-                        <button class="btn btn-outline-secondary spinner-minus" type="button" title="Diminuir">
+                        <button class="btn btn-secondary spinner-minus" type="button" title="Diminuir">
                             <i class="bi bi-dash"></i> </button>
-                        <button class="btn btn-outline-secondary spinner-plus" type="button" title="Aumentar">
+                        <button class="btn btn-secondary spinner-plus" type="button" title="Aumentar">
                             <i class="bi bi-plus"></i> </button>
                     </div>
                     <?php if (session('errors.{$inputName}')) : ?>
@@ -1259,11 +1317,17 @@ HTML;
       } elseif (str_starts_with($inputName, 'data_')) {
         $type = 'date';
         $formFieldsNew .= <<<HTML
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-3 input-with-copy">
                         <input type="{$type}" class="form-control datepicker-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
                             value="<?= old('{$inputName}', \$value ?? '') ?>" 
                             {$required_attr}>
                         <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
                         <?php if (session('errors.{$inputName}')) : ?>
                             <div class="invalid-feedback d-block">
                                 <?= session('errors.{$inputName}') ?>
@@ -1274,11 +1338,17 @@ HTML;
       } elseif (str_starts_with($inputName, 'datahora_')) {
         $type = 'date';
         $formFieldsNew .= <<<HTML
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-3 input-with-copy">
                         <input type="{$type}" class="form-control datetimepicker-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
                             value="<?= old('{$inputName}', \$value ?? '') ?>" 
                             {$required_attr}>
                         <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
                         <?php if (session('errors.{$inputName}')) : ?>
                             <div class="invalid-feedback d-block">
                                 <?= session('errors.{$inputName}') ?>
@@ -1289,11 +1359,17 @@ HTML;
       } elseif (str_starts_with($inputName, 'hora_')) {
         $type = 'time';
         $formFieldsNew .= <<<HTML
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-3 input-with-copy">
                         <input type="{$type}" class="form-control timepicker-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
                             value="<?= old('{$inputName}', \$value ?? '') ?>" 
                             {$required_attr}>
                         <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
                         <?php if (session('errors.{$inputName}')) : ?>
                             <div class="invalid-feedback d-block">
                                 <?= session('errors.{$inputName}') ?>
@@ -1304,11 +1380,17 @@ HTML;
       } elseif (str_ends_with($inputName, '_at')) {
         $type = 'datetime-local'; // Ou 'text' se preferir, o datepicker vai gerenciar
         $formFieldsNew .= <<<HTML
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-3 input-with-copy">
                         <input type="{$type}" class="form-control datepicker-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
                             value="<?= old('{$inputName}', \$value ?? '') ?>" 
                             {$required_attr}>
                         <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
                         <?php if (session('errors.{$inputName}')) : ?>
                             <div class="invalid-feedback d-block">
                                 <?= session('errors.{$inputName}') ?>
@@ -1319,11 +1401,17 @@ HTML;
       } elseif (str_starts_with($inputName, 'valor_')) { // Detecta campos que começam com 'valor_'
         $type = 'text';
         $formFieldsNew .= <<<HTML
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-3 input-with-copy">
                         <input type="{$type}" class="form-control monetary-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
                             value="<?= old('{$inputName}', (isset(\$value) && \$value !== null) ? number_format(\$value / 100, 2, ',', '.') : '') ?>" 
                             {$required_attr}>
                         <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
                         <?php if (session('errors.{$inputName}')) : ?>
                             <div class="invalid-feedback d-block">
                                 <?= session('errors.{$inputName}') ?>
@@ -1333,7 +1421,7 @@ HTML;
     HTML;
       } elseif (strpos(strtoupper($column['type']), 'TEXT') !== false || ($ci4Type === 'VARCHAR' && ($column['max_length'] ?? 0) > 255)) {
         $formFieldsNew .= <<<HTML
-                  <div class="form-floating mb-3 position-relative"> 
+                  <div class="form-floating mb-3 position-relative input-with-copy"> 
                   <input type="{$type}" class="form-control" id="{$inputName}" name="{$inputName}" placeholder="{$label}" value="<?= old('{$inputName}') ?>" {$required_attr}>
                   <label for="{$inputName}">{$label}</label>
                     <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
@@ -1341,6 +1429,7 @@ HTML;
                             title="Copiar">
                         <i class="bi bi-clipboard"></i>
                     </button>
+                    <span class="copy-feedback-message-external"></span>
                     <?php if (session('errors.{$inputName}')) : ?>
                         <div class="invalid-feedback d-block">
                             <?= session('errors.{$inputName}') ?>
@@ -1359,7 +1448,7 @@ HTML;
 
 <div class="container-fluid">
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800"><?= \$titulo ?></h1>
+    <h5 class="mb-0 text-primary-emphasis"><?= \$titulo ?></h5>
   </div>
 
   <?php if (session()->has('errors')) : ?>
@@ -1381,31 +1470,31 @@ HTML;
 
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Novo</h6>
+      <h6 class="m-0 text-primary-emphasis">Novo</h6>
     </div>
     <div class="card-body">
-      <form action="/{$entity_name_plural_lower}/create" method="post">
+      <form action="<?= base_url('{$entity_name_plural_lower}') ?>" method="post">
           <?= csrf_field() ?>
           {$formFieldsNew}
           <div class="d-flex justify-content-start mt-3">
               <?php if (service('Carol')->pode('{$entity_name_plural_upper}.NOVO')) : ?>
-              <button type="submit" class="btn btn-primary btn-icon-split mr-2">
+              <button type="submit" class="btn btn-primary ms-1">
                   <span class="icon text-white-50">
-                      <i class="fas fa-save"></i>
+                      <i class="bi bi-save"></i>
                   </span>
                   <span class="text">Salvar</span>
               </button>
               <?php endif; ?>
-              <a href="/{$entity_name_plural_lower}" class="btn btn-secondary btn-icon-split">
+              <a href="/{$entity_name_plural_lower}" class="btn btn-secondary ms-1">
                   <span class="icon text-white-50">
-                      <i class="fas fa-arrow-left"></i>
+                      <i class="bi bi-arrow-left"></i>
                   </span>
                   <span class="text">Voltar</span>
               </a>
           </div>
       </form>
     </div>
-    <div class="card-footer text-body-secondary">
+    <div class="card-footer text-body-secondary texto-pequeno">
     </div>
   </div>
 </div>
@@ -1422,7 +1511,7 @@ HTML;
     $label = ucwords(str_replace('_', ' ', $field));
     $type = 'text'; // Default
     $inputName = $field;
-    $value = "<?= old('{$inputName}', \${$entity_name_singular_lower}->{$field}) ?>";
+    $value = "<?= old('{$inputName}', esc(\${$entity_name_singular_lower}->{$field} ?? '')) ?>";
     // Adiciona 'required' se a coluna for NOT NULL e não tiver valor padrão, e não for a PK.
     $column_data_for_required = array_values(array_filter($columns, fn($col) => $col['name'] === $field));
     $required_attr = (count($column_data_for_required) > 0 && (bool)$column_data_for_required[0]['notnull'] && $column_data_for_required[0]['dflt_value'] === null && $column_data_for_required[0]['name'] !== $primaryKey) ? 'required' : '';
@@ -1467,15 +1556,22 @@ HTML;
       if ($ci4Type === 'INT' || $ci4Type === 'DOUBLE' || $ci4Type === 'DECIMAL') {
         $type = 'number';
         $formFieldsEdit .= <<<HTML
-                 <div class="form-floating mb-3 number-spinner-input-group">
+                 <div class="form-floating mb-3 number-spinner-input-group input-with-copy">
                     <div class="input-group">
-                        <input type="number" class="form-control text-center" id="{$inputName}" name="{$inputName}" 
-                              placeholder="{$label}" value="<?= old('{$inputName}', (isset(\$value) && \$value !== null) ? esc(\$value) : '') ?>" 
-                              min="0" step="1" {$required_attr}> <label for="{$inputName}">{$label}</label>
-                        <button class="btn btn-outline-secondary spinner-minus" type="button" title="Diminuir">
+                      <input type="number" class="form-control text-center" id="{$inputName}" name="{$inputName}"
+                              placeholder="{$label}" value="<?= old('{$inputName}', esc(\$registros->{$inputName} ?? '')) ?>"
+                              min="0" step="1" {$required_attr}>
+                        <label for="{$inputName}">{$label}</label>
+                        <button class="btn btn-secondary spinner-minus" type="button" title="Diminuir">
                             <i class="bi bi-dash"></i> </button>
-                        <button class="btn btn-outline-secondary spinner-plus" type="button" title="Aumentar">
+                        <button class="btn btn-secondary spinner-plus" type="button" title="Aumentar">
                             <i class="bi bi-plus"></i> </button>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
                     </div>
                     <?php if (session('errors.{$inputName}')) : ?>
                         <div class="invalid-feedback d-block">
@@ -1495,7 +1591,7 @@ HTML;
                            name="{$inputName}" 
                            value="Sim" 
                            <?php 
-                               \$currentValue = old('{$inputName}', \$value ?? null);
+                               \$currentValue = old('{$inputName}', esc(\$registros->{$inputName} ?? ''));
                                if (\$currentValue === 'Sim') {
                                    echo 'checked';
                                }
@@ -1518,11 +1614,17 @@ HTML;
       } elseif (str_starts_with($inputName, 'data_')) {
         $type = 'date';
         $formFieldsEdit .= <<<HTML
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-3 input-with-copy">
                         <input type="{$type}" class="form-control datepicker-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
-                            value="<?= old('{$inputName}', \$value ?? '') ?>" 
+                            value="<?= old('{$inputName}', esc(\$registros->{$inputName} ?? '')) ?>" 
                             {$required_attr}>
                         <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
                         <?php if (session('errors.{$inputName}')) : ?>
                             <div class="invalid-feedback d-block">
                                 <?= session('errors.{$inputName}') ?>
@@ -1533,11 +1635,17 @@ HTML;
       } elseif (str_starts_with($inputName, 'datahora_')) {
         $type = 'date';
         $formFieldsEdit .= <<<HTML
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-3 input-with-copy">
                         <input type="{$type}" class="form-control datetimepicker-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
-                            value="<?= old('{$inputName}', \$value ?? '') ?>" 
+                            value="<?= old('{$inputName}', esc(\$registros->{$inputName} ?? '')) ?>" 
                             {$required_attr}>
                         <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
                         <?php if (session('errors.{$inputName}')) : ?>
                             <div class="invalid-feedback d-block">
                                 <?= session('errors.{$inputName}') ?>
@@ -1548,11 +1656,17 @@ HTML;
       } elseif (str_starts_with($inputName, 'hora_')) {
         $type = 'time';
         $formFieldsEdit .= <<<HTML
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-3 input-with-copy">
                         <input type="{$type}" class="form-control timepicker-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
-                            value="<?= old('{$inputName}', \$value ?? '') ?>" 
+                            value="<?= old('{$inputName}', esc(\$registros->{$inputName} ?? '')) ?>" 
                             {$required_attr}>
                         <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
                         <?php if (session('errors.{$inputName}')) : ?>
                             <div class="invalid-feedback d-block">
                                 <?= session('errors.{$inputName}') ?>
@@ -1563,11 +1677,17 @@ HTML;
       } elseif (str_ends_with($inputName, '_at')) {
         $type = 'datetime-local';
         $formFieldsEdit .= <<<HTML
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-3 input-with-copy">
                         <input type="{$type}" class="form-control datepicker-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
-                            value="<?= old('{$inputName}', \$value ?? '') ?>" 
+                            value="<?= old('{$inputName}', esc(\$registros->{$inputName} ?? '')) ?>" 
                             {$required_attr}>
                         <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
                         <?php if (session('errors.{$inputName}')) : ?>
                             <div class="invalid-feedback d-block">
                                 <?= session('errors.{$inputName}') ?>
@@ -1578,11 +1698,17 @@ HTML;
       } elseif (str_starts_with($inputName, 'valor_')) { // Detecta campos que começam com 'valor_'
         $type = 'text';
         $formFieldsEdit .= <<<HTML
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-3 input-with-copy">
                         <input type="{$type}" class="form-control monetary-input" id="{$inputName}" name="{$inputName}" placeholder="{$label}" 
-                            value="<?= old('{$inputName}', (isset(\$value) && \$value !== null) ? number_format(\$value / 100, 2, ',', '.') : '') ?>" 
+                            value="<?= old('{$inputName}', esc(number_format(\$registros->{$inputName} / 100, 2, ',', '.') ?? '')) ?>" 
                             {$required_attr}>
                         <label for="{$inputName}">{$label}</label>
+                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
+                            data-clipboard-target="#{$inputName}" 
+                            title="Copiar">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <span class="copy-feedback-message-external"></span>
                         <?php if (session('errors.{$inputName}')) : ?>
                             <div class="invalid-feedback d-block">
                                 <?= session('errors.{$inputName}') ?>
@@ -1591,15 +1717,16 @@ HTML;
                     </div>
     HTML;
       } elseif (strpos(strtoupper($column['type']), 'TEXT') !== false || ($ci4Type === 'VARCHAR' && ($column['max_length'] ?? 0) > 255)) {
-        $formFieldsNew .= <<<HTML
-                  <div class="form-floating mb-3 position-relative"> 
-                  <input type="{$type}" class="form-control" id="{$inputName}" name="{$inputName}" placeholder="{$label}" value="<?= old('{$inputName}') ?>" {$required_attr}>
+        $formFieldsEdit .= <<<HTML
+                  <div class="form-floating mb-3 position-relative input-with-copy"> 
+                  <input type="{$type}" class="form-control" id="{$inputName}" name="{$inputName}" placeholder="{$label}" value="<?= old('{$inputName}', esc(\$registros->{$inputName} ?? '')) ?>" {$required_attr}>
                   <label for="{$inputName}">{$label}</label>
                     <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
                             data-clipboard-target="#{$inputName}" 
                             title="Copiar">
                         <i class="bi bi-clipboard"></i>
                     </button>
+                    <span class="copy-feedback-message-external"></span>
                     <?php if (session('errors.{$inputName}')) : ?>
                         <div class="invalid-feedback d-block">
                             <?= session('errors.{$inputName}') ?>
@@ -1617,7 +1744,7 @@ HTML;
 
 <div class="container-fluid">
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800"><?= \$titulo ?></h1>
+    <h5 class="mb-0 text-primary-emphasis"><?= \$titulo ?></h5>
   </div>
 
   <?php if (session()->has('errors')) : ?>
@@ -1639,37 +1766,34 @@ HTML;
 
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Editar</h6>
+      <h6 class="m-0 text-primary-emphasis">Editar</h6>
     </div>
     <div class="card-body">
-      <form action="/{$entity_name_plural_lower}/update/<?= \${$entity_name_singular_lower}->{$primaryKey} ?>" method="post">
+      <form action="<?= base_url('{$entity_name_plural_lower}/' . \$registros->{$primaryKey}) ?>" method="post">
           <?= csrf_field() ?>
           <input type="hidden" name="_method" value="PUT">
           {$formFieldsEdit}
           <div class="d-flex justify-content-start mt-3">
               <?php if (service('Carol')->pode('{$entity_name_plural_upper}.EDITAR')) : ?>
-              <button type="submit" class="btn btn-primary btn-icon-split mr-2">
+              <button type="submit" class="btn btn-primary ms-1">
                   <span class="icon text-white-50">
-                      <i class="fas fa-save"></i>
+                      <i class="bi bi-save"></i>
                   </span>
                   <span class="text">Atualizar</span>
               </button>
               <?php endif; ?>
-              <a href="/{$entity_name_plural_lower}" class="btn btn-secondary btn-icon-split">
+              <a href="/{$entity_name_plural_lower}" class="btn btn-secondary ms-1">
                   <span class="icon text-white-50">
-                      <i class="fas fa-arrow-left"></i>
+                      <i class="bi bi-arrow-left"></i>
                   </span>
                   <span class="text">Voltar</span>
               </a>
           </div>
       </form>
     </div>
-    <div class="card-footer text-body-secondary">
-    <p><strong>Criado em:</strong> \${$entity_name_singular_lower}->criado_em</p>
-    <p><strong>Editado em:</strong> \${$entity_name_singular_lower}->editado_em</p>
-    <?php if (!is_null(\${$entity_name_singular_lower}->excluido_em)) : ?>
-    <p><strong>Excluído em:</strong> \${$entity_name_singular_lower}->excluido_em</p>
-    <?php endif; ?>
+    <div class="card-footer text-body-secondary texto-pequeno">
+      <p class="mb-0">Criado em: <?= \$registros->criado_em ?></p>
+      <p class="mb-0">Editado em: <?= \$registros->editado_em ?></p>
     </div>
   </div>
 </div>
@@ -1684,12 +1808,12 @@ HTML;
   $detailsList = '';
   foreach ($displayFields as $field) {
     $label = ucwords(str_replace('_', ' ', $field));
-    $value = "<?= \$registro->{$field} ?>";
+    $value = "<?= \$registros->{$field} ?>";
 
     // Se for um campo de chave estrangeira, exibe o nome da relação, não apenas o ID
     if (isset($fkFields[$field])) {
       $fkInfo = $fkFields[$field];
-      $value = "<?= \$registro->{$fkInfo['related_table_singular_snake']}_nome ?? 'N/A' ?>";
+      $value = "<?= \$registros->{$fkInfo['related_table_singular_snake']}_nome ?? 'N/A' ?>";
     }
 
     $detailsList .= <<<HTML
@@ -1703,38 +1827,35 @@ HTML;
 
     <div class="container-fluid">
       <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800"><?= \$titulo ?></h1>
+        <h5 class="mb-0 text-primary-emphasis"><?= \$titulo ?></h5>
       </div>
 
       <div class="card shadow mb-4">
         <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">Detalhes</h6>
+          <h6 class="m-0 text-primary-emphasis">Detalhes</h6>
         </div>
         <div class="card-body">
           {$detailsList}
           <div class="d-flex justify-content-start mt-4">
               <?php if (service('Carol')->pode('{$entity_name_plural_upper}.EDITAR')) : ?>
-              <a href="/{$entity_name_plural_lower}/edit/<?= \${$entity_name_singular_lower}->{$primaryKey} ?>" class="btn btn-warning btn-icon-split mr-2">
+              <a href="/{$entity_name_plural_lower}/<?= \$registros->id ?>/edit ?>" class="btn btn-warning ms-1">
                   <span class="icon text-white-50">
-                      <i class="fas fa-pencil-alt"></i>
+                      <i class="bi bi-pencil"></i>
                   </span>
                   <span class="text">Editar</span>
               </a>
               <?php endif; ?>
-              <a href="/{$entity_name_plural_lower}" class="btn btn-secondary btn-icon-split">
+              <a href="/{$entity_name_plural_lower}" class="btn btn-secondary ms-1">
                   <span class="icon text-white-50">
-                      <i class="fas fa-arrow-left"></i>
+                      <i class="bi bi-arrow-left"></i>
                   </span>
                   <span class="text">Voltar</span>
               </a>
           </div>
         </div>
-        <div class="card-footer text-body-secondary">
-          <p><strong>Criado em:</strong> \${$entity_name_singular_lower}->criado_em</p>
-          <p><strong>Editado em:</strong> \${$entity_name_singular_lower}->editado_em</p>
-          <?php if (!is_null(\${$entity_name_singular_lower}->excluido_em)) : ?>
-          <p><strong>Excluído em:</strong> \${$entity_name_singular_lower}->excluido_em</p>
-          <?php endif; ?>
+        <div class="card-footer text-body-secondary texto-pequeno">
+          <p class="mb-0">Criado em: <?= \$registros->criado_em ?></p>
+          <p class="mb-0">Editado em: <?= \$registros->editado_em ?></p>
         </div>
       </div>
     </div>
@@ -2044,7 +2165,7 @@ function generate_entity_file(string $entity_name_pascal, string $table_name, ar
     }
 
     // Adiciona ao protected $dates
-    if (in_array(strtolower($column_name), ['created_at', 'updated_at', 'deleted_at'])) {
+    if (in_array(strtolower($column_name), ['created_at', 'updated_at'])) {
       $dates_array[] = "'{$column_name}'";
     }
   }
@@ -2173,8 +2294,7 @@ try {
   }
 
   // Função auxiliar para processar uma única tabela/entidade
-  $process_single_entity = function (string $entity_name_pascal, PDO $pdo, array $options, string $component_type = 'all') {
-    $table_name = pascal_to_snake_case(pluralize($entity_name_pascal));
+  $process_single_entity = function (string $entity_name_pascal, $table_name, PDO $pdo, array $options, string $component_type = 'all') {
     echo "--- Processando entidade: {$entity_name_pascal} (Tabela: {$table_name}) ---\n";
 
     $table_info = inspect_table($pdo, $table_name);
@@ -2214,13 +2334,13 @@ try {
         }
         $entity_name_pascal = snake_to_pascal_case(pluralize($table_name));
         // $process_single_entity($entity_name_pascal, $pdo, $arguments['options'], 'all');
-        $process_single_entity($entity_name_pascal, $pdo, $arguments['options'], 'all');
+        $process_single_entity($entity_name_pascal, $table_name, $pdo, $arguments['options'], 'all');
       }
       break;
 
     case 'crud':
       echo "Gerando CRUD completo para a entidade: **{$arguments['entity_name']}**\n";
-      $process_single_entity($arguments['entity_name'], $pdo, $arguments['options'], 'all');
+      $process_single_entity($arguments['entity_name'], $table_name, $pdo, $arguments['options'], 'all');
       break;
 
     case 'migration':

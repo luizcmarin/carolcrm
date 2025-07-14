@@ -300,7 +300,7 @@ body.sidebar-collapsed {
   transform: scale(.85) translateY(-.5rem) translateX(.15rem);
 }
 
-.form-floating .copy-button-textarea {
+.form-floating {
   position: absolute;
   top: 5px;
   right: 5px;
@@ -311,6 +311,100 @@ body.sidebar-collapsed {
   transition: opacity 0.2s ease-in-out;
 }
 
-.form-floating .copy-button-textarea:hover {
+.form-floating {
   opacity: 1;
+}
+
+.texto-pequeno {
+  font-size: 0.65em;
+}
+
+.input-with-copy {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-with-copy textarea {
+  flex-grow: 1;
+  padding: 0.75rem;
+  padding-right: 3rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  outline: none;
+  color: #374151;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input-with-copy textarea:focus {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+.form-group-custom+.form-group-custom {
+  margin-top: 1rem;
+}
+
+.copy-button-textarea {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.45rem;
+  z-index: 5;
+  background-color: transparent;
+  border: none;
+  color: #6b7280;
+  border-radius: 0.30rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.copy-button-textarea:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.copy-feedback-message-external {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.45rem;
+  width: 3.5rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  border-radius: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.copy-feedback-message-external.show {
+  opacity: 1;
+}
+
+/* Responsividade básica */
+@media (max-width: 640px) {
+  .input-with-copy textarea {
+    padding-right: 2.5rem;
+  }
+
+  .copy-button-textarea {
+    top: 0.15rem;
+    right: 0.15rem;
+    padding: 0.4rem;
+  }
+
+  .copy-feedback-message-external {
+    top: 0.15rem;
+    right: 0.15rem;
+    width: 2.2rem;
+    height: 2.2rem;
+  }
 }
