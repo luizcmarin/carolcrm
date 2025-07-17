@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use App\Models\PermissoesModel;
 use App\Models\Traits\AuditoriaTrait;
+use App\Models\UsuarioPermissoesModel;
 
 class UsuariosModel extends Model
 {
@@ -15,7 +17,7 @@ class UsuariosModel extends Model
     protected $returnType      = 'App\Entities\Usuario';
     protected $useSoftDeletes  = false;
     protected $protectFields   = true;
-    protected $allowedFields   = ['nome', 'usuario_grupo_id', 'celular', 'telefone', 'email', 'imagem_perfil', 'sobre', 'endereco', 'bairro', 'cidade_id', 'cep', 'complemento', 'redes_sociais', 'genero', 'cpf', 'documentos', 'cargo_id', 'profissao_id', 'nacionalidade_id', 'assinatura_email', 'senha', 'ultimo_ip', 'data_ultimo_login', 'sn_administrador', 'sn_ativo', 'created_at', 'updated_at', 'criado_em', 'editado_em'];
+    protected $allowedFields   = ['nome', 'usuario_grupo_id', 'celular', 'telefone', 'email', 'imagem_id', 'sobre', 'endereco', 'bairro', 'cidade_id', 'cep', 'complemento', 'redes_sociais', 'genero', 'cpf', 'documentos', 'cargo_id', 'profissao_id', 'nacionalidade_id', 'assinatura_email', 'nome_usuario', 'senha', 'ultimo_ip', 'data_ultimo_login', 'sn_administrador', 'sn_ativo', 'created_at', 'updated_at', 'criado_em', 'editado_em'];
 
     // Dates
     protected $useTimestamps = true;
@@ -51,9 +53,9 @@ class UsuariosModel extends Model
             'rules' => 'required|valid_email',
             'errors' => 'O campo {field} é obrigatório.|O campo {field} deve conter um endereço de e-mail válido.',
         ],
-        'imagem_perfil' => [
+        'imagem_id' => [
             'label' => 'Imagem Perfil',
-            'rules' => 'permit_empty',
+            'rules' => 'permit_empty|integer',
             'errors' => '',
         ],
         'sobre' => [
@@ -98,8 +100,9 @@ class UsuariosModel extends Model
         ],
         'cpf' => [
             'label' => 'Cpf',
-            'rules' => 'permit_empty',
+            'rules' => 'permit_empty|valid_cpf',
             'errors' => 'O campo {field} é inválido.',
+            'valid_cpf' => 'O CPF informado não é válido.',
         ],
         'documentos' => [
             'label' => 'Documentos',
@@ -126,20 +129,15 @@ class UsuariosModel extends Model
             'rules' => 'permit_empty|valid_email',
             'errors' => 'O campo {field} deve conter um endereço de e-mail válido.',
         ],
+        'nome_usuario' => [
+            'label' => 'Nome e usuário',
+            'rules' => 'required',
+            'errors' => 'O campo {field} é obrigatório.',
+        ],
         'senha' => [
             'label' => 'Senha',
-            'rules' => 'required|min_length[8]',
-            'errors' => 'O campo {field} é obrigatório.|O campo {field} é inválido.',
-        ],
-        'ultimo_ip' => [
-            'label' => 'Ultimo Ip',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
-        'data_ultimo_login' => [
-            'label' => 'Data Ultimo Login',
-            'rules' => 'permit_empty',
-            'errors' => '',
+            'rules' => 'min_length[8]',
+            'errors' => 'O campo {field} é inválido.',
         ],
         'sn_administrador' => [
             'label' => 'Sn Administrador',
@@ -151,26 +149,6 @@ class UsuariosModel extends Model
             'rules' => 'permit_empty',
             'errors' => '',
         ],
-        'created_at' => [
-            'label' => 'Created At',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
-        'updated_at' => [
-            'label' => 'Updated At',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
-        'criado_em' => [
-            'label' => 'Criado Em',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
-        'editado_em' => [
-            'label' => 'Editado Em',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
     ];
     protected $validationMessages  = [];
     protected $skipValidation      = false;
@@ -178,9 +156,9 @@ class UsuariosModel extends Model
 
     // Callbacks
     protected $allowCallbacks = true;
-    protected $beforeInsert = ['setAuditoriaCriacao'];
-    protected $afterInsert    = [];
-    protected $beforeUpdate = ['setAuditoriaEdicao'];
+    protected $beforeInsert   = ['setAuditoriaCriacao', 'hashPassword'];
+    protected $afterInsert    = ['adicionarPermissoesPadraoAoNovoUsuario'];
+    protected $beforeUpdate   = ['setAuditoriaEdicao', 'hashPassword'];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
@@ -302,5 +280,145 @@ class UsuariosModel extends Model
             $options[$row->$valueField] = $row->$labelField;
         }
         return $options;
+    }
+
+    /**
+     * Hashes a senha antes de salvar no banco de dados.
+     * Este método é chamado pelos callbacks beforeInsert e beforeUpdate.
+     *
+     * @param array $data O array de dados que será inserido/atualizado.
+     * @return array O array de dados modificado com a senha hasheada.
+     */
+    protected function hashPassword(array $data)
+    {
+        // Verifica se o campo 'senha' existe e não está vazio
+        if (isset($data['data']['senha']) && !empty($data['data']['senha'])) {
+            $data['data']['senha'] = password_hash($data['data']['senha'], PASSWORD_DEFAULT);
+        } else {
+            // Se a senha estiver vazia (no caso de update onde não foi alterada),
+            // remove a chave 'senha' para não sobrescrever com vazio/nulo.
+            // Isso é um fallback, pois o controller já deveria lidar com isso.
+            unset($data['data']['senha']);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Associa um ID de arquivo a um usuário específico.
+     * Se $imagemId for null, desvincula a imagem (usa a imagem padrão).
+     *
+     * @param int $userId O ID do usuário.
+     * @param int|null $imagemId O ID do arquivo na tabela 'arquivos', ou null para remover.
+     * @return bool
+     */
+    public function setImagemPerfil(int $userId, ?int $imagemId): bool
+    {
+        return $this->update($userId, ['imagem_id' => $imagemId]);
+    }
+
+    /**
+     * Verifica se um determinado ID de arquivo está sendo referenciado por algum usuário.
+     *
+     * @param int $arquivoId O ID do arquivo a ser verificado na tabela 'arquivos'.
+     * @return bool True se houver referências, False caso contrário.
+     */
+    public function isArquivoReferenciado(int $arquivoId): bool
+    {
+        // Verifica se algum usuário tem este arquivo como imagem de perfil
+        return $this->where('imagem_id', $arquivoId)->countAllResults() > 0;
+
+        // TODO: Se você tiver outras tabelas que referenciam 'arquivos', precisaria verificar aqui também
+        // Ex: $imoveisModel = new ImoveisModel();
+        // return $this->where('imagem_id', $arquivoId)->countAllResults() > 0 || $imoveisModel->where('foto_principal_id', $arquivoId)->countAllResults() > 0;
+    }
+
+    /**
+     * Exclui um usuário e, se houver, sua imagem de perfil associada,
+     * desde que a imagem não esteja sendo referenciada por outros usuários.
+     *
+     * @param int $userId O ID do usuário a ser excluído.
+     * @return bool True em caso de sucesso, False em caso de falha.
+     */
+    public function deleteUserAndAssociatedImage(int $userId): bool
+    {
+        $this->db->transBegin();
+
+        try {
+            $user = $this->find($userId);
+            if (!$user) {
+                throw new \Exception('Usuário não encontrado.');
+            }
+
+            $imageId = $user['imagem_id'];
+
+            // 1. Exclui o registro do usuário
+            if (!$this->delete($userId)) {
+                throw new \Exception('Falha ao excluir o registro do usuário.');
+            }
+
+            // 2. Se o usuário tinha uma imagem associada, tenta excluí-la
+            if ($imageId) {
+                // Instancia o Arquivos Controller para usar sua lógica de exclusão de arquivo.
+                // É importante usar o método interno que verifica referências.
+                $ArquivosController = new \App\Controllers\Arquivos();
+                $ArquivosController->deleteArquivoAndRecord($imageId);
+                // deleteArquivoAndRecord vai internamente verificar se o arquivo ainda é referenciado
+                // por outros usuários ou entidades. Se não for, ele será excluído fisicamente.
+                // Se for, ele simplesmente não será excluído fisicamente, que é o comportamento desejado.
+            }
+
+            $this->db->transCommit();
+            return true;
+        } catch (\Exception $e) {
+            $this->db->transRollback();
+            log_message('error', 'Erro ao excluir usuário e imagem: ' . $e->getMessage());
+            session()->setFlashdata('error', 'Erro ao excluir usuário: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Callback executado após a inserção de um novo usuário.
+     * Adiciona todas as permissões existentes à tabela 'usuario_permissoes' para o novo usuário.
+     *
+     * @param array $data O array de dados do usuário recém-inserido.
+     * @return array O array de dados original.
+     */
+    protected function adicionarPermissoesPadraoAoNovoUsuario(array $data)
+    {
+        // Verifica se a inserção do usuário foi bem-sucedida e se há um ID de usuário
+        if (!empty($data['id'])) {
+            $novoUsuarioId = $data['id'];
+
+            $permissaoModel = new PermissoesModel();
+            $usuarioPermissaoModel = new UsuarioPermissoesModel();
+
+            // Busca todas as permissões existentes na tabela 'permissoes'
+            $permissoesExistentes = $permissaoModel->findAll();
+
+            if (!empty($permissoesExistentes)) {
+                $batchInsertData = [];
+                foreach ($permissoesExistentes as $permissao) {
+                    $batchInsertData[] = [
+                        'usuario_id' => $novoUsuarioId,
+                        'categoria'  => $permissao->categoria,
+                        'chave'      => $permissao->chave,
+                        'sn_ativo'   => 'Não',
+                    ];
+                }
+
+                if (!empty($batchInsertData)) {
+                    try {
+                        $usuarioPermissaoModel->insertBatch($batchInsertData);
+                    } catch (\Throwable $e) {
+                        log_message('error', 'Erro ao adicionar permissões padrão ao novo usuário ID ' . $novoUsuarioId . ': ' . $e->getMessage());
+                    }
+                }
+            } else {
+                log_message('info', 'Nenhuma permissão existente encontrada para adicionar ao novo usuário ID: ' . $novoUsuarioId);
+            }
+        }
+        return $data;
     }
 }

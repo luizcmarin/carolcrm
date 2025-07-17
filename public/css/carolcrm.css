@@ -1,4 +1,3 @@
-/* Variáveis CSS para cores e espaçamentos comuns */
 :root {
   --color-neutral-700: #4a5568;
   --color-neutral-800: #2d3748;
@@ -38,18 +37,19 @@ body {
   overflow-x: hidden;
 }
 
-header {
-  width: 100%;
-  flex-shrink: 0;
-  z-index: 1050;
-  position: relative;
-}
-
+header,
 .navbar {
   width: 100%;
   flex-shrink: 0;
-  z-index: 1040;
   position: relative;
+}
+
+header {
+  z-index: 1050;
+}
+
+.navbar {
+  z-index: 1040;
 }
 
 .main-container {
@@ -61,14 +61,12 @@ header {
 
 #menu.sidebar {
   width: var(--sidebar-width);
-  min-width: var(--sidebar-width);
-  max-width: var(--sidebar-width);
   flex-shrink: 0;
   height: 100%;
   overflow-y: auto;
   position: relative;
   z-index: 1020;
-  transition: width var(--transition-speed) ease, min-width var(--transition-speed) ease, max-width var(--transition-speed) ease;
+  transition: width var(--transition-speed) ease;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   display: block;
 }
@@ -82,8 +80,6 @@ header {
 
 .sidebar-toggled #menu.sidebar {
   width: 0;
-  min-width: 0;
-  max-width: 0;
   overflow: hidden;
 }
 
@@ -267,8 +263,7 @@ body.sidebar-collapsed {
     z-index: 1060;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.4);
     width: var(--sidebar-width);
-    min-width: var(--sidebar-width);
-    max-width: var(--sidebar-width);
+    flex-shrink: 0;
     overflow-y: auto;
     transition: left var(--transition-speed) ease;
     display: none;
@@ -293,7 +288,7 @@ body.sidebar-collapsed {
 
 .choices__list--dropdown,
 .choices__list[aria-expanded] {
-  z-index: 999 !important;
+  z-index: 100 !important;
 }
 
 .choices-label {
@@ -304,15 +299,10 @@ body.sidebar-collapsed {
   position: absolute;
   top: 5px;
   right: 5px;
-  z-index: 2;
   padding: .25rem .5rem;
   border-radius: .2rem;
-  opacity: 0.7;
-  transition: opacity 0.2s ease-in-out;
-}
-
-.form-floating {
   opacity: 1;
+  transition: opacity 0.2s ease-in-out;
 }
 
 .texto-pequeno {
@@ -361,6 +351,17 @@ body.sidebar-collapsed {
   justify-content: center;
 }
 
+.copy-button-textarea2 {
+  position: absolute;
+  z-index: 5;
+  color: #6b7280;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .copy-button-textarea:hover {
   background-color: rgba(0, 0, 0, 0.05);
 }
@@ -389,7 +390,6 @@ body.sidebar-collapsed {
   opacity: 1;
 }
 
-/* Responsividade básica */
 @media (max-width: 640px) {
   .input-with-copy textarea {
     padding-right: 2.5rem;
@@ -407,4 +407,115 @@ body.sidebar-collapsed {
     width: 2.2rem;
     height: 2.2rem;
   }
+}
+
+.choices {
+  margin-bottom: auto;
+}
+
+.form-labels {
+  max-width: 100%;
+  height: 100%;
+  padding-right: 0.05rem;
+  overflow: hidden;
+  color: rgba(var(--bs-body-color-rgb), .65);
+  text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+  border: var(--bs-border-width) solid transparent;
+  transform-origin: 0 0;
+  transition: opacity .1s ease-in-out, transform .1s ease-in-out;
+}
+
+/* Estilos para Upload e Pré-visualização */
+.image-preview {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  margin-top: 1rem;
+  display: block;
+}
+
+.drop-area {
+  border: 2px dashed #007bff;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+  color: #6c757d;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.drop-area.drag-over {
+  background-color: #e9ecef;
+  border-color: #0056b3;
+}
+
+.hidden-file-input {
+  display: none;
+}
+
+/* Estilos para o Álbum de Fotografias */
+.album-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.album-card:hover {
+  transform: translateY(-5px);
+}
+
+.album-card img {
+  /* width: 100%; */
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.album-card-body {
+  padding: 1rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.album-card-actions {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: space-around;
+}
+
+.album-card-actions .btn {
+  flex-grow: 1;
+  margin: 0 0.25rem;
+}
+
+.album-card-actions .btn:first-child {
+  margin-left: 0;
+}
+
+.album-card-actions .btn:last-child {
+  margin-right: 0;
+}
+
+.album-placeholder {
+  background-color: #f0f0f0;
+  color: #6c757d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 180px;
+  font-size: 0.9rem;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
 }

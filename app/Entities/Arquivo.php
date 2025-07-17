@@ -9,11 +9,15 @@ class Arquivo extends Entity
     protected $attributes = [
         'id' => null,
         'nome_arquivo' => null,
+        'nome_original' => null,
         'tipo_arquivo' => null,
+        'tamanho_bytes' => null,
+        'caminho_servidor' => null,
+        'url_publica' => null,
+        'descricao' => null,
+        'entidade_tipo' => null,
+        'entidade_id' => null,
         'sn_visivel_cliente' => 'Não',
-        'chave_anexo' => null,
-        'pessoa_id' => null,
-        'comentario_tarefa_id' => null,
         'created_at' => null,
         'updated_at' => null,
         'criado_em' => null,
@@ -24,8 +28,8 @@ class Arquivo extends Entity
     protected $dates   = ['created_at', 'updated_at'];
     protected $casts   = [
         'id' => 'int',
-        'pessoa_id' => 'int',
-        'comentario_tarefa_id' => 'int'
+        'tamanho_bytes' => 'int',
+        'entidade_id' => 'int'
     ];
 
     
@@ -33,9 +37,9 @@ class Arquivo extends Entity
     private $arquivo = null;
     public function getArquivo()
     {
-      if ($this->arquivo === null && $this->attributes['comentario_tarefa_id'] !== null) {
+      if ($this->arquivo === null && $this->attributes['entidade_id'] !== null) {
         $arquivo = new Arquivo();
-        $this->arquivo = $this->ArquivosModel->find($this->attributes['comentario_tarefa_id']);
+        $this->arquivo = $this->ArquivosModel->find($this->attributes['entidade_id']);
       }
       return $this->arquivo;
     }

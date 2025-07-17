@@ -452,6 +452,10 @@
     // Seleciona todos os botões com a classe 'copy-button-textarea'
     const copyButtons = document.querySelectorAll('.copy-button-textarea');
 
+    copyButtons.forEach(button => {
+      button.setAttribute('tabindex', '-1');
+    });
+
     function restoreIconButton(button) {
       button.innerHTML = '';
       const icon = document.createElement('i');

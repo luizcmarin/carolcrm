@@ -1,6 +1,8 @@
 <?php
 
-declare(strict_types=1); ?>
+declare(strict_types=1);
+
+?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -17,6 +19,8 @@ declare(strict_types=1); ?>
   <link href="<?= base_url('css/sweetalert2.min.css'); ?>" rel="stylesheet">
   <link href="<?= base_url('css/choices.css'); ?>" rel="stylesheet">
   <link href="<?= base_url('css/air-datepicker.css'); ?>" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/suneditor@3.0.0-beta.20/dist/suneditor.min.css" rel="stylesheet">
 
 
   <link rel="stylesheet" href="<?= base_url('css/carolcrm.css') ?>">
@@ -67,13 +71,50 @@ declare(strict_types=1); ?>
 
   <?= $this->include('partes/footer') ?>
 
+  <script>
+    const BASE_URL = '<?= base_url() ?>';
+    const UPLOAD_URL = BASE_URL + 'arquivos/upload';
+    const REMOVE_USER_IMAGE_URL = BASE_URL + 'arquivos/removeUserImage';
+    const DELETE_TEMPORARY_IMAGE_URL = BASE_URL + 'arquivos/deleteTemporaryImage';
+
+    const SEM_IMAGEM = '<?= SEM_IMAGEM ?>';
+
+    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+
+    const ALLOWED_TYPES = [
+      'image/jpeg',
+      'image/png',
+      'image/gif',
+      'image/webp',
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'text/plain'
+    ];
+
+    const ALLOWED_TYPES_IMAGES = [
+      'image/jpeg',
+      'image/png',
+      'image/gif',
+      'image/webp'
+    ];
+  </script>
+
   <script src="<?= base_url('js/bootstrap.bundle.min.js'); ?>"></script>
   <script src="<?= base_url('js/sweetalert2.min.js') ?>"></script>
   <script src="<?= base_url('js/choices.js') ?>"></script>
   <script src="<?= base_url('js/air-datepicker.js'); ?>"></script>
   <script src="<?= base_url('js/locales/air-datepicker-pt-BR.js'); ?>"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/suneditor@3.0.0-beta.20/dist/suneditor.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/suneditor@latest/src/lang/pt_br.js"></script>
+
   <script src="<?= base_url('js/carolcrm.js') ?>"></script>
   <?= $this->renderSection('scripts') ?>
+
+
 </body>
 
 </html>

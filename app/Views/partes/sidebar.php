@@ -47,7 +47,7 @@ declare(strict_types=1); ?>
       <a class="nav-link text-white" data-bs-toggle="collapse" href="#sales-submenu" role="button" aria-expanded="false" aria-controls="sales-submenu">
         <i class="bi bi-lightning-fill menu-icon me-2"></i> <!-- Ícone de Vendas -->
         <span class="menu-text">Vendas</span>
-        <i class="bi bi-chevron-down float-end menu-arrow"></i> <!-- Ícone de seta para baixo -->
+        <i class="bi bi-chevron-down float-end menu-arrow"></i>
       </a>
       <div class="collapse" id="sales-submenu" data-bs-parent="#side-menu">
         <ul class="nav flex-column ps-4 pt-1">
@@ -66,35 +66,76 @@ declare(strict_types=1); ?>
         <span class="menu-text">Assinaturas</span>
       </a>
     </li>
+
     <li class="nav-item">
-      <a class="nav-link text-white" data-bs-toggle="collapse" href="#cadastros-submenu" role="button" aria-expanded="false" aria-controls="sales-submenu">
-        <i class="bi bi-journal-text menu-icon me-2"></i> <!-- Ícone de Cadastros (alterado para algo mais genérico) -->
+      <a class="nav-link text-white" data-bs-toggle="collapse" href="#cadastros-submenu" role="button" aria-expanded="false" aria-controls="cadastros-submenu">
+        <i class="bi bi-journal-text menu-icon me-2"></i>
         <span class="menu-text">Cadastros</span>
-        <i class="bi bi-chevron-down float-end menu-arrow"></i> <!-- Ícone de seta para baixo -->
+        <i class="bi bi-chevron-down float-end menu-arrow"></i>
       </a>
+      <!-- Conteúdo do Submenu 'Cadastros' -->
       <div class="collapse" id="cadastros-submenu" data-bs-parent="#side-menu">
         <ul class="nav flex-column ps-4 pt-1">
-          <li><a class="nav-link text-white-50" href="<?= base_url('bancos') ?>">Bancos</a></li>
-          <li><a class="nav-link text-white-50" href="<?= base_url('cargos') ?>">Cargos</a></li>
-          <li><a class="nav-link text-white-50" href="<?= base_url('cidades') ?>">Cidades</a></li>
-          <li><a class="nav-link text-white-50" href="<?= base_url('nacionalidades') ?>">Nacionalidades</a></li>
-          <li><a class="nav-link text-white-50" href="<?= base_url('paises') ?>">Países</a></li>
-          <li><a class="nav-link text-white-50" href="<?= base_url('profissoes') ?>">Profissões</a></li>
+          <li><a class="nav-link text-white-50" href="<?= base_url('usuarios') ?>">Usuários</a></li>
+          <!-- Item de Submenu Aninhado: Tabelas Auxiliares -->
+          <li class="nav-item">
+            <a class="nav-link text-white-50" data-bs-toggle="collapse" href="#cadastros-tabelas-submenu" role="button" aria-expanded="false" aria-controls="cadastros-tabelas-submenu">
+              <i class="bi bi-table menu-icon me-2"></i>
+              <span class="menu-text">Tabelas Auxiliares</span>
+              <i class="bi bi-chevron-down float-end menu-arrow"></i>
+            </a>
+            <!-- Conteúdo do Submenu 'Tabelas Auxiliares' -->
+            <div class="collapse" id="cadastros-tabelas-submenu" data-bs-parent="#cadastros-submenu">
+              <ul class="nav flex-column ps-4 pt-1">
+                <li><a class="nav-link text-white-50" href="<?= base_url('bancos') ?>">Bancos</a></li>
+                <li><a class="nav-link text-white-50" href="<?= base_url('cargos') ?>">Cargos</a></li>
+                <li><a class="nav-link text-white-50" href="<?= base_url('cidades') ?>">Cidades</a></li>
+                <li><a class="nav-link text-white-50" href="<?= base_url('nacionalidades') ?>">Nacionalidades</a></li>
+                <li><a class="nav-link text-white-50" href="<?= base_url('paises') ?>">Países</a></li>
+                <li><a class="nav-link text-white-50" href="<?= base_url('profissoes') ?>">Profissões</a></li>
+              </ul>
+            </div>
+          </li>
         </ul>
       </div>
     </li>
+
     <li class="nav-item">
       <a class="nav-link text-white" data-bs-toggle="collapse" href="#configuracoes-submenu" role="button" aria-expanded="false" aria-controls="sales-submenu">
-        <i class="bi bi-gear-fill menu-icon me-2"></i> <!-- Ícone de Administração/Configurações -->
+        <i class="bi bi-gear-fill menu-icon me-2"></i>
         <span class="menu-text">Administração</span>
-        <i class="bi bi-chevron-down float-end menu-arrow"></i> <!-- Ícone de seta para baixo -->
+        <i class="bi bi-chevron-down float-end menu-arrow"></i>
       </a>
       <div class="collapse" id="configuracoes-submenu" data-bs-parent="#side-menu">
         <ul class="nav flex-column ps-4 pt-1">
-          <li><a class="nav-link text-white-50" href="<?= base_url('avisos') ?>">Avisos</a></li>
-          <li><a class="nav-link text-white-50" href="<?= base_url('configuracoes') ?>">Configurações</a></li>
-          <li><a class="nav-link text-white-50" href="<?= base_url('usuarios') ?>">Usuários</a></li>
-          <li><a class="nav-link text-white-50" href="<?= base_url('usuario_grupos') ?>">Grupos de Usuários</a></li>
+          <?php if (service('Carol')->pode('AVISOS.INDEX')) : ?>
+            <li><a class="nav-link text-white-50" href="<?= base_url('avisos') ?>">Avisos</a></li>
+          <?php endif; ?>
+          <?php if (service('Carol')->pode('CONFIGURACOES.INDEX')) : ?>
+            <li><a class="nav-link text-white-50" href="<?= base_url('configuracoes') ?>">Configurações</a></li>
+          <?php endif; ?>
+          <?php if (service('Carol')->pode('USUARIOS.INDEX')) : ?>
+            <li><a class="nav-link text-white-50" href="<?= base_url('usuarios') ?>">Usuários</a></li>
+          <?php endif; ?>
+          <?php if (service('Carol')->pode('USUARIOS.INDEX')) : ?>
+            <li><a class="nav-link text-white-50" href="<?= base_url('UsuarioGrupos') ?>">Usuários: Grupos</a></li>
+          <?php endif; ?>
+          <?php if (service('Carol')->pode('USUARIOS.PERMISSOES.INDEX')) : ?>
+            <li><a class="nav-link text-white-50" href="<?= base_url('UsuarioPermissoes') ?>">Usuários: Permissões</a></li>
+          <?php endif; ?>
+        </ul>
+      </div>
+    </li>
+
+    <!-- FIXME:  acertar acesso super usuario -->
+    <li class="nav-item">
+      <a class="nav-link text-white" data-bs-toggle="collapse" href="#su-configuracoes-submenu" role="button" aria-expanded="false" aria-controls="sales-submenu">
+        <i class="bi bi-gear-fill menu-icon me-2"></i>
+        <span class="menu-text">Super Usuário</span>
+        <i class="bi bi-chevron-down float-end menu-arrow"></i>
+      </a>
+      <div class="collapse" id="su-configuracoes-submenu" data-bs-parent="#side-menu">
+        <ul class="nav flex-column ps-4 pt-1">
           <li><a class="nav-link text-white-50" href="<?= base_url('permissoes') ?>">Permissões</a></li>
         </ul>
       </div>

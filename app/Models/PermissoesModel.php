@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use App\Models\UsuariosModel;
 use App\Models\Traits\AuditoriaTrait;
+use App\Models\UsuarioPermissoesModel;
 
 class PermissoesModel extends Model
 {
@@ -41,26 +43,6 @@ class PermissoesModel extends Model
             'rules' => 'required',
             'errors' => 'O campo {field} é obrigatório.',
         ],
-        'created_at' => [
-            'label' => 'Created At',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
-        'updated_at' => [
-            'label' => 'Updated At',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
-        'criado_em' => [
-            'label' => 'Criado Em',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
-        'editado_em' => [
-            'label' => 'Editado Em',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
     ];
     protected $validationMessages  = [];
     protected $skipValidation      = false;
@@ -68,9 +50,9 @@ class PermissoesModel extends Model
 
     // Callbacks
     protected $allowCallbacks = true;
-    protected $beforeInsert = ['setAuditoriaCriacao'];
-    protected $afterInsert    = [];
-    protected $beforeUpdate = ['setAuditoriaEdicao'];
+    protected $beforeInsert   = ['converterChaveParaMaiusculas', 'setAuditoriaCriacao'];
+    protected $afterInsert    = ['criarUsuarioPermissoesParaTodosUsuarios'];
+    protected $beforeUpdate   = ['converterChaveParaMaiusculas', 'setAuditoriaEdicao'];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
@@ -192,5 +174,64 @@ class PermissoesModel extends Model
             $options[$row->$valueField] = $row->$labelField;
         }
         return $options;
+    }
+
+    /**
+     * Converte o valor do campo 'chave' para maiúsculas antes de salvar.
+     * Este método é um callback para beforeInsert e beforeUpdate.
+     *
+     * @param array $data O array de dados que será inserido/atualizado.
+     * @return array O array de dados modificado.
+     */
+    protected function converterChaveParaMaiusculas(array $data)
+    {
+        if (isset($data['data']['chave'])) {
+            $data['data']['chave'] = strtoupper($data['data']['chave']);
+        }
+        return $data;
+    }
+
+    /**
+     * Callback executado após a inserção de uma nova permissão.
+     * Cria um registro em 'usuario_permissoes' para cada usuário existente.
+     *
+     * @param array $data O array de dados da permissão recém-inserida.
+     * @return array O array de dados original.
+     */
+    protected function criarUsuarioPermissoesParaTodosUsuarios(array $data)
+    {
+        // Verifica se a inserção foi bem-sucedida e se há dados da nova permissão
+        if (!empty($data['id']) && !empty($data['data'])) {
+            $permissaoId = $data['id'];
+            $permissaoCategoria = $data['data']['categoria'];
+            $permissaoChave = $data['data']['chave'];
+
+            $usuarioModel = new UsuariosModel();
+            $usuarioPermissaoModel = new UsuarioPermissoesModel();
+
+            $usuarios = $usuarioModel->findAll();
+
+            if (!empty($usuarios)) {
+                $batchInsertData = [];
+                foreach ($usuarios as $usuario) {
+                    $batchInsertData[] = [
+                        'usuario_id'  => $usuario->id,
+                        'categoria'   => $permissaoCategoria,
+                        'chave'       => $permissaoChave,
+                        'sn_ativo'    => 'Não',
+                    ];
+                }
+
+                // Insere em lote para melhor performance
+                if (!empty($batchInsertData)) {
+                    try {
+                        $usuarioPermissaoModel->insertBatch($batchInsertData);
+                    } catch (\Throwable $e) {
+                        log_message('error', 'Erro ao criar permissões de usuário em lote para a nova permissão ' . $permissaoChave . ': ' . $e->getMessage());
+                    }
+                }
+            }
+        }
+        return $data;
     }
 }

@@ -4,28 +4,28 @@
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h5 class="mb-0 text-primary-emphasis"><?= $titulo ?></h5>
-        
+
         <div class="d-sm-flex align-items-center">
-            <div class="col-md-auto me-3"> 
-              <form action="<?= current_url() ?>" method="GET" class="d-flex">
-                  <div class="input-group">
-                      <input type="search" class="form-control" placeholder="Pesquisar..." aria-label="Pesquisar" name="search" value="<?= esc($search ?? '') ?>">
-                      <button class="btn btn-secondary" type="submit" title="Pesquisar">
-                          <i class="bi bi-search"></i>
-                      </button>
-                      <?php if (!empty($search)) : ?>
-                          <a href="<?= current_url() ?>" class="btn btn-danger" title="Limpar pesquisa">
-                              <i class="bi bi-x-lg"></i>
-                          </a>
-                      <?php endif; ?>
-                  </div>
-              </form>
+            <div class="col-md-auto me-3">
+                <form action="<?= current_url() ?>" method="GET" class="d-flex">
+                    <div class="input-group">
+                        <input type="search" class="form-control" placeholder="Pesquisar..." aria-label="Pesquisar" name="search" value="<?= esc($search ?? '') ?>">
+                        <button class="btn btn-secondary" type="submit" title="Pesquisar">
+                            <i class="bi bi-search"></i>
+                        </button>
+                        <?php if (!empty($search)) : ?>
+                            <a href="<?= current_url() ?>" class="btn btn-danger" title="Limpar pesquisa">
+                                <i class="bi bi-x-lg"></i>
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                </form>
             </div>
             <div class="col-md-auto">
                 <?php if (service('Carol')->pode('USUARIOGRUPOS.NOVO')) : ?>
-                <a href="<?= base_url('usuariogrupos/new') ?>" class="btn btn-primary shadow-sm">
-                    <i class="bi bi-plus-lg text-white-50"></i> Novo
-                </a>
+                    <a href="<?= base_url('UsuarioGrupos/new') ?>" class="btn btn-primary shadow-sm">
+                        <i class="bi bi-plus-lg text-white-50"></i> Novo
+                    </a>
                 <?php endif; ?>
             </div>
         </div>
@@ -54,8 +54,6 @@
                     <thead>
                         <tr>
                             <th>Nome</th>
-                                    <th>Criado Em</th>
-                                    <th>Editado Em</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -64,30 +62,28 @@
                             <?php foreach ($registros as $registro): ?>
                                 <tr>
                                     <td><?= $registro->nome ?></td>
-                                    <td><?= $registro->criado_em ?></td>
-                                    <td><?= $registro->editado_em ?></td>
                                     <td>
-                                      <?php if (service('Carol')->pode('USUARIOGRUPOS.VER')) : ?>
-                                        <a href="<?= base_url('usuariogrupos/' . $registro->id) . '/show' ?>" class="btn btn-info btn-sm" title="Detalhes">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                      <?php endif; ?>
+                                        <?php if (service('Carol')->pode('USUARIOGRUPOS.VER')) : ?>
+                                            <a href="<?= base_url('UsuarioGrupos/' . $registro->id) . '/show' ?>" class="btn btn-info btn-sm" title="Detalhes">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                        <?php endif; ?>
 
-                                      <?php if (service('Carol')->pode('USUARIOGRUPOS.EDITAR')) : ?>
-                                      <a href="<?= base_url('usuariogrupos/' . $registro->id . '/edit') ?>" class="btn btn-warning btn-sm" title="Editar">
-                                          <i class="bi bi-pencil"></i>
-                                      </a>
-                                      <?php endif; ?>
+                                        <?php if (service('Carol')->pode('USUARIOGRUPOS.EDITAR')) : ?>
+                                            <a href="<?= base_url('UsuarioGrupos/' . $registro->id . '/edit') ?>" class="btn btn-warning btn-sm" title="Editar">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                        <?php endif; ?>
 
-                                      <?php if (service('Carol')->pode('USUARIOGRUPOS.EXCLUIR')) : ?>
-                                      <form action="<?= base_url('usuariogrupos/' . $registro->id) ?>" method="POST" class="d-inline form-delete">
-                                        <?= csrf_field() ?>
-                                          <input type="hidden" name="_method" value="DELETE">
-                                          <button type="submit" class="btn btn-danger btn-sm" title="Excluir">
-                                              <i class="bi bi-trash"></i>
-                                          </button>
-                                      </form>
-                                      <?php endif; ?>
+                                        <?php if (service('Carol')->pode('USUARIOGRUPOS.EXCLUIR')) : ?>
+                                            <form action="<?= base_url('UsuarioGrupos/' . $registro->id) ?>" method="POST" class="d-inline form-delete">
+                                                <?= csrf_field() ?>
+                                                <input type="hidden" name="_method" value="DELETE">
+                                                <button type="submit" class="btn btn-danger btn-sm" title="Excluir">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

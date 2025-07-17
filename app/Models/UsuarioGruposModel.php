@@ -31,26 +31,6 @@ class UsuarioGruposModel extends Model
             'rules' => 'required',
             'errors' => 'O campo {field} é obrigatório.',
         ],
-        'created_at' => [
-            'label' => 'Created At',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
-        'updated_at' => [
-            'label' => 'Updated At',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
-        'criado_em' => [
-            'label' => 'Criado Em',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
-        'editado_em' => [
-            'label' => 'Editado Em',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
     ];
     protected $validationMessages  = [];
     protected $skipValidation      = false;

@@ -2,11 +2,12 @@
 
 namespace App\Controllers;
 
-use App\Controllers\BaseController;
-use App\Models\LogAtividadesModel;
-use App\Models\ConfiguracoesModel;
 use App\Entities\Configuracao;
+use App\Models\ConfiguracoesModel;
+use App\Models\LogAtividadesModel;
+use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\Database\Exceptions\DataException;
 
 class Configuracoes extends BaseController
 {
@@ -46,6 +47,9 @@ class Configuracoes extends BaseController
       }
       $query->groupEnd();
     }
+
+    $query->orderBy('categoria', 'ASC');
+    $query->orderBy('nome', 'ASC');
 
     $perPage = 10;
 
@@ -125,7 +129,13 @@ class Configuracoes extends BaseController
     $registro->fill($postData);
 
     if ($this->model->save($registro)) {
-      $this->logAtividadesModel->addLog('Configuracoes: novo registro [' . $registro->id . ' - ' . $registro->chave . ']');
+      $insertedId = $this->model->insertID();
+      if (is_array($registro)) {
+        $registro['id'] = $insertedId;
+      } else {
+        $registro->id = $insertedId;
+      }
+      $this->logAtividadesModel->addLog('Configurações: novo registro [' . $registro->id . ' - ' . $registro->chave . ']');
       return redirect()->to('/configuracoes')->with('success', 'Registro criado com sucesso!');
     } else {
       return redirect()->back()->withInput()->with('errors', $this->model->errors());
@@ -171,9 +181,6 @@ class Configuracoes extends BaseController
       ]
     ];
 
-    // carrega dados relacionados
-    // $data['tabela_options'] = $this->tabelaModel->getDropdown('id', 'nome', [], 'nome', 'ASC');
-
     return view('configuracoes/edit', $data);
   }
 
@@ -195,14 +202,20 @@ class Configuracoes extends BaseController
     }
 
     $postData = $this->request->getPost();
-
     $registros->fill($postData);
 
-    if ($this->model->save($registros)) {
-      $this->logAtividadesModel->addLog('Configuracoes: registro atualizado [' . $id . '-' . $registros->chave . ']');
-      return redirect()->to('/configuracoes')->with('success', 'Registro atualizado com sucesso!');
-    } else {
-      return redirect()->back()->withInput()->with('errors', $this->model->errors());
+    try {
+      if ($this->model->save($registros)) {
+        $this->logAtividadesModel->addLog('Configurações: registro atualizado [' . $id . '-' . $registros->chave . ']');
+        return redirect()->to('/configuracoes')->with('success', 'Registro atualizado com sucesso!');
+      } else {
+        return redirect()->back()->withInput()->with('errors', $this->model->errors());
+      }
+    } catch (DataException $e) {
+      return redirect()->to('/configuracoes')->with('info', 'Nenhuma alteração detectada para o registro.');
+    } catch (\Exception $e) {
+      log_message('error', 'Erro inesperado ao atualizar registro de banco: ' . $e->getMessage());
+      return redirect()->back()->with('error', 'Ocorreu um erro inesperado ao atualizar o registro: ' . $e->getMessage());
     }
   }
 
@@ -246,7 +259,7 @@ class Configuracoes extends BaseController
     $nome = $this->model->getCampo('chave', ['id' => $id]);
 
     if ($this->model->delete($id)) {
-      $this->logAtividadesModel->addLog('Configuracoes: registro excluído [' . $id . '-' . $nome . ']');
+      $this->logAtividadesModel->addLog('Configurações: registro excluído [' . $id . '-' . $nome . ']');
       return redirect()->to('/configuracoes')->with('success', 'Registro excluído com sucesso!');
     } else {
       $errors = $this->model->errors();

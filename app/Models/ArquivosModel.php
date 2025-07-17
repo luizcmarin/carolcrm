@@ -15,7 +15,7 @@ class ArquivosModel extends Model
     protected $returnType      = 'App\Entities\Arquivo';
     protected $useSoftDeletes  = false;
     protected $protectFields   = true;
-    protected $allowedFields   = ['nome_arquivo', 'tipo_arquivo', 'sn_visivel_cliente', 'chave_anexo', 'pessoa_id', 'comentario_tarefa_id', 'created_at', 'updated_at', 'criado_em', 'editado_em'];
+    protected $allowedFields   = ['nome_arquivo', 'nome_original', 'tipo_arquivo', 'tamanho_bytes', 'caminho_servidor', 'url_publica', 'descricao', 'entidade_tipo', 'entidade_id', 'sn_visivel_cliente', 'created_at', 'updated_at', 'criado_em', 'editado_em'];
 
     // Dates
     protected $useTimestamps = true;
@@ -31,48 +31,48 @@ class ArquivosModel extends Model
             'rules' => 'required',
             'errors' => 'O campo {field} é obrigatório.',
         ],
+        'nome_original' => [
+            'label' => 'Nome Original',
+            'rules' => 'permit_empty',
+            'errors' => '',
+        ],
         'tipo_arquivo' => [
             'label' => 'Tipo Arquivo',
             'rules' => 'permit_empty',
             'errors' => '',
         ],
+        'tamanho_bytes' => [
+            'label' => 'Tamanho Bytes',
+            'rules' => 'permit_empty|integer',
+            'errors' => 'O campo {field} deve ser um número inteiro.',
+        ],
+        'caminho_servidor' => [
+            'label' => 'Caminho Servidor',
+            'rules' => 'required',
+            'errors' => 'O campo {field} é obrigatório.',
+        ],
+        'url_publica' => [
+            'label' => 'Url Publica',
+            'rules' => 'permit_empty|valid_url',
+            'errors' => 'O campo {field} deve conter uma URL válida.',
+        ],
+        'descricao' => [
+            'label' => 'Descricao',
+            'rules' => 'permit_empty',
+            'errors' => '',
+        ],
+        'entidade_tipo' => [
+            'label' => 'Entidade Tipo',
+            'rules' => 'permit_empty',
+            'errors' => '',
+        ],
+        'entidade_id' => [
+            'label' => 'Entidade Id',
+            'rules' => 'permit_empty|integer',
+            'errors' => 'O campo {field} deve ser um número inteiro.',
+        ],
         'sn_visivel_cliente' => [
             'label' => 'Sn Visivel Cliente',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
-        'chave_anexo' => [
-            'label' => 'Chave Anexo',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
-        'pessoa_id' => [
-            'label' => 'Pessoa Id',
-            'rules' => 'required|integer',
-            'errors' => 'O campo {field} é obrigatório.|O campo {field} deve ser um número inteiro.',
-        ],
-        'comentario_tarefa_id' => [
-            'label' => 'Comentario Tarefa Id',
-            'rules' => 'required|integer',
-            'errors' => 'O campo {field} é obrigatório.|O campo {field} deve ser um número inteiro.',
-        ],
-        'created_at' => [
-            'label' => 'Created At',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
-        'updated_at' => [
-            'label' => 'Updated At',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
-        'criado_em' => [
-            'label' => 'Criado Em',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
-        'editado_em' => [
-            'label' => 'Editado Em',
             'rules' => 'permit_empty',
             'errors' => '',
         ],

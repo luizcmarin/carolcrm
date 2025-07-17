@@ -29,66 +29,38 @@
     </div>
     <div class="card-body">
       <form action="<?= base_url('bancos') ?>" method="post">
-          <?= csrf_field() ?>
-                            <div class="form-floating mb-3 position-relative input-with-copy"> 
-                  <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" value="<?= old('nome') ?>" required>
-                  <label for="nome">Nome</label>
-                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
-                            data-clipboard-target="#nome" 
-                            title="Copiar">
-                        <i class="bi bi-clipboard"></i>
-                    </button>
-                    <span class="copy-feedback-message-external"></span>
-                    <?php if (session('errors.nome')) : ?>
-                        <div class="invalid-feedback d-block">
-                            <?= session('errors.nome') ?>
-                        </div>
-                    <?php endif ?>
-                </div>                  <div class="form-floating mb-3 position-relative input-with-copy"> 
-                  <input type="text" class="form-control" id="criado_em" name="criado_em" placeholder="Criado Em" value="<?= old('criado_em') ?>" >
-                  <label for="criado_em">Criado Em</label>
-                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
-                            data-clipboard-target="#criado_em" 
-                            title="Copiar">
-                        <i class="bi bi-clipboard"></i>
-                    </button>
-                    <span class="copy-feedback-message-external"></span>
-                    <?php if (session('errors.criado_em')) : ?>
-                        <div class="invalid-feedback d-block">
-                            <?= session('errors.criado_em') ?>
-                        </div>
-                    <?php endif ?>
-                </div>                  <div class="form-floating mb-3 position-relative input-with-copy"> 
-                  <input type="text" class="form-control" id="editado_em" name="editado_em" placeholder="Editado Em" value="<?= old('editado_em') ?>" >
-                  <label for="editado_em">Editado Em</label>
-                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
-                            data-clipboard-target="#editado_em" 
-                            title="Copiar">
-                        <i class="bi bi-clipboard"></i>
-                    </button>
-                    <span class="copy-feedback-message-external"></span>
-                    <?php if (session('errors.editado_em')) : ?>
-                        <div class="invalid-feedback d-block">
-                            <?= session('errors.editado_em') ?>
-                        </div>
-                    <?php endif ?>
-                </div>
-          <div class="d-flex justify-content-start mt-3">
-              <?php if (service('Carol')->pode('BANCOS.NOVO')) : ?>
-              <button type="submit" class="btn btn-primary ms-1">
-                  <span class="icon text-white-50">
-                      <i class="bi bi-save"></i>
-                  </span>
-                  <span class="text">Salvar</span>
-              </button>
-              <?php endif; ?>
-              <a href="/bancos" class="btn btn-secondary ms-1">
-                  <span class="icon text-white-50">
-                      <i class="bi bi-arrow-left"></i>
-                  </span>
-                  <span class="text">Voltar</span>
-              </a>
-          </div>
+        <?= csrf_field() ?>
+        <div class="form-floating mb-3 position-relative input-with-copy">
+          <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" value="<?= old('nome') ?>" required>
+          <label for="nome">Nome</label>
+          <button class="btn btn-sm btn-light copy-button-textarea" type="button"
+            data-clipboard-target="#nome"
+            title="Copiar">
+            <i class="bi bi-clipboard"></i>
+          </button>
+          <span class="copy-feedback-message-external"></span>
+          <?php if (session('errors.nome')) : ?>
+            <div class="invalid-feedback d-block">
+              <?= session('errors.nome') ?>
+            </div>
+          <?php endif ?>
+        </div>
+        <div class="d-flex justify-content-start mt-3">
+          <?php if (service('Carol')->pode('BANCOS.NOVO')) : ?>
+            <button type="submit" class="btn btn-primary ms-1">
+              <span class="icon text-white-50">
+                <i class="bi bi-save"></i>
+              </span>
+              <span class="text">Salvar</span>
+            </button>
+          <?php endif; ?>
+          <a href="/bancos" class="btn btn-secondary ms-1">
+            <span class="icon text-white-50">
+              <i class="bi bi-arrow-left"></i>
+            </span>
+            <span class="text">Voltar</span>
+          </a>
+        </div>
       </form>
     </div>
     <div class="card-footer text-body-secondary texto-pequeno">

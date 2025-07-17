@@ -664,7 +664,6 @@ function generate_model_content(string $entity_name_pascal, string $table_name, 
             return null;
         }
 
-        // Seleciona apenas o campo desejado para otimizar a consulta
         \$result = \$this->select(\$fieldName)
                        ->where(\$conditions)
                        ->first();
@@ -781,6 +780,7 @@ use App\Models\LogAtividadesModel;
 use App\Models\\{$entity_name_pascal}Model;
 use App\Entities\\{$entity_name_pascalx};
 use CodeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\Database\Exceptions\DataException;
 
 class {$entity_name_pascal} extends BaseController
 {
@@ -821,6 +821,8 @@ class {$entity_name_pascal} extends BaseController
             \$query->groupEnd();
         }
 
+      \$query->orderBy('nome', 'ASC');
+
       \$perPage = 10;
 
       \$registros = \$query->paginate(\$perPage);
@@ -857,11 +859,8 @@ class {$entity_name_pascal} extends BaseController
       }
 
         \$data = [
-            'titulo' => 'Tabela->{$entity_name_pascal}',
+            'titulo' => \$this->titulo,
         ];
-
-        // carrega dados relacionados
-        // \$data['tabela_options'] = \$this->tabelaModel->getDropdown('id', 'nome', [], 'nome', 'ASC');
 
         return view('{$entity_name_plural_lower}/new', \$data);
     }
@@ -883,8 +882,15 @@ class {$entity_name_pascal} extends BaseController
         \$registro->fill(\$postData);
 
         if (\$this->model->save(\$registro)) {
-            \$this->logAtividadesModel->addLog('{$entity_name_pascal}: novo registro [' . \$registro->id . ' - ' . \$registro->nome . ']');
-            return redirect()->to('/{$entity_name_plural_lower}')->with('success', 'Registro criado com sucesso!');
+          \$insertedId = \$this->model->insertID();
+          if (is_array(\$registro)) {
+            \$registro['id'] = \$insertedId;
+          } else {
+            \$registro->id = \$insertedId;
+          }
+
+          \$this->logAtividadesModel->addLog('{$entity_name_pascal}: novo registro [' . \$registro->id . ' - ' . \$registro->nome . ']');
+          return redirect()->to('/{$entity_name_plural_lower}')->with('success', 'Registro criado com sucesso!');
         } else {
             return redirect()->back()->withInput()->with('errors', \$this->model->errors());
         }
@@ -913,9 +919,6 @@ class {$entity_name_pascal} extends BaseController
             'registros' => \$registros,
         ];
         
-        // carrega dados relacionados
-        // \$data['tabela_options'] = \$this->tabelaModel->getDropdown('id', 'nome', [], 'nome', 'ASC');
-
         return view('{$entity_name_plural_lower}/edit', \$data);
     }
 
@@ -924,33 +927,34 @@ class {$entity_name_pascal} extends BaseController
      *
      * @param int \$id O ID do registro.
      * @return string|ResponseInterface
-     */
+     */    
     public function update(int \$id): string|ResponseInterface
     {
       if (!\$this->Carol->pode('{$entity_name_plural_upper}.EDITAR')) {
         return redirect()->to(site_url())->with('error', 'Acesso negado.');
       }
 
-        \$registros = \$this->model->find(\$id);
-        if (!\$registros) {
-            return redirect()->to('/{$entity_name_plural_lower}')->with('error', 'Registro não encontrado.');
-        }
+      \$registros = \$this->model->find(\$id);
+      if (!\$registros) {
+        return redirect()->to('/{$entity_name_plural_lower}')->with('error', 'Registro não encontrado.');
+      }
 
-        \$postData = \$this->request->getPost();
+      \$postData = \$this->request->getPost();
+      \$registros->fill(\$postData);
 
-        // Lógica para campos 'sn_'
-        if (!isset(\$postData['sn_ativo'])) {
-          \$postData['sn_ativo'] = 'Não';
-        }
-
-        \$registros->fill(\$postData);
-
+      try {
         if (\$this->model->save(\$registros)) {
-            \$this->logAtividadesModel->addLog('{$entity_name_pascal}: registro atualizado [' . \$id . '-' . \$registro->nome . ']');
-            return redirect()->to('/{$entity_name_plural_lower}')->with('success', 'Registro atualizado com sucesso!');
+          \$this->logAtividadesModel->addLog('{$entity_name_pascal}: registro atualizado [' . \$id . '-' . \$registros->nome . ']');
+          return redirect()->to('/{$entity_name_plural_lower}')->with('success', 'Registro atualizado com sucesso!');
         } else {
-            return redirect()->back()->withInput()->with('errors', \$this->model->errors());
+          return redirect()->back()->withInput()->with('errors', \$this->model->errors());
         }
+      } catch (DataException \$e) {
+        return redirect()->to('/{$entity_name_plural_lower}')->with('info', 'Nenhuma alteração detectada para o registro.');
+      } catch (\Exception \$e) {
+        log_message('error', 'Erro inesperado ao atualizar registro: ' . \$e->getMessage());
+        return redirect()->back()->with('error', 'Ocorreu um erro inesperado ao atualizar o registro: ' . \$e->getMessage());
+      }
     }
 
     /**
@@ -975,6 +979,7 @@ class {$entity_name_pascal} extends BaseController
             'titulo' => \$this->titulo,
             'registros' => \$registros,
         ];
+
         return view('{$entity_name_plural_lower}/show', \$data);
     }
 
@@ -1131,7 +1136,7 @@ function generate_view_contents(string $entity_name_pascal, string $table_name, 
         <h5 class="mb-0 text-primary-emphasis"><?= \$titulo ?></h5>
         
         <div class="d-sm-flex align-items-center">
-            <div class="col-md-auto me-3"> 
+            <div class="col-md-auto me-2"> 
               <form action="<?= current_url() ?>" method="GET" class="d-flex">
                   <div class="input-group">
                       <input type="search" class="form-control" placeholder="Pesquisar..." aria-label="Pesquisar" name="search" value="<?= esc(\$search ?? '') ?>">
@@ -1250,7 +1255,7 @@ HTML;
       $fkInfo = $fkFields[$field];
       $optionsVarName = $fkInfo['related_table_singular_snake'] . '_options';
       $formFieldsNew .= <<<HTML
-      <div class="form-floating mb-3">
+      <div class="form-floating mb-3 position-relative">
         <select class="form-select choices-select" id="{$inputName}" name="{$inputName}" {$required_attr}>
             <option value="" disabled selected><?= esc("Selecione um {$label}") ?></option>
             <?php
@@ -1521,7 +1526,7 @@ HTML;
       $fkInfo = $fkFields[$field];
       $optionsVarName = $fkInfo['related_table_singular_snake'] . '_options';
       $formFieldsEdit .= <<<HTML
-                        <div class="form-floating mb-3">
+                        <div class="form-floating mb-3 position-relative">
                           <select class="form-select choices-select" id="{$inputName}" name="{$inputName}" {$required_attr}>
                               <option value="" disabled selected><?= esc("Selecione um {$label}") ?></option>
                               <?php
