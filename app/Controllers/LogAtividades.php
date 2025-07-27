@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\LogAtividadesModel;
 use App\Entities\LogAtividade;
 use CodeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\Database\Exceptions\DataException;
 
 class LogAtividades extends BaseController
 {
@@ -13,12 +14,13 @@ class LogAtividades extends BaseController
   protected $logAtividadesModel;
   protected $model;
   protected $searchableFields = [
-    'nome',
+    'nome_usuario',
+    'atividade',
   ];
 
   public function __construct()
   {
-    $this->titulo = 'Tabela->LogAtividades';
+    $this->titulo = 'Tabela->Log de Atividades';
     $this->model = new LogAtividadesModel();
     $this->logAtividadesModel = new LogAtividadesModel();
   }
@@ -45,6 +47,8 @@ class LogAtividades extends BaseController
       }
       $query->groupEnd();
     }
+
+    $query->orderBy('created_at', 'DESC');
 
     $perPage = 10;
 
@@ -82,11 +86,8 @@ class LogAtividades extends BaseController
     }
 
     $data = [
-      'titulo' => 'Tabela->LogAtividades',
+      'titulo' => $this->titulo,
     ];
-
-    // carrega dados relacionados
-    // $data['tabela_options'] = $this->tabelaModel->getDropdown('id', 'nome', [], 'nome', 'ASC');
 
     return view('logatividades/new', $data);
   }
@@ -114,7 +115,8 @@ class LogAtividades extends BaseController
       } else {
         $registro->id = $insertedId;
       }
-      $this->logAtividadesModel->addLog('LogAtividades: novo registro [' . $registro->id . ' - ' . $registro->nome . ']');
+
+      $this->logAtividadesModel->addLog('Log de Atividades: novo registro [' . $registro->id . ' - ' . $registro->nome . ']');
       return redirect()->to('/logatividades')->with('success', 'Registro criado com sucesso!');
     } else {
       return redirect()->back()->withInput()->with('errors', $this->model->errors());
@@ -144,9 +146,6 @@ class LogAtividades extends BaseController
       'registros' => $registros,
     ];
 
-    // carrega dados relacionados
-    // $data['tabela_options'] = $this->tabelaModel->getDropdown('id', 'nome', [], 'nome', 'ASC');
-
     return view('logatividades/edit', $data);
   }
 
@@ -168,19 +167,20 @@ class LogAtividades extends BaseController
     }
 
     $postData = $this->request->getPost();
-
-    // Lógica para campos 'sn_'
-    if (!isset($postData['sn_ativo'])) {
-      $postData['sn_ativo'] = 'Não';
-    }
-
     $registros->fill($postData);
 
-    if ($this->model->save($registros)) {
-      $this->logAtividadesModel->addLog('LogAtividades: registro atualizado [' . $id . '-' . $registro->nome . ']');
-      return redirect()->to('/logatividades')->with('success', 'Registro atualizado com sucesso!');
-    } else {
-      return redirect()->back()->withInput()->with('errors', $this->model->errors());
+    try {
+      if ($this->model->save($registros)) {
+        $this->logAtividadesModel->addLog('Log de Atividades: registro atualizado [' . $id . '-' . $registros->nome . ']');
+        return redirect()->to('/logatividades')->with('success', 'Registro atualizado com sucesso!');
+      } else {
+        return redirect()->back()->withInput()->with('errors', $this->model->errors());
+      }
+    } catch (DataException $e) {
+      return redirect()->to('/logatividades')->with('info', 'Nenhuma alteração detectada para o registro.');
+    } catch (\Exception $e) {
+      log_message('error', 'Erro inesperado ao atualizar registro: ' . $e->getMessage());
+      return redirect()->back()->with('error', 'Ocorreu um erro inesperado ao atualizar o registro: ' . $e->getMessage());
     }
   }
 
@@ -206,6 +206,7 @@ class LogAtividades extends BaseController
       'titulo' => $this->titulo,
       'registros' => $registros,
     ];
+
     return view('logatividades/show', $data);
   }
 
@@ -224,7 +225,7 @@ class LogAtividades extends BaseController
     $nome = $this->model->getCampo('nome', ['id' => $id]);
 
     if ($this->model->delete($id)) {
-      $this->logAtividadesModel->addLog('LogAtividades: registro excluído [' . $id . '-' . $nome . ']');
+      $this->logAtividadesModel->addLog('Log de Atividades: registro excluído [' . $id . '-' . $nome . ']');
       return redirect()->to('/logatividades')->with('success', 'Registro excluído com sucesso!');
     } else {
       $errors = $this->model->errors();

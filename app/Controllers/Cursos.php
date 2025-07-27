@@ -2,27 +2,24 @@
 
 namespace App\Controllers;
 
-use App\Entities\Configuracao;
-use App\Models\ConfiguracoesModel;
-use App\Models\LogAtividadesModel;
 use App\Controllers\BaseController;
+use App\Models\CursosModel;
+use App\Entities\Curso;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\Database\Exceptions\DataException;
 
-class Configuracoes extends BaseController
+class Cursos extends BaseController
 {
   protected $titulo;
-  protected $logAtividadesModel;
   protected $model;
   protected $searchableFields = [
-    'chave',
+    'nome',
   ];
 
   public function __construct()
   {
-    $this->titulo = 'Tabela->Configurações';
-    $this->model = new ConfiguracoesModel();
-    $this->logAtividadesModel = new LogAtividadesModel();
+    $this->titulo = 'Tabela->Cursos';
+    $this->model = new CursosModel();
   }
 
   /**
@@ -32,7 +29,7 @@ class Configuracoes extends BaseController
    */
   public function index(): string|ResponseInterface
   {
-    if (!$this->Carol->pode('CONFIGURACOES.INDEX')) {
+    if (!$this->Carol->pode('CURSOS.INDEX')) {
       return redirect()->to(site_url())->with('error', 'Acesso negado.');
     }
 
@@ -48,8 +45,7 @@ class Configuracoes extends BaseController
       $query->groupEnd();
     }
 
-    $query->orderBy('categoria', 'ASC');
-    $query->orderBy('chave', 'ASC');
+    $query->orderBy('nome', 'ASC');
 
     $perPage = 10;
 
@@ -72,7 +68,7 @@ class Configuracoes extends BaseController
       'totalRecords' => $totalRecords,
     ];
 
-    return view('configuracoes/index', $data);
+    return view('cursos/index', $data);
   }
 
   /**
@@ -82,34 +78,15 @@ class Configuracoes extends BaseController
    */
   public function new(): string|ResponseInterface
   {
-    if (!$this->Carol->pode('CONFIGURACOES.NOVO')) {
+    if (!$this->Carol->pode('CURSOS.NOVO')) {
       return redirect()->to(site_url())->with('error', 'Acesso negado.');
     }
 
     $data = [
-      'titulo' => 'Tabela->Configuracoes',
-      'tipos' => [
-        'string'   => 'Texto Curto (STRING)',
-        'integer'  => 'Número Inteiro (INTEGER)',
-        'decimal'  => 'Número Decimal (DECIMAL/FLOAT)',
-        'boolean'  => 'Verdadeiro/Falso (BOOLEAN)',
-        'date'     => 'Data (DATE)',
-        'datetime' => 'Data e Hora (DATETIME)',
-        'time'     => 'Hora (TIME)',
-        'email'    => 'E-mail (EMAIL)',
-        'url'      => 'URL (URL)',
-        'password' => 'Senha (PASSWORD)',
-        'color'    => 'Cor (COLOR)',
-        'string'   => 'Imagem (STRING)',
-        'enum'     => 'Lista de Opções (ENUM)',
-        'textarea' => 'Texto Longo (TEXTAREA)',
-      ]
+      'titulo' => $this->titulo,
     ];
 
-    // carrega dados relacionados
-    // $data['tabela_options'] = $this->tabelaModel->getDropdown('id', 'nome', [], 'nome', 'ASC');
-
-    return view('configuracoes/new', $data);
+    return view('cursos/new', $data);
   }
 
   /**
@@ -119,24 +96,19 @@ class Configuracoes extends BaseController
    */
   public function create(): string|ResponseInterface
   {
-    if (!$this->Carol->pode('CONFIGURACOES.NOVO')) {
+    if (!$this->Carol->pode('CURSOS.NOVO')) {
       return redirect()->to(site_url())->with('error', 'Acesso negado.');
     }
 
     $postData = $this->request->getPost();
 
-    $registro = new Configuracao();
+    $registro = new Curso();
     $registro->fill($postData);
 
+    $registro->texto = $this->Carol->removeHtml($registro->texto);
+
     if ($this->model->save($registro)) {
-      $insertedId = $this->model->insertID();
-      if (is_array($registro)) {
-        $registro['id'] = $insertedId;
-      } else {
-        $registro->id = $insertedId;
-      }
-      $this->logAtividadesModel->addLog('Configurações: novo registro [' . $registro->id . ' - ' . $registro->chave . ']');
-      return redirect()->to('/configuracoes')->with('success', 'Registro criado com sucesso!');
+      return redirect()->to('/cursos')->with('success', 'Registro criado com sucesso!');
     } else {
       return redirect()->back()->withInput()->with('errors', $this->model->errors());
     }
@@ -150,38 +122,22 @@ class Configuracoes extends BaseController
    */
   public function edit(int $id): string|ResponseInterface
   {
-    if (!$this->Carol->pode('CONFIGURACOES.EDITAR')) {
+    if (!$this->Carol->pode('CURSOS.EDITAR')) {
       return redirect()->to(site_url())->with('error', 'Acesso negado.');
     }
 
     $registros = $this->model->find($id);
 
     if (!$registros) {
-      return redirect()->to('/configuracoes')->with('error', 'Registro não encontrado.');
+      return redirect()->to('/cursos')->with('error', 'Registro não encontrado.');
     }
 
     $data = [
       'titulo' => $this->titulo,
       'registros' => $registros,
-      'tipos' => [
-        'string'   => 'Texto Curto (STRING)',
-        'integer'  => 'Número Inteiro (INTEGER)',
-        'decimal'  => 'Número Decimal (DECIMAL/FLOAT)',
-        'boolean'  => 'Sim/Não (BOOLEAN)',
-        'date'     => 'Data (DATE)',
-        'datetime' => 'Data e Hora (DATETIME)',
-        'time'     => 'Hora (TIME)',
-        'email'    => 'E-mail (EMAIL)',
-        'url'      => 'URL (URL)',
-        'password' => 'Senha (PASSWORD)',
-        'color'    => 'Cor (COLOR)',
-        'string'   => 'Imagem (STRING)',
-        'enum'     => 'Lista de Opções (ENUM)',
-        'textarea' => 'Texto Longo (TEXTAREA)',
-      ]
     ];
 
-    return view('configuracoes/edit', $data);
+    return view('cursos/edit', $data);
   }
 
   /**
@@ -192,29 +148,30 @@ class Configuracoes extends BaseController
    */
   public function update(int $id): string|ResponseInterface
   {
-    if (!$this->Carol->pode('CONFIGURACOES.EDITAR')) {
+    if (!$this->Carol->pode('CURSOS.EDITAR')) {
       return redirect()->to(site_url())->with('error', 'Acesso negado.');
     }
 
-    $registros = $this->model->find($id);
-    if (!$registros) {
-      return redirect()->to('/configuracoes')->with('error', 'Registro não encontrado.');
+    $registro = $this->model->find($id);
+    if (!$registro) {
+      return redirect()->to('/cursos')->with('error', 'Registro não encontrado.');
     }
 
     $postData = $this->request->getPost();
-    $registros->fill($postData);
+    $registro->fill($postData);
+
+    $registro->texto = $this->Carol->removeHtml($registro->texto);
 
     try {
-      if ($this->model->save($registros)) {
-        $this->logAtividadesModel->addLog('Configurações: registro atualizado [' . $id . '-' . $registros->chave . ']');
-        return redirect()->to('/configuracoes')->with('success', 'Registro atualizado com sucesso!');
+      if ($this->model->save($registro)) {
+        return redirect()->to('/cursos')->with('success', 'Registro atualizado com sucesso!');
       } else {
         return redirect()->back()->withInput()->with('errors', $this->model->errors());
       }
     } catch (DataException $e) {
-      return redirect()->to('/configuracoes')->with('info', 'Nenhuma alteração detectada para o registro.');
+      return redirect()->to('/cursos')->with('info', 'Nenhuma alteração detectada para o registro.');
     } catch (\Exception $e) {
-      log_message('error', 'Erro inesperado ao atualizar registro de banco: ' . $e->getMessage());
+      log_message('error', 'Erro inesperado ao atualizar registro: ' . $e->getMessage());
       return redirect()->back()->with('error', 'Ocorreu um erro inesperado ao atualizar o registro: ' . $e->getMessage());
     }
   }
@@ -227,21 +184,22 @@ class Configuracoes extends BaseController
    */
   public function show(int $id): string|ResponseInterface
   {
-    if (!$this->Carol->pode('CONFIGURACOES.VER')) {
+    if (!$this->Carol->pode('CURSOS.VER')) {
       return redirect()->to(site_url())->with('error', 'Acesso negado.');
     }
 
     $registros = $this->model->find($id);
 
     if (!$registros) {
-      return redirect()->to('/configuracoes')->with('error', 'Registro não encontrado.');
+      return redirect()->to('/cursos')->with('error', 'Registro não encontrado.');
     }
 
     $data = [
       'titulo' => $this->titulo,
       'registros' => $registros,
     ];
-    return view('configuracoes/show', $data);
+
+    return view('cursos/show', $data);
   }
 
   /**
@@ -252,15 +210,14 @@ class Configuracoes extends BaseController
    */
   public function delete(int $id): string|ResponseInterface
   {
-    if (!$this->Carol->pode('CONFIGURACOES.EXCLUIR')) {
+    if (!$this->Carol->pode('CURSOS.EXCLUIR')) {
       return redirect()->to(site_url())->with('error', 'Acesso negado.');
     }
 
-    $nome = $this->model->getCampo('chave', ['id' => $id]);
+    $nome = $this->model->getCampo('nome', ['id' => $id]);
 
     if ($this->model->delete($id)) {
-      $this->logAtividadesModel->addLog('Configurações: registro excluído [' . $id . '-' . $nome . ']');
-      return redirect()->to('/configuracoes')->with('success', 'Registro excluído com sucesso!');
+      return redirect()->to('/cursos')->with('success', 'Registro excluído com sucesso!');
     } else {
       $errors = $this->model->errors();
       $message = !empty($errors) ? implode('<br>', $errors) : 'Erro ao excluir o registro. Verifique os logs.';

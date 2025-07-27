@@ -22,8 +22,8 @@
                 </form>
             </div>
             <div class="col-md-auto">
-                <?php if (service('Carol')->pode('LOGATIVIDADES.NOVO')) : ?>
-                    <a href="<?= base_url('logatividades/new') ?>" class="btn btn-primary shadow-sm">
+                <?php if (service('Carol')->pode('CURSOS.NOVO')) : ?>
+                    <a href="<?= base_url('cursos/new') ?>" class="btn btn-primary shadow-sm">
                         <i class="bi bi-plus-lg text-white-50"></i> Novo
                     </a>
                 <?php endif; ?>
@@ -53,10 +53,8 @@
                 <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Usuário</th>
-                            <th>Atividade</th>
-                            <th>Criado Em</th>
-                            <th>Editado Em</th>
+                            <th>Nome</th>
+                            <th>Texto</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -64,25 +62,23 @@
                         <?php if (!empty($registros)): ?>
                             <?php foreach ($registros as $registro): ?>
                                 <tr>
-                                    <td><?= $registro->nome_usuario ?></td>
-                                    <td><?= $registro->atividade ?></td>
-                                    <td><?= $registro->criado_em ?></td>
-                                    <td><?= $registro->editado_em ?></td>
+                                    <td><?= $registro->nome ?></td>
+                                    <td><?= $registro->texto ?></td>
                                     <td>
-                                        <?php if (service('Carol')->pode('LOGATIVIDADES.VER')) : ?>
-                                            <a href="<?= base_url('logatividades/' . $registro->id) . '/show' ?>" class="btn btn-info btn-sm" title="Detalhes">
+                                        <?php if (service('Carol')->pode('CURSOS.VER')) : ?>
+                                            <a href="<?= base_url('cursos/' . $registro->id) . '/show' ?>" class="btn btn-info btn-sm" title="Detalhes">
                                                 <i class="bi bi-eye"></i>
                                             </a>
                                         <?php endif; ?>
 
-                                        <?php if (service('Carol')->pode('LOGATIVIDADES.EDITAR')) : ?>
-                                            <a href="<?= base_url('logatividades/' . $registro->id . '/edit') ?>" class="btn btn-warning btn-sm" title="Editar">
+                                        <?php if (service('Carol')->pode('CURSOS.EDITAR')) : ?>
+                                            <a href="<?= base_url('cursos/' . $registro->id . '/edit') ?>" class="btn btn-warning btn-sm" title="Editar">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
                                         <?php endif; ?>
 
-                                        <?php if (service('Carol')->pode('LOGATIVIDADES.EXCLUIR')) : ?>
-                                            <form action="<?= base_url('logatividades/' . $registro->id) ?>" method="POST" class="d-inline form-delete">
+                                        <?php if (service('Carol')->pode('CURSOS.EXCLUIR')) : ?>
+                                            <form action="<?= base_url('cursos/' . $registro->id) ?>" method="POST" class="d-inline form-delete">
                                                 <?= csrf_field() ?>
                                                 <input type="hidden" name="_method" value="DELETE">
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Excluir">

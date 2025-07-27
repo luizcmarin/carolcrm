@@ -738,7 +738,6 @@ function generate_model_content(string $entity_name_pascal, string $table_name, 
         if (!empty(\$orderBy)) {
             \$query->orderBy(\$orderBy, \$orderDirection);
         } else {
-            // Ordena pelo labelField por padrão se nenhum orderBy for fornecido
             \$query->orderBy(\$labelField, \$orderDirection);
         }
 

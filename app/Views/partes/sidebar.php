@@ -136,6 +136,8 @@ declare(strict_types=1); ?>
       </a>
       <div class="collapse" id="su-configuracoes-submenu" data-bs-parent="#side-menu">
         <ul class="nav flex-column ps-4 pt-1">
+          <li><a class="nav-link text-white-50" href="<?= base_url('cursos') ?>">Cursos</a></li>
+          <li><a class="nav-link text-white-50" href="<?= base_url('logatividades') ?>">Log de Atividades</a></li>
           <li><a class="nav-link text-white-50" href="<?= base_url('permissoes') ?>">Permissões</a></li>
         </ul>
       </div>

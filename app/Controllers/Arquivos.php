@@ -304,7 +304,7 @@ class Arquivos extends BaseController
         throw new \Exception('Falha ao mover o arquivo. Verifique as permissões do diretório /uploads/arquivos/.');
       }
 
-      // Validaçã do tipo mime
+      // Validação do tipo mime
       $movedFilePath = $uploadPath . $newName;
       $mimeType = mime_content_type($movedFilePath);
 

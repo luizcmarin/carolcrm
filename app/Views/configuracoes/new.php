@@ -82,7 +82,7 @@ $selectedTipo = old('tipo', esc($registros->tipo ?? ''));
         </div>
         <div class="form-floating mb-3 position-relative input-with-copy">
           <input type="text" class="form-control" id="descricao" name="descricao" placeholder="Descricao" value="<?= old('descricao') ?>">
-          <label for="descricao">Descricao</label>
+          <label for="descricao">Descrição</label>
           <button class="btn btn-sm btn-light copy-button-textarea" type="button"
             data-clipboard-target="#descricao"
             title="Copiar">

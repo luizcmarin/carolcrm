@@ -5,6 +5,8 @@ namespace App\Libraries;
 use Config\Services;
 use CodeIgniter\I18n\Time;
 use App\Models\ConfiguracoesModel;
+use CodeIgniter\Cache\CacheFactory;
+use CodeIgniter\Cache\CacheInterface;
 
 /**
  * Esta classe contem funções globais aleatórias.
@@ -12,9 +14,14 @@ use App\Models\ConfiguracoesModel;
 class Carol
 {
     /**
-     * @var array Armazena as configurações carregadas do banco de dados (chave => valor).
+     * @var array Armazena as configurações carregadas do banco de dados.
      */
-    protected $configurations = [];
+    protected $chaves = [];
+
+    /**
+     * @var CacheInterface Instância do serviço de cache.
+     */
+    protected $cache;
 
     /**
      * @var ConfiguracoesModel Instância do modelo de configurações.
@@ -25,92 +32,155 @@ class Carol
     public function __construct()
     {
         $this->configuracoesModel = new ConfiguracoesModel();
-        $this->carregaConfig(); // Carrega as configurações automaticamente ao instanciar a classe Carol
+        $this->cache = \Config\Services::cache();
+
+        $this->carregarConfiguracoes();
     }
 
 
     /**
-     * Carrega todas as configurações do banco de dados para o array $configurations.
-     * Este método deve ser chamado uma única vez para popular as configurações.
+     * Carrega todas as configurações do banco de dados para a propriedade $chaves.
+     * Utiliza cache para otimizar o carregamento.
      */
-    public function carregaConfig()
+    protected function carregarConfiguracoes()
     {
-        // Evita recarregar se já estiverem carregadas (opcional, mas bom para performance)
-        if (!empty($this->configurations)) {
+        $cacheKey = 'carol_configuracoes';
+
+        // Tenta buscar as configurações do cache
+        $cachedConfig = $this->cache->get($cacheKey);
+
+        if ($cachedConfig) {
+            $this->chaves = $cachedConfig;
             return;
         }
 
-        $configs = $this->configuracoesModel->findAll();
+        // Se não estiver no cache, carrega do banco de dados
+        $configuracoesDb = $this->configuracoesModel->findAll();
+        $tempChaves = [];
+        foreach ($configuracoesDb as $config) {
+            // Garante que a chave esteja em maiúsculas (embora o Model já faça isso)
+            $chave = strtoupper($config->chave);
+            $tempChaves[$chave] = [
+                'valor' => $this->converterValorPeloTipo($config->valor, $config->tipo),
+                'tipo'  => $config->tipo,
+                'id'    => $config->id,
+            ];
+        }
+        $this->chaves = $tempChaves;
 
-        foreach ($configs as $config) {
-            if (is_object($config)) {
-                if (method_exists($config, 'toArray')) {
-                    $config = $config->toArray();
-                } else {
-                    $config = (array) $config;
-                }
-            }
+        // Armazena no cache por 1 hora
+        $this->cache->save($cacheKey, $this->chaves, 3600);
+    }
 
-            $this->configurations[$config['chave']] = $this->castValue($config['valor'], $config['tipo']);
+    /**
+     * Converte o valor da string para o tipo de dado especificado.
+     *
+     * @param string|null $valorString O valor como string.
+     * @param string $tipo O tipo de dado ('string', 'int', 'boolean', 'json').
+     * @return mixed O valor convertido.
+     */
+    protected function converterValorPeloTipo($valorString, string $tipo)
+    {
+        if (is_null($valorString)) {
+            return null;
+        }
+
+        switch ($tipo) {
+            case 'int':
+                return (int) $valorString;
+            case 'boolean':
+                return filter_var($valorString, FILTER_VALIDATE_BOOLEAN);
+            case 'json':
+                $decoded = json_decode($valorString, true);
+                return (json_last_error() === JSON_ERROR_NONE) ? $decoded : $valorString; // Retorna string se JSON inválido
+            case 'string':
+            default:
+                return (string) $valorString;
         }
     }
 
     /**
-     * Retorna o valor de uma configuração específica pela sua chave.
+     * Retorna o valor de uma configuração específica.
      *
-     * Exemplo de uso: $this->Carol->config('nome_do_site');
-     *
-     * @param string $key A chave da configuração (ex: 'nome_do_site').
+     * @param string $chave A chave da configuração (case-insensitive).
      * @param mixed $default O valor padrão a ser retornado se a chave não for encontrada.
      * @return mixed O valor da configuração ou o valor padrão.
      */
-    public function config(string $key, $default = null)
+    public function getConfig(string $chave, $default = null)
     {
-        return $this->configurations[$key] ?? $default;
-    }
-
-    /**
-     * Converte o valor da string do banco de dados para o tipo de dado pretendido.
-     * Isso é crucial para booleanos, inteiros, decimais, etc.
-     *
-     * @param mixed $value O valor lido do banco de dados (geralmente string).
-     * @param string $type O tipo de dado declarado para a configuração (ex: 'integer', 'boolean').
-     * @return mixed O valor convertido para o tipo correto.
-     */
-    protected function castValue($value, $type)
-    {
-        switch ($type) {
-            case 'integer':
-                return (int) $value;
-            case 'decimal':
-                return (float) $value;
-            case 'boolean':
-                // Converte 'Sim'/'Não' para true/false. Assumimos 'Sim' ou '1' como true.
-                // return strtolower($value) === 'sim' || $value === '1';
-            case 'enum':
-                // Se 'enum' for armazenado como JSON string, decodifica.
-                // Caso contrário, retorna como string.
-                $decoded = json_decode($value, true);
-                return (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) ? $decoded : $value;
-                // Para outros tipos (string, date, datetime, time, email, url, password, color, textarea),
-                // o valor já é uma string e pode ser retornado diretamente.
-            default:
-                return $value;
+        $chave = strtoupper($chave);
+        if (isset($this->chaves[$chave])) {
+            return $this->chaves[$chave]['valor'];
         }
+        return $default;
     }
 
     /**
-     * Retorna todas as configurações carregadas.
-     * Útil para depuração ou para passar todas as configurações para uma view.
+     * Atualiza o valor de uma configuração no array em memória e no banco de dados.
+     * Se a chave não existir, ela será criada com o tipo 'string' por padrão.
      *
-     * @return array Um array associativo com todas as configurações (chave => valor).
+     * @param string $chave A chave da configuração (case-insensitive).
+     * @param mixed $valor O novo valor da configuração.
+     * @param string $tipo O tipo de dado do valor (opcional, padrão 'string').
+     * @param string $descricao A descrição da configuração (opcional, usada apenas na criação).
+     * @return bool True se a atualização/criação foi bem-sucedida, false caso contrário.
      */
-    public function allConfigs(): array
+    public function setConfig(string $chave, $valor, string $tipo = 'string', $descricao = null): bool
     {
-        return $this->configurations;
+        $chave = strtoupper($chave);
+
+        // Converte o valor para string para salvar no DB
+        $valorDb = $valor;
+        if (is_bool($valor)) {
+            $valorDb = $valor ? 'Sim' : 'Não';
+        } elseif (is_array($valor) || is_object($valor)) {
+            $valorDb = json_encode($valor);
+            $tipo = 'json'; // Força o tipo para 'json' se um array/objeto for passado
+        }
+
+        $dataToSave = [
+            'chave' => $chave,
+            'valor' => (string) $valorDb,
+            'tipo'  => $tipo,
+        ];
+
+        // Verifica se a configuração já existe
+        if (isset($this->chaves[$chave])) {
+            $configId = $this->chaves[$chave]['id'];
+            if ($this->configuracoesModel->update($configId, $dataToSave)) {
+                // Atualiza o array em memória e invalida o cache
+                $this->chaves[$chave]['valor'] = $this->converterValorPeloTipo($valorDb, $tipo);
+                $this->chaves[$chave]['tipo'] = $tipo;
+                $this->cache->delete('carol_configuracoes');
+                return true;
+            }
+        } else {
+            // Se não existe, tenta criar
+            $dataToSave['descricao'] = $descricao ?? 'Configuração adicionada via setConfig';
+            if ($this->configuracoesModel->insert($dataToSave)) {
+                $newId = $this->configuracoesModel->insertID();
+                // Adiciona ao array em memória e invalida o cache
+                $this->chaves[$chave] = [
+                    'valor' => $this->converterValorPeloTipo($valorDb, $tipo),
+                    'tipo'  => $tipo,
+                    'id'    => $newId,
+                ];
+                $this->cache->delete('carol_configuracoes');
+                return true;
+            }
+        }
+
+        return false;
     }
 
-
+    /**
+     * Limpa o cache das configurações.
+     * Útil após atualizações diretas no banco de dados fora do setConfig.
+     */
+    public function clearConfigCache()
+    {
+        $this->cache->delete('carol_configuracoes');
+    }
 
 
 
@@ -440,5 +510,18 @@ class Carol
         // Por enquanto, a validação do CPF é o principal critério.
 
         return true;
+    }
+
+    /**
+     * Remove todas as tags HTML de uma string, mantendo apenas o texto puro.
+     * Opcionalmente, permite especificar tags que devem ser mantidas.
+     *
+     * @param string $text A string que pode conter HTML.
+     * @param string|null $allowedTags Uma string com as tags HTML que devem ser permitidas (ex: '<p><a><strong>').
+     * @return string A string com o HTML removido (ou com tags permitidas).
+     */
+    public function removeHtml(string $text, ?string $allowedTags = null): string
+    {
+        return strip_tags($text, $allowedTags);
     }
 }

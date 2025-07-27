@@ -28,41 +28,44 @@
       <h6 class="m-0 text-primary-emphasis">Editar</h6>
     </div>
     <div class="card-body">
-      <form action="<?= base_url('logatividades/' . $registros->id) ?>" method="post">
+      <form action="<?= base_url('cursos/' . $registros->id) ?>" method="post">
         <?= csrf_field() ?>
         <input type="hidden" name="_method" value="PUT">
         <div class="form-floating mb-3 position-relative input-with-copy">
-          <input type="text" class="form-control" id="nome_usuario" name="nome_usuario" placeholder="Usuário" value="<?= old('nome_usuario', esc($registros->nome_usuario ?? '')) ?>" required>
-          <label for="nome_usuario">Usuário</label>
+          <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" value="<?= old('nome', esc($registros->nome ?? '')) ?>" required>
+          <label for="nome">Nome</label>
           <button class="btn btn-sm btn-light copy-button-textarea" type="button"
-            data-clipboard-target="#nome_usuario"
+            data-clipboard-target="#nome"
             title="Copiar">
             <i class="bi bi-clipboard"></i>
           </button>
           <span class="copy-feedback-message-external"></span>
-          <?php if (session('errors.nome_usuario')) : ?>
+          <?php if (session('errors.nome')) : ?>
             <div class="invalid-feedback d-block">
-              <?= session('errors.nome_usuario') ?>
+              <?= session('errors.nome') ?>
             </div>
           <?php endif ?>
         </div>
         <div class="form-floating mb-3 position-relative input-with-copy">
-          <input type="text" class="form-control" id="atividade" name="atividade" placeholder="Atividade" value="<?= old('atividade', esc($registros->atividade ?? '')) ?>" required>
-          <label for="atividade">Atividade</label>
+          <div class="form-group mb-3">
+            <label for="texto">Texto</label>
+            <textarea class="form-control" id="texto" name="texto" rows="10" placeholder="Digite seu texto aqui..." required><?= old('texto', esc($registros->texto ?? '')) ?></textarea>
+          </div>
+          <label for="texto">Texto</label>
           <button class="btn btn-sm btn-light copy-button-textarea" type="button"
-            data-clipboard-target="#atividade"
+            data-clipboard-target="#texto"
             title="Copiar">
             <i class="bi bi-clipboard"></i>
           </button>
           <span class="copy-feedback-message-external"></span>
-          <?php if (session('errors.atividade')) : ?>
+          <?php if (session('errors.texto')) : ?>
             <div class="invalid-feedback d-block">
-              <?= session('errors.atividade') ?>
+              <?= session('errors.texto') ?>
             </div>
           <?php endif ?>
         </div>
         <div class="d-flex justify-content-start mt-3">
-          <?php if (service('Carol')->pode('LOGATIVIDADES.EDITAR')) : ?>
+          <?php if (service('Carol')->pode('CURSOS.EDITAR')) : ?>
             <button type="submit" class="btn btn-primary ms-1">
               <span class="icon text-white-50">
                 <i class="bi bi-save"></i>
@@ -70,7 +73,7 @@
               <span class="text">Atualizar</span>
             </button>
           <?php endif; ?>
-          <a href="/logatividades" class="btn btn-secondary ms-1">
+          <a href="/cursos" class="btn btn-secondary ms-1">
             <span class="icon text-white-50">
               <i class="bi bi-arrow-left"></i>
             </span>

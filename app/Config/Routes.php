@@ -42,13 +42,16 @@ if (! file_exists(CAROL_DB)) {
   $routes->resource('bancos');
   $routes->resource('cargos');
   $routes->resource('cidades');
+  $routes->resource('cursos');
   $routes->resource('nacionalidades');
-  $routes->resource('configuracoes');
   $routes->resource('paises');
-  $routes->resource('permissoes');
   $routes->resource('profissoes');
   $routes->resource('UsuarioGrupos');
   $routes->resource('usuarios');
+
+  $routes->resource('configuracoes');
+  $routes->resource('logatividades');
+  $routes->resource('permissoes');
 
   // Rotas para upload de arquivos
   $routes->post('arquivos/upload', 'Arquivos::upload');

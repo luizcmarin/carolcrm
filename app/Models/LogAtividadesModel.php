@@ -36,26 +36,6 @@ class LogAtividadesModel extends Model
             'rules' => 'required',
             'errors' => 'O campo {field} é obrigatório.',
         ],
-        'created_at' => [
-            'label' => 'Created At',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
-        'updated_at' => [
-            'label' => 'Updated At',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
-        'criado_em' => [
-            'label' => 'Criado Em',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
-        'editado_em' => [
-            'label' => 'Editado Em',
-            'rules' => 'permit_empty',
-            'errors' => '',
-        ],
     ];
     protected $validationMessages  = [];
     protected $skipValidation      = false;
@@ -63,9 +43,9 @@ class LogAtividadesModel extends Model
 
     // Callbacks
     protected $allowCallbacks = true;
-    protected $beforeInsert = ['setAuditoriaCriacao'];
+    protected $beforeInsert   = ['setAuditoriaCriacao'];
     protected $afterInsert    = [];
-    protected $beforeUpdate = ['setAuditoriaEdicao'];
+    protected $beforeUpdate   = ['setAuditoriaEdicao'];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
@@ -177,7 +157,6 @@ class LogAtividadesModel extends Model
         if (!empty($orderBy)) {
             $query->orderBy($orderBy, $orderDirection);
         } else {
-            // Ordena pelo labelField por padrão se nenhum orderBy for fornecido
             $query->orderBy($labelField, $orderDirection);
         }
 
@@ -187,49 +166,5 @@ class LogAtividadesModel extends Model
             $options[$row->$valueField] = $row->$labelField;
         }
         return $options;
-    }
-
-    /**
-     * Adiciona um novo registro de log.
-     *
-     * @param string $texto A descrição da atividade a ser logada.
-     * @return bool Verdadeiro se o log foi adicionado com sucesso, falso caso contrário.
-     */
-    public function addLog(string $texto): bool
-    {
-        // 1. Obter o nome do usuário logado
-        // Por enquanto, o nome do usuário será 'Anônimo',
-        // pois a parte de login ainda será implementada.
-        // Quando o login estiver pronto, você poderá substituir esta linha
-        // pela lógica que obtém o nome do usuário autenticado (ex: de uma sessão).
-        $nomeUsuario = 'Anônimo';
-
-        // Exemplo de como você PODE obter o nome do usuário no futuro,
-        // dependendo de como você implementar sua autenticação (não usando Shield):
-        /*
-        // Se você estiver armazenando o ID do usuário na sessão:
-        $session = \Config\Services::session();
-        $userId = $session->get('user_id'); // Supondo que você armazene o ID do usuário na sessão
-
-        if ($userId) {
-            // Supondo que você tenha um modelo de usuário para buscar o nome
-            $userModel = new \App\Models\UserModel(); // Substitua pelo seu modelo de usuário real
-            $user = $userModel->find($userId);
-            if ($user) {
-                $nomeUsuario = $user->nome ?? 'Usuário ID: ' . $userId; // Use o campo correto do seu modelo (ex: 'nome', 'username')
-            }
-        }
-        */
-
-        // 2. Preparar os dados para inserção
-        $data = [
-            'atividade'    => $texto,
-            'nome_usuario' => $nomeUsuario,
-            // 'created_at' será preenchido automaticamente pelo useTimestamps no modelo
-        ];
-
-        // 3. Inserir o registro no banco de dados
-        // O método insert() retorna o ID do registro inserido em caso de sucesso, ou false em caso de falha.
-        return (bool) $this->insert($data);
     }
 }

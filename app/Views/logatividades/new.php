@@ -29,80 +29,53 @@
     </div>
     <div class="card-body">
       <form action="<?= base_url('logatividades') ?>" method="post">
-          <?= csrf_field() ?>
-                            <div class="form-floating mb-3 position-relative input-with-copy"> 
-                  <input type="text" class="form-control" id="nome_usuario" name="nome_usuario" placeholder="Nome Usuario" value="<?= old('nome_usuario') ?>" required>
-                  <label for="nome_usuario">Nome Usuario</label>
-                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
-                            data-clipboard-target="#nome_usuario" 
-                            title="Copiar">
-                        <i class="bi bi-clipboard"></i>
-                    </button>
-                    <span class="copy-feedback-message-external"></span>
-                    <?php if (session('errors.nome_usuario')) : ?>
-                        <div class="invalid-feedback d-block">
-                            <?= session('errors.nome_usuario') ?>
-                        </div>
-                    <?php endif ?>
-                </div>                  <div class="form-floating mb-3 position-relative input-with-copy"> 
-                  <input type="text" class="form-control" id="atividade" name="atividade" placeholder="Atividade" value="<?= old('atividade') ?>" required>
-                  <label for="atividade">Atividade</label>
-                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
-                            data-clipboard-target="#atividade" 
-                            title="Copiar">
-                        <i class="bi bi-clipboard"></i>
-                    </button>
-                    <span class="copy-feedback-message-external"></span>
-                    <?php if (session('errors.atividade')) : ?>
-                        <div class="invalid-feedback d-block">
-                            <?= session('errors.atividade') ?>
-                        </div>
-                    <?php endif ?>
-                </div>                  <div class="form-floating mb-3 position-relative input-with-copy"> 
-                  <input type="text" class="form-control" id="criado_em" name="criado_em" placeholder="Criado Em" value="<?= old('criado_em') ?>" >
-                  <label for="criado_em">Criado Em</label>
-                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
-                            data-clipboard-target="#criado_em" 
-                            title="Copiar">
-                        <i class="bi bi-clipboard"></i>
-                    </button>
-                    <span class="copy-feedback-message-external"></span>
-                    <?php if (session('errors.criado_em')) : ?>
-                        <div class="invalid-feedback d-block">
-                            <?= session('errors.criado_em') ?>
-                        </div>
-                    <?php endif ?>
-                </div>                  <div class="form-floating mb-3 position-relative input-with-copy"> 
-                  <input type="text" class="form-control" id="editado_em" name="editado_em" placeholder="Editado Em" value="<?= old('editado_em') ?>" >
-                  <label for="editado_em">Editado Em</label>
-                    <button class="btn btn-sm btn-light copy-button-textarea" type="button" 
-                            data-clipboard-target="#editado_em" 
-                            title="Copiar">
-                        <i class="bi bi-clipboard"></i>
-                    </button>
-                    <span class="copy-feedback-message-external"></span>
-                    <?php if (session('errors.editado_em')) : ?>
-                        <div class="invalid-feedback d-block">
-                            <?= session('errors.editado_em') ?>
-                        </div>
-                    <?php endif ?>
-                </div>
-          <div class="d-flex justify-content-start mt-3">
-              <?php if (service('Carol')->pode('LOGATIVIDADES.NOVO')) : ?>
-              <button type="submit" class="btn btn-primary ms-1">
-                  <span class="icon text-white-50">
-                      <i class="bi bi-save"></i>
-                  </span>
-                  <span class="text">Salvar</span>
-              </button>
-              <?php endif; ?>
-              <a href="/logatividades" class="btn btn-secondary ms-1">
-                  <span class="icon text-white-50">
-                      <i class="bi bi-arrow-left"></i>
-                  </span>
-                  <span class="text">Voltar</span>
-              </a>
-          </div>
+        <?= csrf_field() ?>
+        <div class="form-floating mb-3 position-relative input-with-copy">
+          <input type="text" class="form-control" id="nome_usuario" name="nome_usuario" placeholder="Usuário" value="<?= old('nome_usuario') ?>" required>
+          <label for="nome_usuario">Usuário</label>
+          <button class="btn btn-sm btn-light copy-button-textarea" type="button"
+            data-clipboard-target="#nome_usuario"
+            title="Copiar">
+            <i class="bi bi-clipboard"></i>
+          </button>
+          <span class="copy-feedback-message-external"></span>
+          <?php if (session('errors.nome_usuario')) : ?>
+            <div class="invalid-feedback d-block">
+              <?= session('errors.nome_usuario') ?>
+            </div>
+          <?php endif ?>
+        </div>
+        <div class="form-floating mb-3 position-relative input-with-copy">
+          <input type="text" class="form-control" id="atividade" name="atividade" placeholder="Atividade" value="<?= old('atividade') ?>" required>
+          <label for="atividade">Atividade</label>
+          <button class="btn btn-sm btn-light copy-button-textarea" type="button"
+            data-clipboard-target="#atividade"
+            title="Copiar">
+            <i class="bi bi-clipboard"></i>
+          </button>
+          <span class="copy-feedback-message-external"></span>
+          <?php if (session('errors.atividade')) : ?>
+            <div class="invalid-feedback d-block">
+              <?= session('errors.atividade') ?>
+            </div>
+          <?php endif ?>
+        </div>
+        <div class="d-flex justify-content-start mt-3">
+          <?php if (service('Carol')->pode('LOGATIVIDADES.NOVO')) : ?>
+            <button type="submit" class="btn btn-primary ms-1">
+              <span class="icon text-white-50">
+                <i class="bi bi-save"></i>
+              </span>
+              <span class="text">Salvar</span>
+            </button>
+          <?php endif; ?>
+          <a href="/logatividades" class="btn btn-secondary ms-1">
+            <span class="icon text-white-50">
+              <i class="bi bi-arrow-left"></i>
+            </span>
+            <span class="text">Voltar</span>
+          </a>
+        </div>
       </form>
     </div>
     <div class="card-footer text-body-secondary texto-pequeno">
